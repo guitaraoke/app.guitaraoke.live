@@ -1,5 +1,7 @@
 // Global using directives
 
+global using System.Net;
+global using AngleSharp;
 global using Microsoft.Extensions.DependencyInjection;
 global using Xunit;
 global using Microsoft.AspNetCore.Mvc.Testing;
