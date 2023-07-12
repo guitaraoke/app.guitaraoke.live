@@ -1,9 +1,3 @@
-using GuitaraokeWebApp.Controllers;
-using GuitaraokeWebApp.Data;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging.Abstractions;
-using Shouldly;
-
 namespace GuitaraokeWebApp.Tests;
 
 public class RootControllerTests {

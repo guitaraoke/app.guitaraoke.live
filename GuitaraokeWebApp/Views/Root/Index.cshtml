@@ -1,3 +1,9 @@
+@model IEnumerable<Song>
 @{
 	ViewData["Title"] = "Home";
 }
+<ol>
+@foreach (var song in Model) {
+	<li>@song.Artist - @song.Title</li>
+}
+</ol>
