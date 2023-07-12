@@ -16,15 +16,20 @@ public class SongDatabase : ISongDatabase {
 	public IEnumerable<Song> ListStarredSongs(Guid userGuid)
 		=> stars.GetValueOrDefault(userGuid) ?? new();
 
-	public void ToggleStar(Guid userGuid, Song song) {
+	public bool ToggleStar(Guid userGuid, Song song) {
 		if (stars.ContainsKey(userGuid)) {
 			if (stars[userGuid].Contains(song)) {
 				stars[userGuid].Remove(song);
-			} else {
-				stars[userGuid].Add(song);
+				return false;
 			}
-		} else {
+			stars[userGuid].Add(song);
+		}
+		else {
 			stars.Add(userGuid, new() { song });
 		}
+		return true;
 	}
+
+	public Song FindSong(string slug)
+		=> songs.FirstOrDefault(s => s.Slug.Equals(slug, StringComparison.InvariantCultureIgnoreCase));
 }

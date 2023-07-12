@@ -45,4 +45,19 @@ public class RootControllerTests {
 		var model = (result.Model as IEnumerable<SongSelection>).ToList();
 		foreach (var song in model) song.IsStarred.ShouldBe(false);
 	}
+
+	[Fact]
+	public async Task Starring_Song_Toggles_Star_On() {
+		var hurt = new Song("Nine Inch Nails", "Hurt");
+		var torn = new Song("Natalie Imbruglia", "Torn");
+		var once = new Song("Pearl Jam", "Once");
+		var db = new SongDatabase(new[] { hurt, torn, once }); var guid = Guid.NewGuid();
+
+		var tracker = new FakeUserTracker(guid);
+		var c = new RootController(new NullLogger<RootController>(), db, tracker);
+		c.Star(hurt.Slug);
+		db.ListStarredSongs(guid).Count().ShouldBe(1);
+		c.Star(hurt.Slug);
+		db.ListStarredSongs(guid).Count().ShouldBe(0);
+	}
 }

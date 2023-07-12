@@ -9,6 +9,10 @@ public class Song {
 
 	public string Artist { get; set; }
 	public string Title { get; set; }
+	public static System.Text.RegularExpressions.Regex regex = new("[^\\p{L}0-9]+");
+
+	public string Slug
+		=> regex.Replace($"{Artist}-{Title}", "-").ToLowerInvariant().Trim('-');
 }
 
 public class SongSelection {

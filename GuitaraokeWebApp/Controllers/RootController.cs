@@ -22,5 +22,11 @@ public class RootController : Controller {
 			.Select(song => new SongSelection(song) { IsStarred = stars.Contains(song) });
 		return View(selection);
 	}
+
+	public async Task<IActionResult> Star(string id) {
+		var userGuid = tracker.GetUserGuid();
+		var song = db.FindSong(id);
+		return Json(db.ToggleStar(userGuid, song));
+	}
 }
 
