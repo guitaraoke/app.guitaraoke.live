@@ -5,6 +5,8 @@ var songs = File.ReadAllLines("songlist.txt")
 	.Select(tokens => new Song(tokens[0], tokens[1]));
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IUserTracker, HttpCookieUserTracker>();
 builder.Services.AddSingleton<ISongDatabase>(new SongDatabase(songs));
 builder.Services.AddControllersWithViews();
 var app = builder.Build();

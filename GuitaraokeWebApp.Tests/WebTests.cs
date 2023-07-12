@@ -23,5 +23,5 @@ public class WebTests : IClassFixture<WebApplicationFactory<Program>> {
 			decodedHtml.ShouldContain(song.Title);
 			decodedHtml.ShouldContain(song.Artist);
 		}
-	}	
+	}
 }
