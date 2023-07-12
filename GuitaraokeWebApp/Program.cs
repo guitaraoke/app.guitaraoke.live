@@ -1,4 +1,7 @@
-var songs = new List<Song> { new("Abba", "Waterloo") };
+var songs = File.ReadAllLines("songlist.txt")
+	.Select(line => line.Split(" - "))
+	.Select(tokens => new Song(tokens[0], tokens[1]));
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSingleton<ISongDatabase>(new SongDatabase(songs));
 builder.Services.AddControllersWithViews();

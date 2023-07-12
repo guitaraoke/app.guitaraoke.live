@@ -6,8 +6,8 @@
 	public class SongDatabase : ISongDatabase {
 		private readonly IList<Song> songs;
 
-		public SongDatabase(IList<Song> songs) {
-			this.songs = songs;
+		public SongDatabase(IEnumerable<Song> songs) {
+			this.songs = songs.ToList();
 		}
 
 		public IEnumerable<Song> ListSongs() => songs;
