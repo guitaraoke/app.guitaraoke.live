@@ -1,4 +1,5 @@
 using GuitaraokeWebApp.Data;
+using GuitaraokeWebApp.Model;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GuitaraokeWebApp.Controllers;
@@ -12,6 +13,10 @@ public class RootController : Controller {
 		this.db = db;
 	}
 
-	public async Task<IActionResult> Index() => View(db.ListSongs());
+	public async Task<IActionResult> Index() {
+		var selection = db.ListSongs()
+			.Select(song => new SongSelection(song));
+		return View(selection);
+	}
 }
 

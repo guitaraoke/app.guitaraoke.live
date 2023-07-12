@@ -1,9 +1,12 @@
-@model IEnumerable<Song>
+@model IEnumerable<GuitaraokeWebApp.Model.SongSelection>
 @{
 	ViewData["Title"] = "Home";
 }
 <ol>
-@foreach (var song in Model) {
-	<li>@song.Artist - @song.Title</li>
+@foreach (var item in Model) {
+	<li>@item.Song.Artist - @item.Song.Title
+		<a class="@(item.IsStarred ? "starred" : "")">*</a>
+		</li>
+
 }
 </ol>
