@@ -17,4 +17,5 @@ public class SongSelection {
 	}
 	public Song Song { get; set; }
 	public bool IsStarred { get; set; }
+	public override string ToString() => $"[{(IsStarred ? "*" : " ")}] {Song.Artist} - {Song.Title}";
 }

@@ -6,4 +6,8 @@ namespace GuitaraokeWebApp.Data {
 		IEnumerable<Song> ListStarredSongs(Guid userGuid);
 		void ToggleStar(Guid userGuid, Song song);
 	}
+
+	public interface IUserTracker {
+		Guid GetUserGuid();
+	}
 }
