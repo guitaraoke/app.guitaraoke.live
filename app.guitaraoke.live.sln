@@ -5,6 +5,8 @@ VisualStudioVersion = 17.5.33424.131
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GuitaraokeWebApp", "GuitaraokeWebApp\GuitaraokeWebApp.csproj", "{9E524C9A-BA08-44A4-801B-26B5B0168E5C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GuitaraokeWebApp.Tests", "GuitaraokeWebApp.Tests\GuitaraokeWebApp.Tests.csproj", "{16832E45-8D8D-40C0-9846-50DB1C5E147C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{9E524C9A-BA08-44A4-801B-26B5B0168E5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E524C9A-BA08-44A4-801B-26B5B0168E5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E524C9A-BA08-44A4-801B-26B5B0168E5C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16832E45-8D8D-40C0-9846-50DB1C5E147C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16832E45-8D8D-40C0-9846-50DB1C5E147C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16832E45-8D8D-40C0-9846-50DB1C5E147C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16832E45-8D8D-40C0-9846-50DB1C5E147C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
