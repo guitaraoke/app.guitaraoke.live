@@ -3,10 +3,30 @@
 	ViewData["Title"] = "Home";
 }
 <ol>
-@foreach (var item in Model) {
-	<li class="song">@item.Song.Artist - @item.Song.Title
-		<a class="@(item.IsStarred ? "starred" : "")">*</a>
+	@foreach (var item in Model) {
+		<li class="song">
+			@item.Song.Artist - @item.Song.Title
+			<a class="star @(item.IsStarred ? "starred" : "")"
+			   data-song-slug="@item.Song.Slug">*</a>
 		</li>
-
-}
+	}
 </ol>
+<script>
+	document.querySelectorAll("a.star").forEach(a =>
+		a.addEventListener("click", async evt => {
+			const slug = evt.target.getAttribute("data-song-slug");
+			const result = await fetch(`/star/${slug}`, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' }
+			});
+			const starred = await result.json();
+			if (starred) {
+				a.classList.add("starred");
+			} else {
+				a.classList.remove("starred");
+			}
+			evt.preventDefault();
+			return false;
+		})
+	);
+</script>

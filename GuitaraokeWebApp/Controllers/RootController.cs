@@ -23,6 +23,7 @@ public class RootController : Controller {
 		return View(selection);
 	}
 
+	[HttpPost]
 	public async Task<IActionResult> Star(string id) {
 		var userGuid = tracker.GetUserGuid();
 		var song = db.FindSong(id);
