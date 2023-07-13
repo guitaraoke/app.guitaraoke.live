@@ -1,5 +1,6 @@
 using AngleSharp.Dom;
 using GuitaraokeWebApp.Model;
+using GuitaraokeWebApp.TagHelpers;
 
 namespace GuitaraokeWebApp.Tests;
 
@@ -69,7 +70,8 @@ public class WebTests : IClassFixture<WebApplicationFactory<Program>> {
 		var userGuid = Guid.NewGuid();
 		var client = factory.CreateClient();
 		var db = factory.Services.GetService<ISongDatabase>();
-		db!.ToggleStar(userGuid, db.ListSongs().First());
+		var song = db.ListSongs().First();
+		db!.ToggleStar(userGuid, song);
 		var request = new HttpRequestMessage(HttpMethod.Get, "/");
 		var cookie = new Cookie(HttpCookieUserTracker.COOKIE_NAME, userGuid.ToString());
 		request.Headers.Add("Cookie", cookie.ToString());
@@ -77,8 +79,9 @@ public class WebTests : IClassFixture<WebApplicationFactory<Program>> {
 		var html = await response.Content.ReadAsStringAsync();
 		var context = BrowsingContext.New(Configuration.Default);
 		var document = await context.OpenAsync(req => req.Content(html));
-		var elements = document.QuerySelectorAll("li.song a.starred");
-		elements.Length.ShouldBe(1);
+		var elements = document.QuerySelectorAll($"li.song a.{SongStarTagHelper.STARRED}");
+		var slug = elements.Single().GetAttribute(SongStarTagHelper.DATA_ATTRIBUTE_NAME);
+		slug.ShouldBe(song.Slug);
 	}
 
 	[Fact]

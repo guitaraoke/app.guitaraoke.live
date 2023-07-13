@@ -10,6 +10,7 @@ builder.Services.AddScoped<IUserTracker, HttpCookieUserTracker>();
 builder.Services.AddSingleton<ISongDatabase>(new SongDatabase(songs));
 builder.Services.AddControllersWithViews();
 var app = builder.Build();
+app.UseStaticFiles();
 app.MapGet("/hello", () => "Hello World");
 app.MapControllerRoute(
 	name: "root",

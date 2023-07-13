@@ -6,13 +6,12 @@
 	@foreach (var item in Model) {
 		<li class="song">
 			<a asp-action="Song" asp-route-id="@item.Song.Slug">@item.Song.Artist - @item.Song.Title</a>
-			<a class="star @(item.IsStarred ? "starred" : "")"
-			   data-song-slug="@item.Song.Slug">*</a>
+			<song-star selection="item" />
 		</li>
 	}
 </ol>
 <script>
-	document.querySelectorAll("a.star").forEach(a =>
+	document.querySelectorAll("a.song-star").forEach(a =>
 		a.addEventListener("click", async evt => {
 			const slug = evt.target.getAttribute("data-song-slug");
 			const result = await fetch(`/star/${slug}`, {
@@ -21,9 +20,11 @@
 			});
 			const starred = await result.json();
 			if (starred) {
-				a.classList.add("starred");
+				a.classList.remove("fa-thin");
+				a.classList.add("fa-solid");
 			} else {
-				a.classList.remove("starred");
+				a.classList.remove("fa-solid");
+				a.classList.add("fa-thin");
 			}
 			evt.preventDefault();
 			return false;
