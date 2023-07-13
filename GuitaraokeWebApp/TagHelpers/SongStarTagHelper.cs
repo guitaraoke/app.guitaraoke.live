@@ -7,7 +7,7 @@ public class SongStarTagHelper : TagHelper {
 	public const string STARRED = "fa-solid";
 	public const string NORMAL = "fa-thin";
 	public const string DATA_ATTRIBUTE_NAME = "data-song-slug";
-	public SongSelection Selection { get; set; }
+	public SongSelection? Selection { get; set; }
 
 	public override void Process(TagHelperContext context, TagHelperOutput output) {
 		output.TagName = "a";

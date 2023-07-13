@@ -14,12 +14,12 @@ namespace GuitaraokeWebApp.Tests.Data {
 			var b = new Song("b", "b");
 			var c = new Song("c", "c");
 			var db = new SongDatabase(new[] { a, b, c });
-			db.ToggleStar(Guid.NewGuid(), a);
-			db.ToggleStar(Guid.NewGuid(), a);
-			db.ToggleStar(Guid.NewGuid(), a);
-			db.ToggleStar(Guid.NewGuid(), b);
-			db.ToggleStar(Guid.NewGuid(), b);
-			db.ToggleStar(Guid.NewGuid(), c);
+			db.ToggleStar(new(), a);
+			db.ToggleStar(new(), a);
+			db.ToggleStar(new(), a);
+			db.ToggleStar(new(), b);
+			db.ToggleStar(new(), b);
+			db.ToggleStar(new(), c);
 			var result = db.ListStarredSongs();
 			result[a].Count.ShouldBe(3);
 			result[b].Count.ShouldBe(2);
@@ -30,24 +30,24 @@ namespace GuitaraokeWebApp.Tests.Data {
 		public void ToggleStar_Toggles_Star_For_First_Song() {
 			var humanLove = new Song("Chroma Key", "Human Love");
 			var oneSecond = new Song("Napalm Death", "One Second");
-			var userGuid = Guid.NewGuid();
-			var db = new SongDatabase(new [] { humanLove, oneSecond });
-			db.ListStarredSongs(userGuid).ShouldBeEmpty();
+			var user = new User();
+			var db = new SongDatabase(new[] { humanLove, oneSecond });
+			db.ListStarredSongs(user).ShouldBeEmpty();
 
-			db.ToggleStar(userGuid, humanLove);
-			db.ListStarredSongs(userGuid).Single().ShouldBe(humanLove);
+			db.ToggleStar(user, humanLove);
+			db.ListStarredSongs(user).Single().ShouldBe(humanLove);
 
-			db.ToggleStar(userGuid, oneSecond);
-			var list = db.ListStarredSongs(userGuid).ToList();
+			db.ToggleStar(user, oneSecond);
+			var list = db.ListStarredSongs(user).ToList();
 			list.Count.ShouldBe(2);
 			list.ShouldContain(oneSecond);
 			list.ShouldContain(humanLove);
 
-			db.ToggleStar(userGuid, humanLove);
-			db.ListStarredSongs(userGuid).Single().ShouldBe(oneSecond);
+			db.ToggleStar(user, humanLove);
+			db.ListStarredSongs(user).Single().ShouldBe(oneSecond);
 
-			db.ToggleStar(userGuid, oneSecond);
-			db.ListStarredSongs(userGuid).ShouldBeEmpty();
+			db.ToggleStar(user, oneSecond);
+			db.ListStarredSongs(user).ShouldBeEmpty();
 
 		}
 	}

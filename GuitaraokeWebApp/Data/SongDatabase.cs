@@ -4,27 +4,27 @@ namespace GuitaraokeWebApp.Data;
 
 public class SongDatabase : ISongDatabase {
 	private readonly IList<Song> songs;
-	private readonly Dictionary<Guid, List<Song>> stars;
+	private readonly Dictionary<Guid, User> users = new();
+	private readonly Dictionary<User, List<Song>> stars = new();
 
 	public SongDatabase(IEnumerable<Song> songs) {
 		this.songs = songs.ToList();
-		this.stars = new();
 	}
 
 	public IEnumerable<Song> ListSongs() => songs;
 
-	public IEnumerable<Song> ListStarredSongs(Guid userGuid)
-		=> stars.GetValueOrDefault(userGuid) ?? new();
+	public IEnumerable<Song> ListStarredSongs(User user)
+		=> stars.GetValueOrDefault(user) ?? new();
 
-	public bool ToggleStar(Guid userGuid, Song song) {
-		if (stars.ContainsKey(userGuid)) {
-			if (stars[userGuid].Contains(song)) {
-				stars[userGuid].Remove(song);
+	public bool ToggleStar(User user, Song song) {
+		if (stars.ContainsKey(user)) {
+			if (stars[user].Contains(song)) {
+				stars[user].Remove(song);
 				return false;
 			}
-			stars[userGuid].Add(song);
+			stars[user].Add(song);
 		} else {
-			stars.Add(userGuid, new() { song });
+			stars.Add(user, new() { song });
 		}
 		return true;
 	}
@@ -32,7 +32,10 @@ public class SongDatabase : ISongDatabase {
 	public Song? FindSong(string slug)
 		=> songs.FirstOrDefault(s => s.Slug.Equals(slug, StringComparison.InvariantCultureIgnoreCase));
 
-	public Dictionary<Song, List<Guid>> ListStarredSongs()
+	public User? FindUser(Guid guid) => users.GetValueOrDefault(guid);
+	public User SaveUser(User user) => users[user.Guid] = user;
+
+	public Dictionary<Song, List<User>> ListStarredSongs()
 		=> stars.SelectMany(pair => pair.Value.Select(song => (pair.Key, song)))
 			.GroupBy(item => item.Item2)
 			.ToDictionary(group => group.Key, group => group.Select(g => g.Item1).ToList());

@@ -23,9 +23,9 @@ public class RootControllerIndexTests : RootControllerTestBase {
 		var torn = new Song("Natalie Imbruglia", "Torn");
 		var once = new Song("Pearl Jam", "Once");
 		var db = new SongDatabase(new[] { hurt, torn, once });
-		var guid = Guid.NewGuid();
-		db.ToggleStar(guid, hurt);
-		var tracker = new FakeUserTracker(guid);
+		var user = new User();
+		db.ToggleStar(user, hurt);
+		var tracker = new FakeUserTracker(user);
 		var c = new RootController(new NullLogger<RootController>(), db, tracker);
 		var selection = ((await c.Index() as ViewResult)!.Model as IEnumerable<SongSelection>)!.ToList();
 		selection.ShouldNotBeEmpty();
@@ -48,14 +48,14 @@ public class RootControllerIndexTests : RootControllerTestBase {
 		var hurt = new Song("Nine Inch Nails", "Hurt");
 		var torn = new Song("Natalie Imbruglia", "Torn");
 		var once = new Song("Pearl Jam", "Once");
-		var db = new SongDatabase(new[] { hurt, torn, once }); 
-		var guid = Guid.NewGuid();
-		var tracker = new FakeUserTracker(guid);
+		var db = new SongDatabase(new[] { hurt, torn, once });
+		var user = new User();
+		var tracker = new FakeUserTracker(user);
 		var c = new RootController(new NullLogger<RootController>(), db, tracker);
 		await c.Star(hurt.Slug);
-		db.ListStarredSongs(guid).Count().ShouldBe(1);
+		db.ListStarredSongs(user).Count().ShouldBe(1);
 		await c.Star(hurt.Slug);
-		db.ListStarredSongs(guid).Count().ShouldBe(0);
+		db.ListStarredSongs(user).Count().ShouldBe(0);
 	}
 
 	[Theory]
@@ -65,8 +65,8 @@ public class RootControllerIndexTests : RootControllerTestBase {
 	public async Task Starring_Song_With_Empty_Slug_Does_Not_Make_Everything_Break(string slug) {
 		var hurt = new Song("Nine Inch Nails", "Hurt");
 		var db = new SongDatabase(new[] { hurt });
-		var guid = Guid.NewGuid();
-		var tracker = new FakeUserTracker(guid);
+		var user = new User();
+		var tracker = new FakeUserTracker(user);
 		var c = new RootController(new NullLogger<RootController>(), db, tracker);
 		await c.Star(slug);
 		var result = await c.Queue() as ViewResult;

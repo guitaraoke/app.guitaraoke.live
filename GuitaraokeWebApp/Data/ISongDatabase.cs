@@ -1,13 +1,15 @@
 ﻿using GuitaraokeWebApp.Model;
 
-namespace GuitaraokeWebApp.Data; 
+namespace GuitaraokeWebApp.Data;
 
 public interface ISongDatabase {
 	IEnumerable<Song> ListSongs();
-	Dictionary<Song,List<Guid>> ListStarredSongs();
-	IEnumerable<Song> ListStarredSongs(Guid userGuid);
+	Dictionary<Song, List<User>> ListStarredSongs();
+	IEnumerable<Song> ListStarredSongs(User user);
 	/// <summary>Toggle the specified song star for the specified user.</summary>
 	/// <returns>True if the song is now starred; otherwise false.</returns>
-	bool ToggleStar(Guid userGuid, Song song);
+	bool ToggleStar(User user, Song song);
 	Song? FindSong(string slug);
+	User? FindUser(Guid guid);
+	User SaveUser(User user);
 }

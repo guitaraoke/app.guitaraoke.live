@@ -1,9 +1,10 @@
 namespace GuitaraokeWebApp.Tests;
 
 public class FakeUserTracker : IUserTracker {
-	private readonly Guid guid;
-	public FakeUserTracker(Guid guid = default) {
-		this.guid = guid;
+	private readonly User user;
+
+	public FakeUserTracker(User? user = default) {
+		this.user = user ??= new();
 	}
-	public Guid GetUserGuid() => guid;
+	public User GetUser() => user;
 }

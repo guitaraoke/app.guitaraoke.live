@@ -16,8 +16,8 @@ public class RootController : Controller {
 	}
 
 	public async Task<IActionResult> Index() {
-		var userGuid = tracker.GetUserGuid();
-		var stars = db.ListStarredSongs(userGuid);
+		var user= tracker.GetUser();
+		var stars = db.ListStarredSongs(user);
 		var selection = db.ListSongs()
 			.Select(song => new SongSelection(song) { IsStarred = stars.Contains(song) });
 		return View(selection);
@@ -27,14 +27,15 @@ public class RootController : Controller {
 	public async Task<IActionResult> Star(string id) {
 		var song = db.FindSong(id);
 		if (song == default) return NotFound();
-		var userGuid = tracker.GetUserGuid();
-		return Json(db.ToggleStar(userGuid, song));
+		var user = tracker.GetUser();
+		return Json(db.ToggleStar(user, song));
 	}
 
 	public async Task<IActionResult> Song(string id) {
-		var userGuid = tracker.GetUserGuid();
 		var song = db.FindSong(id);
-		var stars = db.ListStarredSongs(userGuid);
+		if (song == default) return NotFound();
+		var user = tracker.GetUser();
+		var stars = db.ListStarredSongs(user);
 		var model = new SongSelection(song) { IsStarred = stars.Contains(song) };
 		return View(model);
 	}
