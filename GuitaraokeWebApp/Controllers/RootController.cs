@@ -29,5 +29,11 @@ public class RootController : Controller {
 		var song = db.FindSong(id);
 		return Json(db.ToggleStar(userGuid, song));
 	}
+
+	public async Task<IActionResult> Song(string id) {
+		var song = db.FindSong(id);
+		var model = new SongSelection(song);
+		return View(model);
+	}
 }
 

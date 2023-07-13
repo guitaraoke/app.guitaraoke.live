@@ -7,6 +7,9 @@ public class Song {
 		Title = title;
 	}
 
+	private const string SEPARATOR = " - ";
+	public string Name => $"{Artist}{SEPARATOR}{Title}";
+
 	public string Artist { get; set; }
 	public string Title { get; set; }
 	public static System.Text.RegularExpressions.Regex regex = new("[^\\p{L}0-9]+");

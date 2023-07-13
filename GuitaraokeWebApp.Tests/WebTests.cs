@@ -10,6 +10,28 @@ public class WebTests : IClassFixture<WebApplicationFactory<Program>> {
 	}
 
 	[Fact]
+	public async Task Root_Song_Returns_Song() {
+		var client = factory.CreateClient();
+		var db = factory.Services.GetService<ISongDatabase>();
+		var song = db.ListSongs().First();
+		var response = await client.GetAsync($"/song/{song.Slug}");
+		response.IsSuccessStatusCode.ShouldBe(true);
+	}
+
+	[Fact]
+	public async Task Root_Song_Includes_Song_Title() {
+		var client = factory.CreateClient();
+		var db = factory.Services.GetService<ISongDatabase>();
+		var song = db.ListSongs().First();
+		var response = await client.GetAsync($"/song/{song.Slug}");
+		var html = await response.Content.ReadAsStringAsync();
+		var context = BrowsingContext.New(Configuration.Default);
+		var document = await context.OpenAsync(req => req.Content(html));
+		var title = document.QuerySelector("title");
+		title.InnerHtml.ShouldBe(song.Name);
+	}
+
+	[Fact]
 	public async Task Root_Index_Includes_Songs() {
 		var client = factory.CreateClient();
 		var response = await client.GetAsync("/");

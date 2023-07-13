@@ -1,18 +1,34 @@
+using System.Net.WebSockets;
 using GuitaraokeWebApp.Model;
 
 namespace GuitaraokeWebApp.Tests;
 
 public class RootControllerTests {
 	private readonly List<Song> songs;
+	private readonly ISongDatabase db;
+
+	private RootController MakeController() 
+		=> new(new NullLogger<RootController>(), db, new FakeUserTracker());
 	
 	public RootControllerTests() {
 		songs = new() { new("Abba", "Waterloo") };
+		db = new SongDatabase(songs);
+	}
+
+	[Fact]
+	public async Task Song_Returns_Song() {
+		var c = MakeController();
+		var song = songs.First();
+		var result = await c.Song(song.Slug) as ViewResult;
+		result.ShouldNotBeNull();
+		var selection = result.Model as SongSelection;
+		selection.Song.ShouldBe(song);
 	}
 
 	[Fact]
 	public async Task Index_Returns_SongList() {
 		var db = new SongDatabase(songs);
-		var c = new RootController(new NullLogger<RootController>(), db, new FakeUserTracker());
+		var c = MakeController();
 		var result = await c.Index() as ViewResult;
 		result.ShouldNotBeNull();
 		var model = (result.Model as IEnumerable<SongSelection>).ToList();

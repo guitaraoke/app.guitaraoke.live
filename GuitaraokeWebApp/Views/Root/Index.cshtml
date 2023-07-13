@@ -5,7 +5,7 @@
 <ol>
 	@foreach (var item in Model) {
 		<li class="song">
-			@item.Song.Artist - @item.Song.Title
+			<a ></a>@item.Song.Artist - @item.Song.Title
 			<a class="star @(item.IsStarred ? "starred" : "")"
 			   data-song-slug="@item.Song.Slug">*</a>
 		</li>
