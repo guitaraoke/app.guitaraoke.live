@@ -1,4 +1,8 @@
-﻿namespace GuitaraokeWebApp.Model; 
+﻿namespace GuitaraokeWebApp.Model;
+
+public class SongQueue {
+	public Dictionary<Song, int> StarredSongs { get; set; } = new();
+}
 
 public class Song {
 

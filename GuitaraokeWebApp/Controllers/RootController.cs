@@ -37,5 +37,13 @@ public class RootController : Controller {
 		var model = new SongSelection(song) { IsStarred = stars.Contains(song) };
 		return View(model);
 	}
+
+	public async Task<IActionResult> Queue() {
+		var songQueue = new SongQueue {
+			StarredSongs = db.ListStarredSongs()
+				.ToDictionary(pair => pair.Key, pair => pair.Value.Count)
+		};
+		return View(songQueue);
+	}
 }
 

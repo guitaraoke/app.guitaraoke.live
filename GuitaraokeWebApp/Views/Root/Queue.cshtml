@@ -1,0 +1,13 @@
+@model SongQueue
+@{
+	ViewData["Title"] = "Queue";
+}
+<ul>
+	@foreach (var item in Model.StarredSongs.OrderByDescending(pair => pair.Value)) {
+		<li>
+			@item.Key.Name
+			@item.Value
+		</li>
+	}
+</ul>
+

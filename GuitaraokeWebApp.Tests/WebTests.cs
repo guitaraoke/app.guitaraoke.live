@@ -23,6 +23,13 @@ public class WebTests : IClassFixture<WebApplicationFactory<Program>> {
 	}
 
 	[Fact]
+	public async Task Root_Queue_Returns_View() {
+		var client = factory.CreateClient();
+		var result = await client.GetAsync("/queue");
+		result.IsSuccessStatusCode.ShouldBe(true);
+	}
+
+	[Fact]
 	public async Task Root_Song_Returns_Song() {
 		var (_, response) = await GetSong();
 		response.IsSuccessStatusCode.ShouldBe(true);

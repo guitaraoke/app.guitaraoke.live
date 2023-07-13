@@ -4,6 +4,7 @@ namespace GuitaraokeWebApp.Data;
 
 public interface ISongDatabase {
 	IEnumerable<Song> ListSongs();
+	Dictionary<Song,List<Guid>> ListStarredSongs();
 	IEnumerable<Song> ListStarredSongs(Guid userGuid);
 	/// <summary>Toggle the specified song star for the specified user.</summary>
 	/// <returns>True if the song is now starred; otherwise false.</returns>
