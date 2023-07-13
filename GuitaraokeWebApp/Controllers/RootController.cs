@@ -25,8 +25,9 @@ public class RootController : Controller {
 
 	[HttpPost]
 	public async Task<IActionResult> Star(string id) {
-		var userGuid = tracker.GetUserGuid();
 		var song = db.FindSong(id);
+		if (song == default) return NotFound();
+		var userGuid = tracker.GetUserGuid();
 		return Json(db.ToggleStar(userGuid, song));
 	}
 

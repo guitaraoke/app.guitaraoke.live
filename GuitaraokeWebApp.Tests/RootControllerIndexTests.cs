@@ -1,4 +1,6 @@
 using GuitaraokeWebApp.Model;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel.Client.Payloads;
+using Xunit.Sdk;
 
 namespace GuitaraokeWebApp.Tests;
 
@@ -46,13 +48,28 @@ public class RootControllerIndexTests : RootControllerTestBase {
 		var hurt = new Song("Nine Inch Nails", "Hurt");
 		var torn = new Song("Natalie Imbruglia", "Torn");
 		var once = new Song("Pearl Jam", "Once");
-		var db = new SongDatabase(new[] { hurt, torn, once }); var guid = Guid.NewGuid();
-
+		var db = new SongDatabase(new[] { hurt, torn, once }); 
+		var guid = Guid.NewGuid();
 		var tracker = new FakeUserTracker(guid);
 		var c = new RootController(new NullLogger<RootController>(), db, tracker);
-		c.Star(hurt.Slug);
+		await c.Star(hurt.Slug);
 		db.ListStarredSongs(guid).Count().ShouldBe(1);
-		c.Star(hurt.Slug);
+		await c.Star(hurt.Slug);
 		db.ListStarredSongs(guid).Count().ShouldBe(0);
+	}
+
+	[Theory]
+	[InlineData("")]
+	[InlineData(null)]
+	[InlineData("this-is-not-a-valid-song")]
+	public async Task Starring_Song_With_Empty_Slug_Does_Not_Make_Everything_Break(string slug) {
+		var hurt = new Song("Nine Inch Nails", "Hurt");
+		var db = new SongDatabase(new[] { hurt });
+		var guid = Guid.NewGuid();
+		var tracker = new FakeUserTracker(guid);
+		var c = new RootController(new NullLogger<RootController>(), db, tracker);
+		await c.Star(slug);
+		var result = await c.Queue() as ViewResult;
+		result.ShouldNotBeNull();
 	}
 }

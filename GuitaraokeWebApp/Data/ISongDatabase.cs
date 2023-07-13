@@ -9,5 +9,5 @@ public interface ISongDatabase {
 	/// <summary>Toggle the specified song star for the specified user.</summary>
 	/// <returns>True if the song is now starred; otherwise false.</returns>
 	bool ToggleStar(Guid userGuid, Song song);
-	Song FindSong(string slug);
+	Song? FindSong(string slug);
 }
