@@ -2,7 +2,7 @@ using GuitaraokeWebApp.Model;
 
 namespace GuitaraokeWebApp.Tests;
 
-public class RootControllerIndexTests : RootControllerTests {
+public class RootControllerIndexTests : RootControllerTestBase {
 
 	[Fact]
 	public async Task Index_Returns_SongList() {
