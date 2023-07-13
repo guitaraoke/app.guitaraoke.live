@@ -1,7 +1,11 @@
+using AngleSharp.Dom;
+using GuitaraokeWebApp.Model;
+
 namespace GuitaraokeWebApp.Tests;
 
 public class WebTests : IClassFixture<WebApplicationFactory<Program>> {
 	private readonly WebApplicationFactory<Program> factory = new();
+
 	[Fact]
 	public async Task Root_Index_Returns_OK() {
 		var client = factory.CreateClient();
@@ -9,24 +13,40 @@ public class WebTests : IClassFixture<WebApplicationFactory<Program>> {
 		response.IsSuccessStatusCode.ShouldBe(true);
 	}
 
-	[Fact]
-	public async Task Root_Song_Returns_Song() {
+	private async Task<(Song, HttpResponseMessage)> GetSong() {
 		var client = factory.CreateClient();
 		var db = factory.Services.GetService<ISongDatabase>();
-		var song = db.ListSongs().First();
+		var song = db.ListSongs().First(s => s.Title.Contains("'"));
 		var response = await client.GetAsync($"/song/{song.Slug}");
+		return (song, response);
+	}
+
+	[Fact]
+	public async Task Root_Song_Returns_Song() {
+		var (_, response) = await GetSong();
 		response.IsSuccessStatusCode.ShouldBe(true);
+	}
+
+	private async Task<(Song, IDocument)> GetSongDocument() {
+		var (song, response) = await GetSong();
+		var html = await response.Content.ReadAsStringAsync();
+		var context = BrowsingContext.New(Configuration.Default);
+		var document = await context.OpenAsync(req => req.Content(html));
+		return (song, document);
+	}
+
+	[Fact]
+	public async Task Root_Song_Includes_Song_Details() {
+		var (song, document) = await GetSongDocument();
+		var h1 = document.QuerySelector("h1");
+		h1.InnerHtml.ShouldBe(song.Title);
+		var h2 = document.QuerySelector("h2");
+		h2.InnerHtml.ShouldBe(song.Artist);
 	}
 
 	[Fact]
 	public async Task Root_Song_Includes_Song_Title() {
-		var client = factory.CreateClient();
-		var db = factory.Services.GetService<ISongDatabase>();
-		var song = db.ListSongs().First();
-		var response = await client.GetAsync($"/song/{song.Slug}");
-		var html = await response.Content.ReadAsStringAsync();
-		var context = BrowsingContext.New(Configuration.Default);
-		var document = await context.OpenAsync(req => req.Content(html));
+		var (song, document) = await GetSongDocument();
 		var title = document.QuerySelector("title");
 		title.InnerHtml.ShouldBe(song.Name);
 	}

@@ -5,7 +5,7 @@
 <ol>
 	@foreach (var item in Model) {
 		<li class="song">
-			<a ></a>@item.Song.Artist - @item.Song.Title
+			<a asp-action="Song" asp-route-id="@item.Song.Slug">@item.Song.Artist - @item.Song.Title</a>
 			<a class="star @(item.IsStarred ? "starred" : "")"
 			   data-song-slug="@item.Song.Slug">*</a>
 		</li>
