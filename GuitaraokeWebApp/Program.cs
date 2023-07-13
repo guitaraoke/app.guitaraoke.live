@@ -8,6 +8,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUserTracker, HttpCookieUserTracker>();
 builder.Services.AddSingleton<ISongDatabase>(new SongDatabase(songs));
+builder.Services.Configure<RouteOptions>(config => {
+	config.LowercaseQueryStrings = true;
+	config.LowercaseUrls = true;
+});
 builder.Services.AddControllersWithViews();
 #if DEBUG
 builder.Services.AddSassCompiler();
