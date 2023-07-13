@@ -26,6 +26,19 @@ public class RootControllerTests {
 	}
 
 	[Fact]
+	public async Task Song_Returns_Song_With_Star() {
+		var hurt = new Song("Nine Inch Nails", "Hurt");
+		var db = new SongDatabase(new[] { hurt });
+		var guid = Guid.NewGuid();
+		db.ToggleStar(guid, hurt);
+		var tracker = new FakeUserTracker(guid);
+		var c = new RootController(new NullLogger<RootController>(), db, tracker);
+		var result = await c.Song(hurt.Slug) as ViewResult;
+		var model = result.Model as SongSelection;
+		model.IsStarred.ShouldBe(true);
+	}
+
+	[Fact]
 	public async Task Index_Returns_SongList() {
 		var db = new SongDatabase(songs);
 		var c = MakeController();

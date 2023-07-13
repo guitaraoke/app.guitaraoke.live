@@ -9,6 +9,9 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUserTracker, HttpCookieUserTracker>();
 builder.Services.AddSingleton<ISongDatabase>(new SongDatabase(songs));
 builder.Services.AddControllersWithViews();
+#if DEBUG
+builder.Services.AddSassCompiler();
+#endif
 var app = builder.Build();
 app.UseStaticFiles();
 app.MapGet("/hello", () => "Hello World");

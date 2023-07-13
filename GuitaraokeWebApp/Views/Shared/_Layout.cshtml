@@ -7,17 +7,20 @@
 	<link href="~/fontawesome/css/fontawesome.css" rel="stylesheet" />
 	<link href="~/fontawesome/css/solid.css" rel="stylesheet" />
 	<link href="~/fontawesome/css/thin.css" rel="stylesheet" />
-
+	<link href="~/css/styles.css" rel="stylesheet" />
 </head>
 <body>
 	<header>
-		header
+		<nav>
+			<a asp-action="Index">all songs</a>
+		</nav>
 	</header>
 	<main>
 		@RenderBody()
 	</main>
-	<footer>
-		footer
-	</footer>
+<footer>
+	footer
+</footer>
+<script src="~/js/script.js"></script>
 </body>
 </html>

@@ -31,8 +31,10 @@ public class RootController : Controller {
 	}
 
 	public async Task<IActionResult> Song(string id) {
+		var userGuid = tracker.GetUserGuid();
 		var song = db.FindSong(id);
-		var model = new SongSelection(song);
+		var stars = db.ListStarredSongs(userGuid);
+		var model = new SongSelection(song) { IsStarred = stars.Contains(song) };
 		return View(model);
 	}
 }

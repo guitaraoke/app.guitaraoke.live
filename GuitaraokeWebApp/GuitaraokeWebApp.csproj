@@ -7,6 +7,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="AspNetCore.SassCompiler" Version="1.63.6" />
 		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.7" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
 	</ItemGroup>
@@ -15,5 +16,9 @@
 	  <None Update="songlist.txt">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <UpToDateCheckInput Remove="wwwroot\sass\styles.scss" />
 	</ItemGroup>
 </Project>
