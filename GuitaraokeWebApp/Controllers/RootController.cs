@@ -1,5 +1,4 @@
 using GuitaraokeWebApp.Data;
-using GuitaraokeWebApp.Model;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GuitaraokeWebApp.Controllers;
@@ -16,7 +15,7 @@ public class RootController : Controller {
 	}
 
 	public async Task<IActionResult> Index() {
-		var user= tracker.GetUser();
+		var user = tracker.GetUser();
 		var stars = db.ListStarredSongs(user);
 		var selection = db.ListSongs()
 			.Select(song => new SongSelection(song) { IsStarred = stars.Contains(song) });
@@ -31,12 +30,24 @@ public class RootController : Controller {
 		return Json(db.ToggleStar(user, song));
 	}
 
+	[HttpPost]
+	public async Task<IActionResult> Song(string slug, string name, Instrument[] instruments) {
+		var song = db.FindSong(slug);
+		if (song == default) return NotFound();
+		var user = tracker.GetUser();
+		db.SignUp(user, song, instruments);
+		return Ok("yay!");
+	}
+	[HttpGet]
 	public async Task<IActionResult> Song(string id) {
 		var song = db.FindSong(id);
 		if (song == default) return NotFound();
 		var user = tracker.GetUser();
 		var stars = db.ListStarredSongs(user);
-		var model = new SongSelection(song) { IsStarred = stars.Contains(song) };
+		var model = new SongSelection(song) {
+			User = user,
+			IsStarred = stars.Contains(song)
+		};
 		return View(model);
 	}
 

@@ -1,6 +1,4 @@
-﻿using GuitaraokeWebApp.Model;
-
-namespace GuitaraokeWebApp.Data;
+﻿namespace GuitaraokeWebApp.Data;
 
 public interface ISongDatabase {
 	IEnumerable<Song> ListSongs();
@@ -12,4 +10,5 @@ public interface ISongDatabase {
 	Song? FindSong(string slug);
 	User? FindUser(Guid guid);
 	User SaveUser(User user);
+	void SignUp(User user, Song song, Instrument[] instruments);
 }

@@ -1,6 +1,4 @@
-﻿using GuitaraokeWebApp.Model;
-
-namespace GuitaraokeWebApp.Data;
+﻿namespace GuitaraokeWebApp.Data;
 
 public class SongDatabase : ISongDatabase {
 	private readonly IList<Song> songs;
@@ -22,10 +20,12 @@ public class SongDatabase : ISongDatabase {
 				stars[user].Remove(song);
 				return false;
 			}
+
 			stars[user].Add(song);
 		} else {
 			stars.Add(user, new() { song });
 		}
+
 		return true;
 	}
 
@@ -39,4 +39,16 @@ public class SongDatabase : ISongDatabase {
 		=> stars.SelectMany(pair => pair.Value.Select(song => (pair.Key, song)))
 			.GroupBy(item => item.Item2)
 			.ToDictionary(group => group.Key, group => group.Select(g => g.Item1).ToList());
+
+	public void SignUp(User user, Song song, Instrument[] instruments) {
+		user.Signups[song] = instruments;
+	}
+
+	public SongSelection FindSongForUser(Song song, User user) {
+		return new(song) {
+			User = user,
+			IsStarred = ListStarredSongs(user).Contains(song),
+			Instruments = user.Signups.GetValueOrDefault(song) ?? new Instrument[] { }
+		};
+	}
 }

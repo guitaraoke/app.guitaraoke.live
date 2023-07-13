@@ -1,5 +1,4 @@
-﻿using GuitaraokeWebApp.Model;
-using Microsoft.AspNetCore.Razor.TagHelpers;
+﻿using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace GuitaraokeWebApp.TagHelpers; 
 

@@ -1,10 +1,21 @@
 ﻿namespace GuitaraokeWebApp.Data;
 
-public class User {
-	public User() { }
-	public User(Guid guid) {
-		Guid = guid;
-	}
+[Flags]
+public enum Instrument {
+	Sing = 1 << 0,
+	LeadGuitar = 1 << 1,
+	RhythmGuitar = 1 << 2,
+	BassGuitar = 1 << 3,
+	Piano = 1 << 4,
+	Theremin = 1 << 5
+}
 
-	public Guid Guid { get; set; } = Guid.NewGuid();
+public class User {
+	public Guid Guid { get; set; }
+	public string Name { get; set; }
+	public User(Guid? guid = null, string? name = null) {
+		Guid = guid ?? Guid.NewGuid();
+		Name = name ?? String.Empty;
+	}
+	public Dictionary<Song, Instrument[]> Signups { get; set; } = new();
 }

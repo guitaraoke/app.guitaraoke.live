@@ -21,12 +21,3 @@ public class Song {
 	public string Slug
 		=> regex.Replace($"{Artist}-{Title}", "-").ToLowerInvariant().Trim('-');
 }
-
-public class SongSelection {
-	public SongSelection(Song song) {
-		Song = song;
-	}
-	public Song Song { get; set; }
-	public bool IsStarred { get; set; }
-	public override string ToString() => $"[{(IsStarred ? "*" : " ")}] {Song.Artist} - {Song.Title}";
-}
