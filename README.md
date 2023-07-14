@@ -3,12 +3,21 @@
 
 **Mobile-optimised web:**
 
-* See all songs
-* Pick your favourite songs (star)
+* ~~See all songs~~
+* ~~Pick your favourite songs (star)~~
 * Sign up
   * What do you want to sing/play?
+  * Validate: you must pick at least one instrument
+  * Validate: you must tell us your name
+* Revisit signup
+  * What happens when you go to `/song/abba-waterloo` but you've already signed up?
+    * Can you edit your selection?
+    * Can you cancel completely?
+      * ...by submitting an empty form? 
+
 * Cancel signups
 * See the queue
+* Search for songs (including weird punctuation handling) - e.g. search for "What's Up" needs to find "What’s Up" (smart quotes)
 
 **Backstage**
 
@@ -21,7 +30,7 @@
 
 API
 
-* Rebuild the song list
+* Rebuild the song list (?)
 
 **DO we need security?**
 
@@ -33,7 +42,7 @@ I'm going to say no. We don't.
 
 ## NOTES ON SEARCH
 
-Must exclude punctuation - so if you search for `what's up` (with a regular "straight apostrophe") it'll find `what’s up` (with a "smart apostrophe")
+
 
  
 
