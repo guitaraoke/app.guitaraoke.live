@@ -2,12 +2,14 @@
 @{
 	ViewData["Title"] = "Home";
 }
-<ol>
+<ol class="song-list">
 	@foreach (var item in Model) {
-		<li class="song">
-			@(item.Song.Played ? "PLAYED!" : "")
-			<a asp-action="Song" asp-route-id="@item.Song.Slug">@item.Song.Artist - @item.Song.Title</a>
-			<song-star selection="item"/>
+		<li class="song @(item.Song.Played ? "already-played" : "")">
+			<song-star selection="item" />
+			<a asp-action="Song" asp-route-id="@item.Song.Slug">
+				@item.Song.Artist
+				<span class="@(item.Song.Title.Length > 30 ? "long-song-name" : "")">- @item.Song.Title</span>
+			</a>
 		</li>
 	}
 </ol>

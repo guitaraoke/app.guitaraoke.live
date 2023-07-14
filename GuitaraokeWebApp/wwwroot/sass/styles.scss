@@ -1,3 +1,5 @@
+$gutter: 8px;
+
 html, body {
 	margin: 0;
 	padding: 0;
@@ -5,6 +7,7 @@ html, body {
 
 html {
 	height: 100vh;
+	background-attachment: fixed;
 	background: rgb(17,23,45);
 	background: linear-gradient(150deg, rgba(17,23,45,1) 0%, rgba(37,32,79,1) 49%, rgba(78,14,72,1) 100%);
 	font-size: 140%;
@@ -19,9 +22,10 @@ header {
 		grid-auto-flow: column;
 		grid-auto-columns: 1fr;
 		grid-column-gap: 8px;
-		margin: 8px;
+		margin: $gutter;
+
 		a {
-		text-align: center;
+			text-align: center;
 			text-decoration: none;
 			color: #fff;
 			background-color: #8d2691;
@@ -31,8 +35,44 @@ header {
 	}
 }
 
+ol.song-list {
+	margin: $gutter;
+	padding: 0;
+
+	li.song {
+		&.already-played {
+			text-decoration: line-through;
+			text-decoration-thickness: 2px;
+			text-decoration-color: #fff;			
+		}
+
+		border: 1px solid #fff;
+		margin-bottom: $gutter;
+		border-radius: $gutter;
+		list-style: none;
+		background-color: rgba(0,0,0,0.5);
+		padding: 8px;
+
+		a {
+			text-decoration: none;
+			color: #fff;
+			span {
+				white-space: nowrap;
+				&.long-song-name {
+				font-size: 80%;
+				}
+			}
+		}
+
+		a.song-star {
+			float: right;
+			font-size: 120%;
+		}
+	}
+}
+
 a.song-star.fa-solid {
-	color: #f90;
+	color: #f90 !important;
 }
 
 div#dashboard {
@@ -62,5 +102,23 @@ div#dashboard {
 	div#starred-songs {
 		outline: 2px solid #00f;
 		overflow: scroll;
+	}
+}
+
+footer {
+position: fixed;
+bottom: 0;
+left: 0;
+right: 0;
+height: 12px;
+	background-color: #000;
+	font-size: 50%;
+	color: #fff;
+	text-align: center;
+	font-weight: normal;
+	padding: $gutter;
+	a {
+		color: #b230b7;
+		text-decoration: none;
 	}
 }
