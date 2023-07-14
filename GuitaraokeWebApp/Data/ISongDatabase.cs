@@ -1,4 +1,4 @@
-﻿namespace GuitaraokeWebApp.Data;
+namespace GuitaraokeWebApp.Data;
 
 public interface ISongDatabase {
 	IEnumerable<Song> ListSongs();
@@ -10,4 +10,7 @@ public interface ISongDatabase {
 	Song? FindSong(string slug);
 	User? FindUser(Guid guid);
 	User SaveUser(User user);
+	List<(Song, Dictionary<User, Instrument[]>)> GetQueuedSongs();
+	Dictionary<Song, int> GetStarredSongs();
+	void AddSongToQueue(Song song);
 }

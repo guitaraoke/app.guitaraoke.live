@@ -4,11 +4,14 @@ using GuitaraokeWebApp.Model;
 namespace GuitaraokeWebApp.Tests;
 
 public abstract class RootControllerTestBase {
-	protected readonly List<Song> songs;
-	protected readonly ISongDatabase db;
+	protected List<Song> songs;
+	protected ISongDatabase db;
 
 	protected RootController MakeController()
 		=> new(new NullLogger<RootController>(), db, new FakeUserTracker());
+
+	protected RootController MakeController(User user)
+		=> new(new NullLogger<RootController>(), db, new FakeUserTracker(user));
 
 	protected RootControllerTestBase() {
 		songs = new() { new("Abba", "Waterloo") };

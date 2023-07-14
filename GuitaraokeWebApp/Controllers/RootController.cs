@@ -37,7 +37,7 @@ public class RootController : Controller {
 		if (song == default) return NotFound();
 		var user = tracker.GetUser();
 		if (! String.IsNullOrEmpty(name)) user.Name = name;
-		user.SignUp(song, instruments);
+		if (user.SignUp(song, instruments)) db.AddSongToQueue(song);
 		return RedirectToAction("me");
 	}
 
@@ -56,8 +56,8 @@ public class RootController : Controller {
 
 	public async Task<IActionResult> Queue() {
 		var songQueue = new SongQueue {
-			StarredSongs = db.ListStarredSongs()
-				.ToDictionary(pair => pair.Key, pair => pair.Value.Count)
+			QueuedSongs = db.GetQueuedSongs(),
+			StarredSongs = db.GetStarredSongs()
 		};
 		return View(songQueue);
 	}

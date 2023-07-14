@@ -33,7 +33,28 @@ public class SongDatabase : ISongDatabase {
 		=> songs.FirstOrDefault(s => s.Slug.Equals(slug, StringComparison.InvariantCultureIgnoreCase));
 
 	public User? FindUser(Guid guid) => users.GetValueOrDefault(guid);
+
 	public User SaveUser(User user) => users[user.Guid] = user;
+
+	private readonly List<Song> queuedSongs = new();
+
+	public List<(Song, Dictionary<User, Instrument[]>)> GetQueuedSongs()
+		=> queuedSongs.Select(song => (song, ListPlayers(song))).ToList();
+
+	public Dictionary<Song, int> GetStarredSongs()
+		=> ListStarredSongs().ToDictionary(pair => pair.Key, pair => pair.Value.Count);
+
+	public void AddSongToQueue(Song song) {
+		if (queuedSongs.Contains(song)) return;
+		queuedSongs.Add(song);
+	}
+
+	private Dictionary<User, Instrument[]> ListPlayers(Song song)
+		=> users.Values
+			.Where(user => user.Signups.ContainsKey(song))
+			.ToDictionary(user => user, user => user.Signups[song]);
+
+
 
 	public Dictionary<Song, List<User>> ListStarredSongs()
 		=> stars.SelectMany(pair => pair.Value.Select(song => (pair.Key, song)))
@@ -45,5 +66,38 @@ public class SongDatabase : ISongDatabase {
 			User = user,
 			IsStarred = ListStarredSongs(user).Contains(song)
 		};
+	}
+
+	public void PopulateSampleData() {
+		var alicia = new User { Name = "Alicia Keys" };
+		var ben = new User { Name = "Ben Folds" };
+		var chris = new User { Name = "Chris Catalyst" };
+		var david = new User { Name = "David Coverdale" };
+		var eddie = new User { Name = "Eddie van Halen" };
+		var freddie = new User { Name = "Freddie Mercury" };
+
+		SaveUser(alicia);
+		SaveUser(ben);
+		SaveUser(chris);
+		SaveUser(david);
+		SaveUser(eddie);
+		SaveUser(freddie);
+		var testUsers = new[] { alicia, ben, chris, david, eddie, freddie };
+
+		var instruments = Enum.GetValues<Instrument>().ToArray();
+		for (var i = 0; i < 50; i++) {
+			var song = this.songs[Random.Shared.Next(this.songs.Count)];
+			var user = testUsers[Random.Shared.Next(testUsers.Length)];
+			var instrument = instruments[Random.Shared.Next(instruments.Length)];
+			user.SignUp(song, instrument);
+			AddSongToQueue(song);
+
+		}
+
+		for (var i = 0; i < 250; i++) {
+			var song = this.songs[Random.Shared.Next(this.songs.Count)];
+			var user = testUsers[Random.Shared.Next(testUsers.Length)];
+			ToggleStar(user, song);
+		}
 	}
 }

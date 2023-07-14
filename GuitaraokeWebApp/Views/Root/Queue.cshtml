@@ -2,6 +2,19 @@
 @{
 	ViewData["Title"] = "Queue";
 }
+<h1>Coming Up...</h1>
+<ol>
+	@foreach (var item in Model.QueuedSongs) {
+		<li>
+			@item.Song.Name
+			<ul>
+				@foreach (var player in item.Players) {
+					<li>@player.Key.Name: @String.Join(", ", player.Value)</li>
+				}
+			</ul>
+		</li>
+	}
+</ol>
 <ul>
 	@foreach (var item in Model.StarredSongs.OrderByDescending(pair => pair.Value)) {
 		<li>

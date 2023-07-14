@@ -6,7 +6,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUserTracker, HttpCookieUserTracker>();
 builder.Services.AddScoped<ICookieJar, HttpCookieJar>();
-builder.Services.AddSingleton<ISongDatabase>(new SongDatabase(songs));
+var db = new SongDatabase(songs);
+#if DEBUG
+db.PopulateSampleData();
+#endif
+builder.Services.AddSingleton<ISongDatabase>(db);
 builder.Services.Configure<RouteOptions>(config => {
 	config.LowercaseQueryStrings = true;
 	config.LowercaseUrls = true;
