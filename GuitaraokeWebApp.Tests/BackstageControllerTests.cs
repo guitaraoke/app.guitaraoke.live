@@ -16,6 +16,33 @@ public class BackstageControllerTests {
 		model.ShouldNotBeNull();
 	}
 
+	[Fact]
+	public async Task BackstagePlayedReturnsOk() {
+		var song = new Song("Battle Beast", "Familiar Hell");
+		var songs = new List<Song>() { song };
+		var db = new SongDatabase(songs);
+		var bc = new BackstageController(db);
+		var result = await bc.Status(song.Slug, true) as JsonResult;
+		result.ShouldNotBeNull();
+		song = db.FindSong("battle-beast-familiar-hell");
+		song.ShouldNotBeNull();
+		song.Played.ShouldBe(true);
+	}
+
+	[Fact]
+	public async Task BackstagePlayed_Removes_Song_From_Queue() {
+		var song = new Song("Battle Beast", "Familiar Hell");
+		var songs = new List<Song>() { song };
+		var db = new SongDatabase(songs);
+		var user = new User();
+		var rc = new RootController(new NullLogger<RootController>(), db, new FakeUserTracker(user));
+		await rc.Song(song.Slug, "Benny", new[] { Instrument.Sing });
+		db.GetQueuedSongs().Single().Song.ShouldBe(song);
+		var bc = new BackstageController(db);
+		await bc.Status(song.Slug, true);
+		db.GetQueuedSongs().ShouldBeEmpty();
+	}
+
 	private async Task<SongDatabase> SetUpQueue(User user, params Song[] songs) {
 		var db = new SongDatabase(songs);
 		var rc = new RootController(new NullLogger<RootController>(), db, new FakeUserTracker(user));

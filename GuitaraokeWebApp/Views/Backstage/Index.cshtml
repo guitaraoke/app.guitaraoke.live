@@ -9,6 +9,7 @@
 				<li draggable="true" class="dropzone" id="li-@item.Song.Slug"
 					data-song-slug="@item.Song.Slug">
 					@item.Song.Name
+					<a href="#" class="mark-song-as-played-link">PLAYED</a>
 					<ul>
 						@foreach (var player in item.Players) {
 							<li>
@@ -22,7 +23,6 @@
 			}
 		</ol>
 	</div>
-	<div id></div>
 	<div id="starred-songs">
 		<ol>
 			@foreach (var pair in Model.StarredSongs
@@ -37,6 +37,19 @@
 	</div>
 </div>
 <script>
+	document.getElementById('ol-song-queue').addEventListener("click",
+		async ({ target }) => {
+			if (target.tagName === "A" && target.className === "mark-song-as-played-link") {
+				var li = target.closest("li");
+				var slug = li.getAttribute("data-song-slug");
+				await fetch(`/backstage/status/${slug}`, {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify(true)
+				});
+				li.remove();
+			}
+		});
 	let dragged;
 	let id;
 	let index;

@@ -56,6 +56,9 @@ public class SongDatabase : ISongDatabase {
 		queuedSongs.Insert(newIndex, song);
 	}
 
+	public void RemoveSongFromQueue(Song song)
+		=> queuedSongs.Remove(song);
+
 	private Dictionary<User, Instrument[]> ListPlayers(Song song)
 		=> users.Values
 			.Where(user => user.Signups.ContainsKey(song))

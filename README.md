@@ -21,12 +21,12 @@
 
 **Backstage**
 
-* See all songs
-* See all active users
-* See favourites
-* Edit the queue - move songs up/down
+* ~~See~~ all songs
+* ~~See all active users~~
+* ~~See favourites~~
+* ~~Edit the queue - move songs up/down~~
 * Edit signups
-* Mark a song as "done" (we've already played it)
+* **Mark a song as "done" (we've already played it)**
 
 API
 

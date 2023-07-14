@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Mvc;
+
 namespace GuitaraokeWebApp.Model;
 
 public class SongQueue {
@@ -21,4 +23,7 @@ public class Song {
 
 	public string Slug
 		=> regex.Replace($"{Artist}-{Title}", "-").ToLowerInvariant().Trim('-');
+
+	public bool Played => PlayedAt.HasValue;
+	public DateTime? PlayedAt { get; set; }
 }

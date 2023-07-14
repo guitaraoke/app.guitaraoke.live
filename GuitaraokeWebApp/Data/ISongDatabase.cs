@@ -14,4 +14,5 @@ public interface ISongDatabase {
 	Dictionary<Song, int> GetStarredSongs();
 	void AddSongToQueue(Song song);
 	void MoveSongToPosition(Song song, int newIndex);
+	void RemoveSongFromQueue(Song song);
 }

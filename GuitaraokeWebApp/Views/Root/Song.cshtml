@@ -5,16 +5,21 @@
 <song-star selection="@Model" />
 <h1>@Model.Song.Title</h1>
 <h2>@Model.Song.Artist</h2>
-<form asp-action="Song" method="post">
-	<input type="hidden" name="slug" value="@Model.Song.Slug" />
-	@foreach (var i in Model.InstrumentOptions) {
-		<label for="input-@i.Value">
-			<input type="checkbox" name="instruments" value="@i.Value"
-				   id="input-@i.Value"
-			       @(i.Selected ? "checked='checked'" : "") />
-			@i.Text
-		</label><br />
-	}
-	<input type="text" name="name" placeholder="Your name" value="@Model.User.Name" />
-	<input type="submit" />
-</form>
+@if (Model.Song.Played) {
+	<p>We already played this one tonight!</p>
+} else {
+	<form asp-action="Song" method="post">
+		<input type="hidden" name="slug" value="@Model.Song.Slug" />
+		@foreach (var i in Model.InstrumentOptions) {
+			<label for="input-@i.Value">
+				<input type="checkbox" name="instruments" value="@i.Value"
+					   id="input-@i.Value"
+				@(i.Selected ? "checked='checked'" : "") />
+				@i.Text
+			</label>
+			<br />
+		}
+		<input type="text" name="name" placeholder="Your name" value="@Model.User.Name" />
+		<input type="submit" />
+	</form>
+}

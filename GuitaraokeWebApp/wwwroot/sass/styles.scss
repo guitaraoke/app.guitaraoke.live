@@ -15,7 +15,7 @@ div#dashboard {
 	height: 100vh;
 	overflow: clip;
 	display: grid;
-	grid-template-columns: 30% auto 30%;
+	grid-template-columns: 60% 40%;
 	outline: 1px solid #f00;
 
 	div#song-queue {

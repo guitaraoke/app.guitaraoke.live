@@ -12,9 +12,9 @@ public class RootWebTests : WebTestBase {
 		response.IsSuccessStatusCode.ShouldBe(true);
 	}
 
-	private async Task<(Song, HttpResponseMessage)> GetSong() {
+	private async Task<(Song, HttpResponseMessage)> GetSong(string? slug = null) {
 		var client = Factory.CreateClient();
-		var song = Db!.ListSongs().First(s => s.Title.Contains("'"));
+		var song = (slug == null ? Db!.ListSongs().First() : Db.FindSong(slug));
 		var response = await client.GetAsync($"/song/{song.Slug}");
 		return (song, response);
 	}
@@ -32,8 +32,16 @@ public class RootWebTests : WebTestBase {
 		response.IsSuccessStatusCode.ShouldBe(true);
 	}
 
-	private async Task<(Song, IDocument)> GetSongDocument() {
-		var (song, response) = await GetSong();
+	[Fact]
+	public async Task Root_Song_With_Played_Song_Does_Not_Allow_Signups() {
+		var song = Db.FindSong("abba-waterloo")!;
+		song.PlayedAt = DateTime.UtcNow;
+		var (_, doc) = await GetSongDocument(song.Slug);
+		doc.QuerySelector("form").ShouldBeNull();
+	}
+
+	private async Task<(Song, IDocument)> GetSongDocument(string slug = null) {
+		var (song, response) = await GetSong(slug);
 		var html = await response.Content.ReadAsStringAsync();
 		var document = await AngleSharp.OpenAsync(req => req.Content(html));
 		return (song, document);

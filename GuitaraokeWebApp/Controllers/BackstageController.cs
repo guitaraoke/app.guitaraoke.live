@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 
 namespace GuitaraokeWebApp.Controllers;
 
@@ -22,6 +23,15 @@ public class BackstageController : Controller {
 		if (song == default) return BadRequest();
 		db.MoveSongToPosition(song, post.Position);
 		return Json(true);
+	}
+
+	[HttpPost]
+	public async Task<IActionResult> Status(string id, [FromBody] bool played) {
+		var song = db.FindSong(id);
+		if (song == default) return NotFound();
+		song.PlayedAt = (played ? DateTime.UtcNow : null);
+		if (song.Played) db.RemoveSongFromQueue(song);
+		return Json(played);
 	}
 }
 
