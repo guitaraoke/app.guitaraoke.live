@@ -11,11 +11,15 @@ public enum Instrument {
 }
 
 public class User {
+	
+	public string? Name { get; set; }
+
 	public Guid Guid { get; set; }
-	public string Name { get; set; }
+
 	public User(Guid? guid = null, string? name = null) {
 		Guid = guid ?? Guid.NewGuid();
-		Name = name ?? String.Empty;
+		Name = name;
+
 	}
 	public Dictionary<Song, Instrument[]> Signups { get; set; } = new();
 }

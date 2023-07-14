@@ -1,0 +1,14 @@
+@model User
+@{
+	ViewData["Title"] = "My Songs";
+}
+<h1>Hi @(Model.Name ?? "there")</h1>
+@if (Model.Signups.Any()) {
+
+
+} else {
+	<div class="no-signups-message">
+		<h2>You haven't signed up to sing or play anything!</h2>
+		<p>Why not pick something from the <a asp-action="Index">song list?</a></p>
+	</div>
+}

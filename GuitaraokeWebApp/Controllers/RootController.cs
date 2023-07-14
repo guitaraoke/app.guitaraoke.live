@@ -58,5 +58,10 @@ public class RootController : Controller {
 		};
 		return View(songQueue);
 	}
+
+	public async Task<IActionResult> Me() {
+		var user = tracker.GetUser();
+		return View(user);
+	}
 }
 

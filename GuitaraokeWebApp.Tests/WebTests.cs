@@ -6,28 +6,6 @@ using Moq;
 
 namespace GuitaraokeWebApp.Tests;
 
-public class UserTrackerTests {
-
-	public class Jar : ICookieJar {
-		private readonly Dictionary<string, string> contents = new();
-		public string? Get(string name) => contents.GetValueOrDefault(name);
-		public void Set(string name, string value) => contents[name] = value;
-	}
-
-	[Fact]
-	public void Tracker_Returns_Same_Instance_For_Same_Guid() {
-		var jar = new Jar();
-		var guid = Guid.NewGuid();
-		var db = new SongDatabase(new Song[] { });
-		jar.Set(HttpCookieUserTracker.COOKIE_NAME, guid.ToString());
-		var t = new HttpCookieUserTracker(jar, db);
-		var user1 = t.GetUser();
-		var user2 = t.GetUser();
-		user1.Guid.ShouldBe(user2.Guid);
-		user1.ShouldBe(user2);
-	}
-
-}
 public class WebTests : IClassFixture<WebApplicationFactory<Program>> {
 	private readonly WebApplicationFactory<Program> factory = new();
 
@@ -115,6 +93,52 @@ public class WebTests : IClassFixture<WebApplicationFactory<Program>> {
 		var slug = elements.Single().GetAttribute(SongStarTagHelper.DATA_ATTRIBUTE_NAME);
 		slug.ShouldBe(song.Slug);
 	}
+
+	[Fact]
+	public async Task Root_Me_Returns_Ok() {
+		var response = await factory.CreateClient().GetAsync("/me");
+		var html = await response.Content.ReadAsStringAsync();
+		var context = BrowsingContext.New(Configuration.Default);
+		var document = await context.OpenAsync(req => req.Content(html));
+		document.ShouldNotBeNull();
+		document.QuerySelector("title")!.InnerHtml.ShouldBe("My Songs");
+	}
+
+	[Theory]
+	[InlineData("Surly Dev", "Hi Surly Dev")]
+	[InlineData("Dylan", "Hi Dylan")]
+	[InlineData(null, "Hi there")]
+	[InlineData("", "Hi ")]
+	public async Task Root_Me_Includes_Name(string name, string expectedHtml) {
+		var html = await GetHtmlForMePage(name);
+		var context = BrowsingContext.New(Configuration.Default);
+		var document = await context.OpenAsync(req => req.Content(html));
+		document.ShouldNotBeNull();
+		document.QuerySelector("h1")!.InnerHtml.ShouldBe(expectedHtml);
+	}
+
+	[Fact]
+	public async Task Root_Me_With_No_Signsups_Returns_Message() {
+		var html = await GetHtmlForMePage("Eddie");
+		var context = BrowsingContext.New(Configuration.Default);
+		var document = await context.OpenAsync(req => req.Content(html));
+		document.ShouldNotBeNull();
+		document.QuerySelector(".no-signups-message").ShouldNotBeNull();
+	}
+
+	private async Task<string> GetHtmlForMePage(string name) {
+		var user = new User { Name = name };
+		var client = factory.CreateClient();
+		var db = factory.Services.GetService<ISongDatabase>();
+		db.SaveUser(user);
+		var request = new HttpRequestMessage(HttpMethod.Get, "/me");
+		var cookie = new Cookie(HttpCookieUserTracker.COOKIE_NAME, user.Guid.ToString());
+		request.Headers.Add("Cookie", cookie.ToString());
+		var response = await client.SendAsync(request);
+		var html = await response.Content.ReadAsStringAsync();
+		return html;
+	}
+
 
 	[Fact]
 	public async Task Root_Index_Sets_UserGuid_Cookie() {
