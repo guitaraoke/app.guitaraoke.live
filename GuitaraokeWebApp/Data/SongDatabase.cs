@@ -1,4 +1,4 @@
-﻿namespace GuitaraokeWebApp.Data;
+namespace GuitaraokeWebApp.Data;
 
 public class SongDatabase : ISongDatabase {
 	private readonly IList<Song> songs;
@@ -43,8 +43,7 @@ public class SongDatabase : ISongDatabase {
 	public SongSelection FindSongForUser(Song song, User user) {
 		return new(song) {
 			User = user,
-			IsStarred = ListStarredSongs(user).Contains(song),
-			Instruments = user.Signups.GetValueOrDefault(song) ?? new Instrument[] { }
+			IsStarred = ListStarredSongs(user).Contains(song)
 		};
 	}
 }

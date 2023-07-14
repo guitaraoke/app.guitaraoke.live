@@ -44,6 +44,20 @@ public class RootControllerSongTests : RootControllerTestBase {
 	}
 
 	[Fact]
+	public async Task POST_Song_With_No_Instruments_Deletes_Signup() {
+		var hurt = new Song("Nine Inch Nails", "Hurt");
+		var db = new SongDatabase(new[] { hurt });
+		var user = new User();
+		user.SignUp(hurt, new[] { Instrument.LeadGuitar });
+		db.SaveUser(user);
+		var tracker = new FakeUserTracker(user);
+		var c = new RootController(new NullLogger<RootController>(), db, tracker);
+		var result = c.Song(hurt.Slug, "Surly Dev", new Instrument[] { });
+		user.Signups.ShouldBeEmpty();
+	}
+
+
+	[Fact]
 	public async Task POST_Song_Updates_User_Name_In_Database() {
 		var hurt = new Song("Nine Inch Nails", "Hurt");
 		var db = new SongDatabase(new[] { hurt });
@@ -82,5 +96,23 @@ public class RootControllerSongTests : RootControllerTestBase {
 		var result = await c.Song(hurt.Slug) as ViewResult;
 		var model = result!.Model as SongSelection;
 		model.User.Name.ShouldBe(NAME);
+	}
+
+
+	[Fact]
+	public async Task Song_Returns_Song_With_Instruments_Selected() {
+		const string NAME = "Surly Dev";
+		var hurt = new Song("Nine Inch Nails", "Hurt");
+		var db = new SongDatabase(new[] { hurt });
+		var user = new User(name: NAME);
+		user.SignUp(hurt, new[] { Instrument.Piano, Instrument.Sing });
+		db.SaveUser(user);
+		var tracker = new FakeUserTracker(user);
+		var c = new RootController(new NullLogger<RootController>(), db, tracker);
+		var result = await c.Song(hurt.Slug) as ViewResult;
+		var model = result!.Model as SongSelection;
+		model.Instruments.Length.ShouldBe(2);
+		model.Instruments.ShouldContain(Instrument.Piano);
+		model.Instruments.ShouldContain(Instrument.Sing);
 	}
 }

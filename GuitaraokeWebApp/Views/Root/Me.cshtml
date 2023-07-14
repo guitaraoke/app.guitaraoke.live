@@ -7,9 +7,7 @@
 	<ul class="signup-list">
 		@foreach (var signup in Model.Signups) {
 			<li>
-				<a asp-action="song" asp-route-id="@signup.Key.Slug">
-					@signup.Key.Name
-				</a>
+				<a asp-action="song" asp-route-id="@signup.Key.Slug">@signup.Key.Name</a>
 				@String.Join(", ", signup.Value.Select(i => i.ToString()).ToArray())
 			</li>
 		}

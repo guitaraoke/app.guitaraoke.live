@@ -40,6 +40,7 @@ public class RootController : Controller {
 		user.SignUp(song, instruments);
 		return RedirectToAction("me");
 	}
+
 	[HttpGet]
 	public async Task<IActionResult> Song(string id) {
 		var song = db.FindSong(id);

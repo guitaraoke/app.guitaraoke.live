@@ -1,4 +1,6 @@
-﻿namespace GuitaraokeWebApp.Model;
+using Microsoft.AspNetCore.Mvc.Rendering;
+
+namespace GuitaraokeWebApp.Model;
 
 public class SongSelection {
 	public SongSelection(Song song) {
@@ -7,6 +9,17 @@ public class SongSelection {
 	public User User { get; set; }
 	public Song Song { get; set; }
 	public bool IsStarred { get; set; }
-	public Instrument[] Instruments { get; set; } = { };
 	public override string ToString() => $"[{(IsStarred ? "*" : " ")}] {Song.Artist} - {Song.Title}";
+
+	public IEnumerable<SelectListItem> InstrumentOptions =>
+		Enum
+			.GetValues<Instrument>()
+			.Select(item => new SelectListItem {
+				Value = item.ToString(),
+				Text = item.ToString(),
+				Selected = this.Instruments.Contains(item)
+			});
+
+	public Instrument[] Instruments =>
+		this.User.Signups.GetValueOrDefault(Song) ?? new Instrument[] { };
 }

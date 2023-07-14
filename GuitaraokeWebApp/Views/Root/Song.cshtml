@@ -6,13 +6,15 @@
 <h1>@Model.Song.Title</h1>
 <h2>@Model.Song.Artist</h2>
 <form asp-action="Song" method="post">
-	<input type="hidden" name="slug" value="@Model.Song.Slug"/>
-	@foreach (var item in Enum.GetValues<Instrument>()) {
-		<label for="input-@(Enum.GetName(item))">
-			<input type="checkbox" name="instruments" id="input-@(Enum.GetName(item))" value="@item" />
-			@Enum.GetName(item)
-		</label><br/>
+	<input type="hidden" name="slug" value="@Model.Song.Slug" />
+	@foreach (var i in Model.InstrumentOptions) {
+		<label for="input-@i.Value">
+			<input type="checkbox" name="instruments" value="@i.Value"
+				   id="input-@i.Value"
+			       @(i.Selected ? "checked='checked'" : "") />
+			@i.Text
+		</label><br />
 	}
-	<input type="text" name="name" placeholder="Your name"/>
-	<input type="submit"/>
+	<input type="text" name="name" placeholder="Your name" value="@Model.User.Name" />
+	<input type="submit" />
 </form>

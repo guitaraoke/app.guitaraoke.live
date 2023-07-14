@@ -1,4 +1,4 @@
-﻿namespace GuitaraokeWebApp.Data;
+namespace GuitaraokeWebApp.Data;
 
 [Flags]
 public enum Instrument {
@@ -26,5 +26,11 @@ public class User {
 	// Like how when you log in (two words), that's a login (one word)
 	public Dictionary<Song, Instrument[]> Signups { get; set; } = new();
 
-	public void SignUp(Song song, Instrument[] instruments) => Signups[song] = instruments;
+	public void SignUp(Song song, Instrument[] instruments) {
+		if (instruments.Any()) {
+			Signups[song] = instruments;
+		} else {
+			Signups.Remove(song);
+		}
+	}
 }
