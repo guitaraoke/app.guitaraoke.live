@@ -1,11 +1,18 @@
+using Microsoft.OpenApi.Attributes;
+
 namespace GuitaraokeWebApp.Data;
 
 [Flags]
 public enum Instrument {
+	[Display("Sing")]
 	Sing,
+	[Display("Lead Guitar")]
 	LeadGuitar,
+	[Display("Rhythm Guitar")]
 	RhythmGuitar,
+	[Display("Bass")]
 	BassGuitar,
+	[Display("Piano")]
 	Piano,
 }
 

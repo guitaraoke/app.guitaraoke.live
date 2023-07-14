@@ -1,5 +1,10 @@
 $gutter: 8px;
 
+div.big-emoji {
+	font-size: 800%;
+	text-align: center;
+}
+
 html, body {
 	margin: 0;
 	padding: 0;
@@ -43,7 +48,7 @@ ol.song-list {
 		&.already-played {
 			text-decoration: line-through;
 			text-decoration-thickness: 2px;
-			text-decoration-color: #fff;			
+			text-decoration-color: #fff;
 		}
 
 		border: 1px solid #fff;
@@ -56,23 +61,109 @@ ol.song-list {
 		a {
 			text-decoration: none;
 			color: #fff;
+
 			span {
 				white-space: nowrap;
+
 				&.long-song-name {
-				font-size: 80%;
+					font-size: 80%;
 				}
 			}
-		}
-
-		a.song-star {
-			float: right;
-			font-size: 120%;
 		}
 	}
 }
 
+a.song-star {
+	float: right;
+	font-size: 120%;
+}
+
 a.song-star.fa-solid {
 	color: #f90 !important;
+}
+
+h1 {
+	font-size: 140%;
+	margin: 0;
+}
+
+h2 {
+	font-size: 120%;
+	margin: $gutter 0;
+	font-weight: 100 normal;
+}
+
+main {
+	padding: $gutter $gutter 24px $gutter;
+	color: #fff;
+
+	&.song-page {
+		a.song-star {
+			color: #fff;
+			font-size: 200%;
+		}
+	}
+
+	&.my-songs {
+		ul {
+			margin: 0;
+			padding: 0;
+
+			li {
+				border: 1px solid #fff;
+				padding: $gutter;
+				border-radius: $gutter;
+				background-color: rgba(0,0,0,0.5);
+				margin-bottom: $gutter;
+			}
+
+			li a {
+				text-decoration: none;
+				color: #fff;
+
+				span {
+					line-height: 1.4em;
+					white-space: nowrap;
+				}
+			}
+
+			li em {
+				margin: $gutter;
+				display: block;
+				font-size: 80%;
+			}
+		}
+	}
+
+	form {
+		label {
+			display: block;
+		}
+
+		input[type=text] {
+			width: 100%;
+			box-sizing: border-box;
+			margin: 8px 0;
+			font-size: 20px;
+			padding: 8px;
+			border: 0;
+			border-radius: 8px;
+			color: #213;
+			font-weight: bold;
+		}
+
+		input[type=submit] {
+			width: 100%;
+			box-sizing: border-box;
+			margin: 8px 0;
+			font-size: 20px;
+			padding: 8px;
+			border: 0;
+			border-radius: 8px;
+			background: #821b78;
+			color: #fff;
+		}
+	}
 }
 
 div#dashboard {
@@ -103,22 +194,67 @@ div#dashboard {
 		outline: 2px solid #00f;
 		overflow: scroll;
 	}
+
+	&.queue-page {
+		ol {
+			li {
+				list-style-position: inside;
+				border: 1px solid #f0f;
+			}
+		}
+	}
 }
 
 footer {
-position: fixed;
-bottom: 0;
-left: 0;
-right: 0;
-height: 12px;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	height: 12px;
 	background-color: #000;
 	font-size: 50%;
 	color: #fff;
 	text-align: center;
 	font-weight: normal;
 	padding: $gutter;
+
 	a {
 		color: #b230b7;
 		text-decoration: none;
 	}
+}
+
+input[type="checkbox"] {
+	-webkit-appearance: none;
+	appearance: none;
+	background-color: var(--form-background);
+	margin: 0 8px 0 0;
+	font: inherit;
+	color: currentColor;
+	width: 1.4em;
+	height: 1.4em;
+	border: 3px solid currentColor;
+	background-color: #000000;
+	background-color: rgba(0, 0, 0, 0.5);
+	border-radius: 4px;
+	transform: translateY(-0.075em);
+	display: grid;
+	place-content: center;
+	float: left;
+}
+
+input[type="checkbox"]::before {
+	background-color: #fff;
+	content: "";
+	width: 0.8em;
+	height: 0.8em;
+	clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+	transform: scale(0);
+	transform-origin: bottom left;
+	transition: 120ms transform ease-in-out;
+	box-shadow: inset 1em 1em var(--form-control-color);
+}
+
+input[type="checkbox"]:checked::before {
+	transform: scale(1);
 }

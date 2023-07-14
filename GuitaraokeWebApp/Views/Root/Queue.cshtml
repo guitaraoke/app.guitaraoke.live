@@ -1,13 +1,13 @@
 @model SongQueue
 @{
 	ViewData["Title"] = "Queue";
+	ViewData["MainCssClass"] = "queue-page";
 }
 <h1>Coming Up...</h1>
 <ol>
 	@foreach (var item in Model.QueuedSongs) {
 		<li>
 			<a asp-action="Song" asp-route-id="@item.Song.Slug">@item.Song.Name</a>
-			
 			<ul>
 				@foreach (var player in item.Players) {
 					<li>@player.Key.Name: @String.Join(", ", player.Value)</li>

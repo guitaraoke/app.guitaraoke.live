@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Reflection;
+using Microsoft.OpenApi.Attributes;
 
 namespace GuitaraokeWebApp.Model;
 
@@ -16,10 +18,17 @@ public class SongSelection {
 			.GetValues<Instrument>()
 			.Select(item => new SelectListItem {
 				Value = item.ToString(),
-				Text = item.ToString(),
+				Text = item.GetDisplayName(),
 				Selected = this.Instruments.Contains(item)
 			});
 
 	public Instrument[] Instruments =>
 		this.User.Signups.GetValueOrDefault(Song) ?? new Instrument[] { };
 }
+
+public static class EnumExtensions {
+	public static string GetDisplayName(this Enum enumValue) => enumValue.GetType().GetMember(enumValue.ToString())?
+		.FirstOrDefault()?
+			.GetCustomAttribute<DisplayAttribute>()?.Name ?? enumValue.ToString();
+}
+

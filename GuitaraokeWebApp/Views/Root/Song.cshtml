@@ -1,13 +1,17 @@
 @model SongSelection
 @{
 	ViewData["Title"] = Model.Song.Name;
+	ViewData["MainCssClass"] = "song-page";
 }
 <song-star selection="@Model" />
 <h1>@Model.Song.Title</h1>
 <h2>@Model.Song.Artist</h2>
 @if (Model.Song.Played) {
+	<div class="big-emoji">😕</div>
+	<h1>Sorry!</h1>
 	<p>We already played this one tonight!</p>
 } else {
+	<p>Want to sing or play this one?</p>
 	<form asp-action="Song" method="post">
 		<input type="hidden" name="slug" value="@Model.Song.Slug" />
 		@foreach (var i in Model.InstrumentOptions) {
@@ -20,6 +24,6 @@
 			<br />
 		}
 		<input type="text" name="name" placeholder="Your name" value="@Model.User.Name" />
-		<input type="submit" />
+		<input type="submit" value="Let's Rock!" />
 	</form>
 }
