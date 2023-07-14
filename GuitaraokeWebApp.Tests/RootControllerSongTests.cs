@@ -37,7 +37,7 @@ public class RootControllerSongTests : RootControllerTestBase {
 		db.SaveUser(user);
 		var tracker = new FakeUserTracker(user);
 		var c = new RootController(new NullLogger<RootController>(), db, tracker);
-		var result = c.Song(hurt.Slug, "Surly Dev", new[] { Instrument.Sing, Instrument.BassGuitar });
+		await c.Song(hurt.Slug, "Surly Dev", new[] { Instrument.Sing, Instrument.BassGuitar });
 		var selection = db.FindSongForUser(hurt, user);
 		selection.Instruments.ShouldContain(Instrument.Sing);
 		selection.Instruments.ShouldContain(Instrument.BassGuitar);
@@ -52,7 +52,7 @@ public class RootControllerSongTests : RootControllerTestBase {
 		db.SaveUser(user);
 		var tracker = new FakeUserTracker(user);
 		var c = new RootController(new NullLogger<RootController>(), db, tracker);
-		var result = c.Song(hurt.Slug, "Surly Dev", new Instrument[] { });
+		await c.Song(hurt.Slug, "Surly Dev", new Instrument[] { });
 		user.Signups.ShouldBeEmpty();
 	}
 
@@ -110,7 +110,9 @@ public class RootControllerSongTests : RootControllerTestBase {
 		var tracker = new FakeUserTracker(user);
 		var c = new RootController(new NullLogger<RootController>(), db, tracker);
 		var result = await c.Song(hurt.Slug) as ViewResult;
-		var model = result!.Model as SongSelection;
+		result.ShouldNotBeNull();
+		var model = result.Model as SongSelection;
+		model.ShouldNotBeNull();
 		model.Instruments.Length.ShouldBe(2);
 		model.Instruments.ShouldContain(Instrument.Piano);
 		model.Instruments.ShouldContain(Instrument.Sing);

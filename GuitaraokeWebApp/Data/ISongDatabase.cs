@@ -10,7 +10,8 @@ public interface ISongDatabase {
 	Song? FindSong(string slug);
 	User? FindUser(Guid guid);
 	User SaveUser(User user);
-	List<(Song, Dictionary<User, Instrument[]>)> GetQueuedSongs();
+	List<(Song Song, Dictionary<User, Instrument[]> Players)> GetQueuedSongs();
 	Dictionary<Song, int> GetStarredSongs();
 	void AddSongToQueue(Song song);
+	void MoveSongToPosition(Song song, int newIndex);
 }

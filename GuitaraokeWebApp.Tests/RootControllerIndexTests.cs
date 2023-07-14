@@ -12,7 +12,7 @@ public class RootControllerIndexTests : RootControllerTestBase {
 		var c = MakeController();
 		var result = await c.Index() as ViewResult;
 		result.ShouldNotBeNull();
-		var model = (result.Model as IEnumerable<SongSelection>).ToList();
+		var model = ((result.Model as IEnumerable<SongSelection>)!).ToList();
 		model.ShouldNotBeNull();
 		model.ShouldNotBeEmpty();
 	}
@@ -39,7 +39,7 @@ public class RootControllerIndexTests : RootControllerTestBase {
 		var c = new RootController(new NullLogger<RootController>(), db, new FakeUserTracker());
 		var result = await c.Index() as ViewResult;
 		result.ShouldNotBeNull();
-		var model = (result.Model as IEnumerable<SongSelection>).ToList();
+		var model = ((result.Model as IEnumerable<SongSelection>)!).ToList();
 		foreach (var song in model) song.IsStarred.ShouldBe(false);
 	}
 

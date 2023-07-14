@@ -38,7 +38,7 @@ public class SongDatabase : ISongDatabase {
 
 	private readonly List<Song> queuedSongs = new();
 
-	public List<(Song, Dictionary<User, Instrument[]>)> GetQueuedSongs()
+	public List<(Song Song, Dictionary<User, Instrument[]> Players)> GetQueuedSongs()
 		=> queuedSongs.Select(song => (song, ListPlayers(song))).ToList();
 
 	public Dictionary<Song, int> GetStarredSongs()
@@ -47,6 +47,13 @@ public class SongDatabase : ISongDatabase {
 	public void AddSongToQueue(Song song) {
 		if (queuedSongs.Contains(song)) return;
 		queuedSongs.Add(song);
+	}
+
+	public void MoveSongToPosition(Song song, int newIndex) {
+		if (queuedSongs.Contains(song)) queuedSongs.Remove(song);
+		if (newIndex < 0) newIndex = 0;
+		if (newIndex >= queuedSongs.Count) newIndex = queuedSongs.Count;
+		queuedSongs.Insert(newIndex, song);
 	}
 
 	private Dictionary<User, Instrument[]> ListPlayers(Song song)

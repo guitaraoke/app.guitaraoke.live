@@ -1,3 +1,42 @@
+html {
+	height: 100vh;
+}
+
+html, body {
+	margin: 0;
+	padding: 0;
+}
+
 a.song-star.fa-solid {
 	color: #f90;
+}
+
+div#dashboard {
+	height: 100vh;
+	overflow: clip;
+	display: grid;
+	grid-template-columns: 30% auto 30%;
+	outline: 1px solid #f00;
+
+	div#song-queue {
+		outline: 2px solid #0f0;
+		overflow: scroll;
+
+		ol > li {
+			list-style-position: inside;
+			border: 1px solid #000;
+			margin: 4px;
+			background: #306;
+			color: #fff;
+
+			&.drop-target {
+				border-top: 10px solid #f0f;
+			}
+		}
+	}
+
+	div#starred-songs {
+		outline: 2px solid #00f;
+		overflow: scroll;
+	}
 }

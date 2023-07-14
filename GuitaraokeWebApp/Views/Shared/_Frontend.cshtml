@@ -1,0 +1,17 @@
+@{
+	Layout = "_Layout";
+}
+<header>
+	<nav>
+		<a asp-action="index">all songs</a>
+		<a asp-action="me">my songs</a>
+		<a asp-action="queue">queue</a>
+		<a href="/backstage">backstage</a>
+	</nav>
+</header>
+<main>
+	@RenderBody()
+</main>
+<footer>
+	footer
+</footer>

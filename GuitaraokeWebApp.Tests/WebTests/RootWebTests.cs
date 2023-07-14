@@ -105,7 +105,6 @@ public class RootWebTests : WebTestBase {
 	public async Task Root_Me_Returns_Ok() {
 		var response = await Factory.CreateClient().GetAsync("/me");
 		var html = await response.Content.ReadAsStringAsync();
-		
 		var document = await AngleSharp.OpenAsync(req => req.Content(html));
 		document.ShouldNotBeNull();
 		document.QuerySelector("title")!.InnerHtml.ShouldBe("My Songs");
