@@ -11,7 +11,7 @@ public enum Instrument {
 }
 
 public class User {
-	
+
 	public string? Name { get; set; }
 
 	public Guid Guid { get; set; }
@@ -21,5 +21,10 @@ public class User {
 		Name = name;
 
 	}
+
+	// When you sign up (two words), it creates a signup (one word)
+	// Like how when you log in (two words), that's a login (one word)
 	public Dictionary<Song, Instrument[]> Signups { get; set; } = new();
+
+	public void SignUp(Song song, Instrument[] instruments) => Signups[song] = instruments;
 }

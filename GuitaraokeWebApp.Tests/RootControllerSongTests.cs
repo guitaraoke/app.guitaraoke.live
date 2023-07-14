@@ -37,10 +37,37 @@ public class RootControllerSongTests : RootControllerTestBase {
 		db.SaveUser(user);
 		var tracker = new FakeUserTracker(user);
 		var c = new RootController(new NullLogger<RootController>(), db, tracker);
-		var result = c.Song(hurt.Slug, "Surly Dev", new []{ Instrument.Sing, Instrument.BassGuitar });
+		var result = c.Song(hurt.Slug, "Surly Dev", new[] { Instrument.Sing, Instrument.BassGuitar });
 		var selection = db.FindSongForUser(hurt, user);
 		selection.Instruments.ShouldContain(Instrument.Sing);
 		selection.Instruments.ShouldContain(Instrument.BassGuitar);
+	}
+
+	[Fact]
+	public async Task POST_Song_Updates_User_Name_In_Database() {
+		var hurt = new Song("Nine Inch Nails", "Hurt");
+		var db = new SongDatabase(new[] { hurt });
+		var user = new User();
+		var instruments = new[] { Instrument.Sing, Instrument.BassGuitar };
+		db.SaveUser(user);
+		var tracker = new FakeUserTracker(user);
+		var c = new RootController(new NullLogger<RootController>(), db, tracker);
+		await c.Song(hurt.Slug, "Surly Dev", instruments);
+		db.FindUser(user.Guid)!.Name.ShouldBe("Surly Dev");
+	}
+
+	[Fact]
+	public async Task POST_Song_Redirects_To_Me() {
+		var hurt = new Song("Nine Inch Nails", "Hurt");
+		var db = new SongDatabase(new[] { hurt });
+		var user = new User();
+		var instruments = new[] { Instrument.Sing, Instrument.BassGuitar };
+		db.SaveUser(user);
+		var tracker = new FakeUserTracker(user);
+		var c = new RootController(new NullLogger<RootController>(), db, tracker);
+		var result = await c.Song(hurt.Slug, "Surly Dev", instruments) as RedirectToActionResult;
+		result.ShouldNotBeNull();
+		result.ActionName.ShouldBe("me");
 	}
 
 	[Fact]

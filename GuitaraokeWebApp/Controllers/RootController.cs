@@ -1,4 +1,5 @@
 using GuitaraokeWebApp.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GuitaraokeWebApp.Controllers;
@@ -35,8 +36,9 @@ public class RootController : Controller {
 		var song = db.FindSong(slug);
 		if (song == default) return NotFound();
 		var user = tracker.GetUser();
-		db.SignUp(user, song, instruments);
-		return Ok("yay!");
+		if (! String.IsNullOrEmpty(name)) user.Name = name;
+		user.SignUp(song, instruments);
+		return RedirectToAction("me");
 	}
 	[HttpGet]
 	public async Task<IActionResult> Song(string id) {

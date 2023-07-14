@@ -10,5 +10,4 @@ public interface ISongDatabase {
 	Song? FindSong(string slug);
 	User? FindUser(Guid guid);
 	User SaveUser(User user);
-	void SignUp(User user, Song song, Instrument[] instruments);
 }

@@ -40,10 +40,6 @@ public class SongDatabase : ISongDatabase {
 			.GroupBy(item => item.Item2)
 			.ToDictionary(group => group.Key, group => group.Select(g => g.Item1).ToList());
 
-	public void SignUp(User user, Song song, Instrument[] instruments) {
-		user.Signups[song] = instruments;
-	}
-
 	public SongSelection FindSongForUser(Song song, User user) {
 		return new(song) {
 			User = user,

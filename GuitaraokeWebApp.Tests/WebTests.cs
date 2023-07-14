@@ -3,6 +3,7 @@ using GuitaraokeWebApp.Model;
 using GuitaraokeWebApp.TagHelpers;
 using Microsoft.AspNetCore.Http;
 using Moq;
+using System.Xml.Linq;
 
 namespace GuitaraokeWebApp.Tests;
 
@@ -110,7 +111,8 @@ public class WebTests : IClassFixture<WebApplicationFactory<Program>> {
 	[InlineData(null, "Hi there")]
 	[InlineData("", "Hi ")]
 	public async Task Root_Me_Includes_Name(string name, string expectedHtml) {
-		var html = await GetHtmlForMePage(name);
+		var user = new User { Name = name };
+		var html = await GetHtmlForMePage(user);
 		var context = BrowsingContext.New(Configuration.Default);
 		var document = await context.OpenAsync(req => req.Content(html));
 		document.ShouldNotBeNull();
@@ -118,16 +120,34 @@ public class WebTests : IClassFixture<WebApplicationFactory<Program>> {
 	}
 
 	[Fact]
-	public async Task Root_Me_With_No_Signsups_Returns_Message() {
-		var html = await GetHtmlForMePage("Eddie");
+	public async Task Root_Me_With_No_Signups_Returns_Message() {
+		var user = new User { Name = "Eddie" };
+		var html = await GetHtmlForMePage(user);
 		var context = BrowsingContext.New(Configuration.Default);
 		var document = await context.OpenAsync(req => req.Content(html));
 		document.ShouldNotBeNull();
 		document.QuerySelector(".no-signups-message").ShouldNotBeNull();
 	}
 
-	private async Task<string> GetHtmlForMePage(string name) {
-		var user = new User { Name = name };
+	[Fact]
+	public async Task Root_Me_With_Signups_Includes_Song_List() {
+		var db = factory.Services.GetService<ISongDatabase>();
+		var song = db.ListSongs().First();
+		var user = new User { Name = "Geddy" };
+		user.SignUp(song, new[] { Instrument.Sing, Instrument.BassGuitar });
+		db.SaveUser(user);
+		var html = await GetHtmlForMePage(user);
+		var context = BrowsingContext.New(Configuration.Default);
+		var document = await context.OpenAsync(req => req.Content(html));
+		document.ShouldNotBeNull();
+		document.QuerySelector(".no-signups-message").ShouldBeNull();
+		var liHtml = document.QuerySelectorAll(".signup-list li").Single().InnerHtml;
+		liHtml.ShouldContain(song.Title);
+		liHtml.ShouldContain(song.Artist);
+		liHtml.ShouldContain(song.Slug);
+	}
+
+	private async Task<string> GetHtmlForMePage(User user) {
 		var client = factory.CreateClient();
 		var db = factory.Services.GetService<ISongDatabase>();
 		db.SaveUser(user);
