@@ -125,7 +125,7 @@ h2 {
 }
 
 main {
-	padding: $gutter $gutter 24px $gutter;
+	padding: $gutter $gutter 40px $gutter;
 	color: #fff;
 
 	&.song-page {
@@ -296,6 +296,7 @@ div#dashboard {
 			color: #fff;
 			padding: $gutter;
 			line-height: 1.4em;
+
 			&.drop-target {
 				border-top: 10px solid #f0f;
 			}
@@ -307,8 +308,7 @@ div#dashboard {
 		overflow: scroll;
 
 		& > ol > li {
-		list-style: none;
-			
+			list-style: none;
 		}
 	}
 }
@@ -318,17 +318,20 @@ footer {
 	bottom: 0;
 	left: 0;
 	right: 0;
-	height: 12px;
+	padding: 12px $gutter $gutter $gutter;
+	height: 20px;
 	background-color: #000;
-	font-size: 50%;
 	color: #fff;
-	text-align: center;
+	text-align: left;
 	font-weight: normal;
-	padding: $gutter;
-
-	a {
-		color: #b230b7;
-		text-decoration: none;
+	
+	font-size: 14px;
+	span.social-media-icons a {
+	position: relative;
+	top: -8px;
+		font-size: 30px;
+		float: right;
+		margin-left: 8px;
 	}
 }
 
@@ -365,4 +368,12 @@ input[type="checkbox"]::before {
 
 input[type="checkbox"]:checked::before {
 	transform: scale(1);
+}
+
+
+.fa-square-instagram {
+	background: #d6249f;
+	background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%,#d6249f 60%,#285AEB 90%);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
 }
