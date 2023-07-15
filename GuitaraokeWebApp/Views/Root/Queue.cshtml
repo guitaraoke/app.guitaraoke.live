@@ -29,7 +29,7 @@ else {
 @if (Model.StarredSongs.Any()) {
 
 	<p>Tonight's most-starred songs:</p>
-	<ul class="star-chart">
+	<ol class="star-chart">
 		@foreach (var item in Model.StarredSongs.OrderByDescending(pair => pair.Value)) {
 			<li>
 				<span class="starfield">
@@ -41,7 +41,7 @@ else {
 				<span class="title">@item.Key.Title</span>
 			</li>
 		}
-	</ul>
+	</ol>
 }
 else {
 	<h2>Nobody's starred anything!</h2>

@@ -8,13 +8,14 @@
 			@foreach (var item in Model.QueuedSongs) {
 				<li draggable="true" class="dropzone" id="li-@item.Song.Slug"
 					data-song-slug="@item.Song.Slug">
-					@item.Song.Name
 					<a href="#" class="mark-song-as-played-link">PLAYED</a>
+					@item.Song.Name
 					<ul>
 						@foreach (var player in item.Players) {
 							<li>
 								@player.Key.Name
-								<text> (@String.Join(", ", player.Value))</text>
+								<em>@String.Join(", ", player.Value.Select(i => i.GetDisplayName()).ToArray())
+								</em>
 							</li>
 						}
 					</ul>
@@ -24,14 +25,17 @@
 		</ol>
 	</div>
 	<div id="starred-songs">
-		<ol>
-			@foreach (var pair in Model.StarredSongs
-					.OrderByDescending(pair => pair.Value)) {
+		<ol class="star-chart">
+			@foreach (var item in Model.StarredSongs.OrderByDescending(pair => pair.Value)) {
 				<li>
-					@pair.Key.Name
-					@pair.Value
+					<span class="starfield">
+						@for (var i = 0; i < item.Value; i++) {
+							<i class="fa-solid fa-star"></i>
+						}
+					</span>
+					<span class="artist">@item.Key.Artist</span>
+					<span class="title">@item.Key.Title</span>
 				</li>
-
 			}
 		</ol>
 	</div>
@@ -42,12 +46,15 @@
 			if (target.tagName === "A" && target.className === "mark-song-as-played-link") {
 				var li = target.closest("li");
 				var slug = li.getAttribute("data-song-slug");
-				await fetch(`/backstage/status/${slug}`, {
-					method: 'POST',
-					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify(true)
+				fetch(`/backstage/status/${slug}`,
+					{
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify(true)
+					}).then(() => {
+					li.classList.add("hide");
+					window.setTimeout(() => li.remove(), 500);
 				});
-				li.remove();
 			}
 		});
 	let dragged;

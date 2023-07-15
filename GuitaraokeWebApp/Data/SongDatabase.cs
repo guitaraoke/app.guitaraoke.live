@@ -81,19 +81,19 @@ public class SongDatabase : ISongDatabase {
 	}
 
 	public void PopulateSampleData() {
-		var alicia = new User { Name = "Alicia K" };
+		var alicia = new User { Name = "Alicia" };
 		var ben = new User { Name = "Ben F" };
 		var chris = new User { Name = "Chris C" };
 		var david = new User { Name = "David C" };
-		var eddie = new User { Name = "Eddie van H" };
+		var eddie = new User { Name = "Ed van H" };
 		var freddie = new User { Name = "Freddie M" };
-		var gloria = new User { Name = "Gloria G"};
+		var gloria = new User { Name = "Gloria"};
 		var harry = new User { Name = "Harry" };
 		var iggy = new User { Name = "I. Pop" };
-		var joe = new User { Name = "Joe Bonamassa" };
-		var kerry = new User { Name = "Kerry K" };
-		var liam = new User { Name = "Liam H" };
-		var mike = new User { Name = "Mike R" };
+		var joe = new User { Name = "Joe B" };
+		var kerry = new User { Name = "Kerry" };
+		var liam = new User { Name = "Liam" };
+		var mike = new User { Name = "Mike" };
 
 		SaveUser(alicia);
 		SaveUser(ben);

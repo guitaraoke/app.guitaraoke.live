@@ -19,6 +19,7 @@ div.big-emoji {
 html, body {
 	margin: 0;
 	padding: 0;
+	color: #fff;
 }
 
 a {
@@ -174,30 +175,6 @@ main {
 				}
 			}
 		}
-
-		ul.star-chart {
-			margin: 0;
-			padding: 0;
-			font-size: 70%;
-
-			li {
-				border-top: 1px solid #fff;
-				padding: $gutter 0;
-				line-height: 1.4em;
-			}
-
-			span.artist {
-				display: block;
-				font-weight: bold;
-			}
-
-			span.starfield {
-				display: inline-block;
-				float: right;
-				font-size: 80%;
-				color: $gold;
-			}
-		}
 	}
 
 	&.my-songs {
@@ -262,24 +239,63 @@ main {
 	}
 }
 
+ol.star-chart {
+	margin: 0;
+	padding: 0;
+	font-size: 70%;
+
+	li {
+		border-top: 1px solid #fff;
+		padding: $gutter 0;
+		line-height: 1.4em;
+	}
+
+	span.artist {
+		display: block;
+		font-weight: bold;
+	}
+
+	span.starfield {
+		display: inline-block;
+		float: right;
+		font-size: 80%;
+		color: $gold;
+	}
+}
+
+
 div#dashboard {
+	a.mark-song-as-played-link {
+		background-color: $hotpink;
+		float: right;
+		text-decoration: none;
+		padding: 8px;
+		border-radius: 8px;
+		margin: 8px;
+	}
+
 	height: 100vh;
 	overflow: clip;
 	display: grid;
 	grid-template-columns: 60% 40%;
-	outline: 1px solid #f00;
 
 	div#song-queue {
-		outline: 2px solid #0f0;
 		overflow: scroll;
+
+		> ol {
+			margin: 0;
+			padding: 0;
+		}
 
 		ol > li {
 			list-style-position: inside;
-			border: 1px solid #000;
-			margin: 4px;
-			background: #306;
+			border: 1px solid #fff;
+			border-radius: $gutter;
+			margin: $gutter;
+			background: rgba(0,0,0,0.5);
 			color: #fff;
-
+			padding: $gutter;
+			line-height: 1.4em;
 			&.drop-target {
 				border-top: 10px solid #f0f;
 			}
@@ -287,8 +303,13 @@ div#dashboard {
 	}
 
 	div#starred-songs {
-		outline: 2px solid #00f;
+		padding: 8px;
 		overflow: scroll;
+
+		& > ol > li {
+		list-style: none;
+			
+		}
 	}
 }
 
