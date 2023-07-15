@@ -55,7 +55,7 @@ public class BackstageControllerTests {
 	}
 
 	[Fact]
-	public async Task Moving_Song_Works() {
+	public async Task Moving_Song_Up_Works() {
 		var adia = new Song("Sarah McLachlan", "Adia");
 		var bang = new Song("Blur", "Bang");
 		var cave = new Song("Muse", "Cave");
@@ -71,6 +71,25 @@ public class BackstageControllerTests {
 		queue[0].Song.Name.ShouldBe(cave.Name);
 		queue[1].Song.Name.ShouldBe(adia.Name);
 		queue[2].Song.Name.ShouldBe(bang.Name);
+	}
+
+	[Fact]
+	public async Task Moving_Song_Down_Works() {
+		var adia = new Song("Sarah McLachlan", "Adia");
+		var bang = new Song("Blur", "Bang");
+		var cave = new Song("Muse", "Cave");
+		var user = new User();
+		var db = await SetUpQueue(user, adia, bang, cave);
+		var bc = new BackstageController(db);
+		var result = await bc.Move(new() {
+			Song = adia.Slug,
+			Position = 1,
+		});
+		result.ShouldNotBeNull();
+		var queue = db.GetQueuedSongs();
+		queue[0].Song.Name.ShouldBe(bang.Name);
+		queue[1].Song.Name.ShouldBe(adia.Name);
+		queue[2].Song.Name.ShouldBe(cave.Name);
 	}
 
 	[Fact]

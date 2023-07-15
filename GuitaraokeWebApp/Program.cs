@@ -8,7 +8,7 @@ builder.Services.AddScoped<IUserTracker, HttpCookieUserTracker>();
 builder.Services.AddScoped<ICookieJar, HttpCookieJar>();
 var db = new SongDatabase(songs);
 #if DEBUG
-// db.PopulateSampleData();
+db.PopulateSampleData();
 #endif
 builder.Services.AddSingleton<ISongDatabase>(db);
 builder.Services.Configure<RouteOptions>(config => {

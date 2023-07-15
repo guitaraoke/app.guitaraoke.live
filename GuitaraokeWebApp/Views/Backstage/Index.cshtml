@@ -79,16 +79,20 @@
 			target.classList.remove("drop-target");
 			dragged.remove(dragged);
 			const indexDrop = target.parentNode.children.indexOf(target);
+			let offset = 0;
 			if (index > indexDrop) {
 				target.before(dragged);
 			} else {
+				offset = 1;
 				target.after(dragged);
 			}
 			const data = {
 				song: dragged.getAttribute("data-song-slug"),
-				position: indexDrop
+				position: indexDrop + offset
 			};
+			
 			console.log(data);
+			console.log(index, indexDrop);
 			const response = await fetch('/backstage/move', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },

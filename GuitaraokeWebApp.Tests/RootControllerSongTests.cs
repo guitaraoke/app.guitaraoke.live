@@ -48,12 +48,42 @@ public class RootControllerSongTests : RootControllerTestBase {
 		var hurt = new Song("Nine Inch Nails", "Hurt");
 		var db = new SongDatabase(new[] { hurt });
 		var user = new User();
-		user.SignUp(hurt, new[] { Instrument.LeadGuitar });
 		db.SaveUser(user);
 		var tracker = new FakeUserTracker(user);
 		var c = new RootController(new NullLogger<RootController>(), db, tracker);
+
+		await c.Song(hurt.Slug, "Surly Dev", new[] { Instrument.LeadGuitar });
+		var queue = db.GetQueuedSongs();
+		queue.Select(pair => pair.Song).ShouldContain(hurt);
 		await c.Song(hurt.Slug, "Surly Dev", new Instrument[] { });
+
 		user.Signups.ShouldBeEmpty();
+		queue = db.GetQueuedSongs();
+		queue.Select(pair => pair.Song).ShouldNotContain(hurt);
+	}
+
+
+	[Fact]
+	public async Task POST_Song_With_No_Instruments_Leaves_Song_In_Queue_If_Other_Signups_Exist() {
+		var hurt = new Song("Nine Inch Nails", "Hurt");
+		var db = new SongDatabase(new[] { hurt });
+		var user1 = new User();
+		db.SaveUser(user1);
+		var user2 = new User();
+		db.SaveUser(user2);
+		var tracker = new FakeUserTracker(user1);
+		var c = new RootController(new NullLogger<RootController>(), db, tracker);
+		await c.Song(hurt.Slug, "Surly Dev", new[] { Instrument.LeadGuitar });
+		await new RootController(new NullLogger<RootController>(), db, new FakeUserTracker(user2)).Song(hurt.Slug, "User 2",
+			new[] { Instrument.BassGuitar });
+
+		var queue = db.GetQueuedSongs();
+		queue.Select(pair => pair.Song).ShouldContain(hurt);
+		await c.Song(hurt.Slug, "Surly Dev", new Instrument[] { });
+
+		user1.Signups.ShouldBeEmpty();
+		queue = db.GetQueuedSongs();
+		queue.Select(pair => pair.Song).ShouldContain(hurt);
 	}
 
 
