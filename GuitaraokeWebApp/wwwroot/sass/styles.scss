@@ -1,4 +1,6 @@
 $gutter: 8px;
+$hotpink: #8d2691;
+$gold: #f90;
 
 div.big-emoji {
 	font-size: 800%;
@@ -33,7 +35,7 @@ header {
 			text-align: center;
 			text-decoration: none;
 			color: #fff;
-			background-color: #8d2691;
+			background-color: $hotpink;
 			padding: 4px;
 			border-radius: 4px;
 		}
@@ -41,7 +43,7 @@ header {
 }
 
 ol.song-list {
-	margin: $gutter;
+	margin: 0;
 	padding: 0;
 
 	li.song {
@@ -79,12 +81,12 @@ a.song-star {
 }
 
 a.song-star.fa-solid {
-	color: #f90 !important;
+	color: $gold !important;
 }
 
 h1 {
 	font-size: 140%;
-	margin: 0;
+	margin: 0 0 $gutter 0;
 }
 
 h2 {
@@ -101,6 +103,71 @@ main {
 		a.song-star {
 			color: #fff;
 			font-size: 200%;
+		}
+	}
+
+
+	&.queue-page {
+		ol.song-list {
+			counter-reset: item;
+
+			> li.song {
+				counter-increment: item;
+
+				&:before {
+					margin: 0;
+					position: absolute;
+					left: $gutter;
+					top: 12px;
+					content: counter(item);
+					color: #fff;
+					font-size: 14px;
+				}
+
+				padding-left: 32px;
+				list-style: none;
+				position: relative;
+
+				a {
+					color: #fff;
+					text-decoration: none;
+				}
+
+				ul {
+					margin: $gutter 0;
+					padding: 0;
+
+					li {
+						font-size: 80%;
+						padding: 0;
+						margin: 0 0 $gutter/2 0;
+						list-style: none;
+					}
+				}
+			}
+		}
+
+		ul.star-chart {
+			margin: 0;
+			padding: 0;
+			font-size: 70%;
+			li {
+				border-top: 1px solid #fff;
+				padding: $gutter 0;
+				line-height: 1.4em;
+			}
+
+			span.artist {
+				display: block;
+				font-weight: bold;
+			}
+
+			span.starfield {
+				display: inline-block;
+				float: right;
+				font-size: 80%;
+				color: $gold;
+			}
 		}
 	}
 
@@ -193,15 +260,6 @@ div#dashboard {
 	div#starred-songs {
 		outline: 2px solid #00f;
 		overflow: scroll;
-	}
-
-	&.queue-page {
-		ol {
-			li {
-				list-style-position: inside;
-				border: 1px solid #f0f;
-			}
-		}
 	}
 }
 

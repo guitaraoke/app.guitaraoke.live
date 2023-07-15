@@ -4,23 +4,32 @@
 	ViewData["MainCssClass"] = "queue-page";
 }
 <h1>Coming Up...</h1>
-<ol>
+<ol class="song-list">
 	@foreach (var item in Model.QueuedSongs) {
-		<li>
-			<a asp-action="Song" asp-route-id="@item.Song.Slug">@item.Song.Name</a>
+		<li class="song">
+			<a asp-action="Song" asp-route-id="@item.Song.Slug">
+				@item.Song.Artist - <span>@item.Song.Title</span>
+			</a>
 			<ul>
 				@foreach (var player in item.Players) {
-					<li>@player.Key.Name: @String.Join(", ", player.Value)</li>
+					<li><strong>@player.Key.Name</strong>: @String.Join(", ", player.Value.Select(i => i.GetDisplayName()).ToArray())</li>
 				}
 			</ul>
 		</li>
 	}
 </ol>
-<ul>
+<h1>What's Hot?</h1>
+<p>Tonight's most-starred songs:</p>
+<ul class="star-chart">
 	@foreach (var item in Model.StarredSongs.OrderByDescending(pair => pair.Value)) {
 		<li>
-			@item.Key.Name
-			@item.Value
+			<span class="starfield">
+				@for (var i = 0; i < item.Value; i++) {
+					<i class="fa-solid fa-star"></i>
+				}
+			</span>
+			<span class="artist">@item.Key.Artist</span>
+			<span class="title">@item.Key.Title</span>
 		</li>
 	}
 </ul>
