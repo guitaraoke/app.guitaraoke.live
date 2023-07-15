@@ -4,33 +4,47 @@
 	ViewData["MainCssClass"] = "queue-page";
 }
 <h1>Coming Up...</h1>
-<ol class="song-list">
-	@foreach (var item in Model.QueuedSongs) {
-		<li class="song">
-			<a asp-action="Song" asp-route-id="@item.Song.Slug">
-				@item.Song.Artist - <span>@item.Song.Title</span>
-			</a>
-			<ul>
-				@foreach (var player in item.Players) {
-					<li><strong>@player.Key.Name</strong>: @String.Join(", ", player.Value.Select(i => i.GetDisplayName()).ToArray())</li>
-				}
-			</ul>
-		</li>
-	}
-</ol>
+@if (Model.QueuedSongs.Any()) {
+	<ol class="song-list">
+		@foreach (var item in Model.QueuedSongs) {
+			<li class="song">
+				<a asp-action="Song" asp-route-id="@item.Song.Slug">
+					@item.Song.Artist - <span>@item.Song.Title</span>
+				</a>
+				<ul>
+					@foreach (var player in item.Players) {
+						<li><strong>@player.Key.Name</strong>: @String.Join(", ", player.Value.Select(i => i.GetDisplayName()).ToArray())</li>
+					}
+				</ul>
+			</li>
+		}
+	</ol>
+}
+else {
+	<div class="big-emoji">😟</div>
+	<h3>There's nothing in the queue!</h3>
+	<p>Why not head over to the <a href="/">song list</a> and sign up to sing or play something?</p>
+}
 <h1>What's Hot?</h1>
-<p>Tonight's most-starred songs:</p>
-<ul class="star-chart">
-	@foreach (var item in Model.StarredSongs.OrderByDescending(pair => pair.Value)) {
-		<li>
-			<span class="starfield">
-				@for (var i = 0; i < item.Value; i++) {
-					<i class="fa-solid fa-star"></i>
-				}
-			</span>
-			<span class="artist">@item.Key.Artist</span>
-			<span class="title">@item.Key.Title</span>
-		</li>
-	}
-</ul>
+@if (Model.StarredSongs.Any()) {
 
+	<p>Tonight's most-starred songs:</p>
+	<ul class="star-chart">
+		@foreach (var item in Model.StarredSongs.OrderByDescending(pair => pair.Value)) {
+			<li>
+				<span class="starfield">
+					@for (var i = 0; i < item.Value; i++) {
+						<i class="fa-solid fa-star"></i>
+					}
+				</span>
+				<span class="artist">@item.Key.Artist</span>
+				<span class="title">@item.Key.Title</span>
+			</li>
+		}
+	</ul>
+}
+else {
+	<h2>Nobody's starred anything!</h2>
+	<div class="big-emoji">⭐</div>
+	<p>Star your favourite songs and you might get to hear them!</p>
+}

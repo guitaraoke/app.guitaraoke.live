@@ -36,8 +36,12 @@ public class RootController : Controller {
 		var song = db.FindSong(slug);
 		if (song == default) return NotFound();
 		var user = tracker.GetUser();
-		if (! String.IsNullOrEmpty(name)) user.Name = name;
-		if (user.SignUp(song, instruments)) db.AddSongToQueue(song);
+		if (user.SignUp(song, instruments)) {
+			if (!String.IsNullOrEmpty(name)) user.Name = name;
+			db.AddSongToQueue(song);
+		} else {
+			db.PruneQueue();
+		}
 		return RedirectToAction("me");
 	}
 

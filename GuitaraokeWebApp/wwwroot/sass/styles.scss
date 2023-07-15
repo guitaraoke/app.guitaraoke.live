@@ -2,6 +2,15 @@ $gutter: 8px;
 $hotpink: #8d2691;
 $gold: #f90;
 
+.show {
+	opacity: 1;
+}
+
+.hide {
+	opacity: 0;
+	transition: opacity 500ms;
+}
+
 div.big-emoji {
 	font-size: 800%;
 	text-align: center;
@@ -12,11 +21,30 @@ html, body {
 	padding: 0;
 }
 
+a {
+	color: #fff;
+}
+
+a.remove-song-button {
+	display: inline-block;
+	float: right;
+	border: 2px solid #fff;
+	background-color: #900;
+	padding: 10px 11px;
+	border-radius: 40px;
+}
+
+
+p.small-print {
+	margin: 8px 0;
+	font-size: 10px;
+}
+
 html {
 	height: 100vh;
-	background-attachment: fixed;
 	background: rgb(17,23,45);
 	background: linear-gradient(150deg, rgba(17,23,45,1) 0%, rgba(37,32,79,1) 49%, rgba(78,14,72,1) 100%);
+	background-attachment: fixed;
 	font-size: 140%;
 	font-family: Arial, Verdana, sans-serif;
 }
@@ -151,6 +179,7 @@ main {
 			margin: 0;
 			padding: 0;
 			font-size: 70%;
+
 			li {
 				border-top: 1px solid #fff;
 				padding: $gutter 0;

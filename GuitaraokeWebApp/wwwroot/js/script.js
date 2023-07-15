@@ -17,3 +17,22 @@ document.querySelectorAll("a.song-star").forEach(a =>
 		return false;
 	})
 );
+document.querySelectorAll("a.remove-song-button").forEach(a => a.addEventListener("click",
+	async ({ target }) => {
+		if (confirm('Are you sure you don’t want to do this one any more?')) {
+			const slug = target.getAttribute("data-song-slug");
+			const form = new FormData();
+			form.append("slug", slug);
+			fetch(`/song`,
+				{
+					method: 'POST',
+					body: form,
+				}).then(() => {
+					const li = target.closest("li");
+					window.setTimeout(() => li.remove(), 500);
+					li.classList.add("hide");
+				});
+		}
+	}));
+
+

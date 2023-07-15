@@ -59,6 +59,8 @@ public class SongDatabase : ISongDatabase {
 	public void RemoveSongFromQueue(Song song)
 		=> queuedSongs.Remove(song);
 
+	public void PruneQueue() => queuedSongs.RemoveAll(queuedSong => !ListPlayers(queuedSong).Any());
+
 	private Dictionary<User, Instrument[]> ListPlayers(Song song)
 		=> users.Values
 			.Where(user => user.Signups.ContainsKey(song))

@@ -9,10 +9,12 @@
 	<ul class="signup-list">
 		@foreach (var signup in Model.Signups) {
 			<li>
+				<a class="fa-light fa-trash-can remove-song-button" data-song-slug="@signup.Key.Slug"></a>
 				<a asp-action="song" asp-route-id="@signup.Key.Slug">
 					@signup.Key.Artist - <span>@signup.Key.Title</span>
 				</a>
 				<em>@String.Join(", ", signup.Value.Select(i => i.GetDisplayName()).ToArray())</em>
+
 			</li>
 		}
 	</ul>

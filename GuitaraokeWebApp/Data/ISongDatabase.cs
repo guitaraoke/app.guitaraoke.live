@@ -15,4 +15,5 @@ public interface ISongDatabase {
 	void AddSongToQueue(Song song);
 	void MoveSongToPosition(Song song, int newIndex);
 	void RemoveSongFromQueue(Song song);
+	void PruneQueue();
 }

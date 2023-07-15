@@ -17,13 +17,14 @@
 		@foreach (var i in Model.InstrumentOptions) {
 			<label for="input-@i.Value">
 				<input type="checkbox" name="instruments" value="@i.Value"
-					   id="input-@i.Value"
-				@(i.Selected ? "checked='checked'" : "") />
+				       id="input-@i.Value"
+				       @(i.Selected ? "checked='checked'" : "") />
 				@i.Text
 			</label>
 			<br />
 		}
-		<input type="text" name="name" placeholder="Your name" value="@Model.User.Name" />
+		<input type="text" name="name" placeholder="Your name" value="@Model.User.Name" required="required" />
 		<input type="submit" value="Let's Rock!" />
 	</form>
+	<p class="small-print">Just your first name is fine. We use a cookie to remember your name, and we don't share it with anybody. Hope that's OK.</p>
 }
