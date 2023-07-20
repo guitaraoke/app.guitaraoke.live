@@ -1,0 +1,35 @@
+ol {
+	margin: 0;
+	padding: 0;
+}
+
+li {
+	border: 1px solid #fff;
+	margin-bottom: var(--gutter, 8px);
+	border-radius: var(--gutter, 8px);
+	list-style: none;
+	background-color: rgba(0,0,0,0.5);
+	padding: 8px;
+
+}
+
+.already-played {
+	text-decoration: line-through;
+	text-decoration-thickness: 2px;
+	text-decoration-color: #fff;
+}
+
+a {
+	text-decoration: none;
+	color: #fff;
+}
+
+span {
+	white-space: nowrap;
+}
+
+
+.long-song-name {
+	font-size: 80%;
+}
+

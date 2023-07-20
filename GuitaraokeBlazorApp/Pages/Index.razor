@@ -1,7 +1,43 @@
-﻿@page "/"
+@page "/"
+@inject ISongDatabase db;
+@inject IUserTracker tracker;
+@* @attribute [StreamRendering(true)] *@
 
-<PageTitle>Index</PageTitle>
+<PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+@if (Selection == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+<ol class="song-list">
+	@foreach (var item in Selection) {
+		<li class="song @(item.Song.Played ? "already-played" : "")">
+			<song-star selection="item" />
+			<a href="/song/{@item.Song.Slug}">
+				@item.Song.Artist
+				<span class="@(item.Song.Title.Length > 30 ? "long-song-name" : "")">- @item.Song.Title</span>
+			</a>
+		</li>
+	}
+</ol>
+}
 
-Welcome to your new app.
+
+@code {
+
+	private User User;
+	private SongSelection[]? Selection;
+
+	protected override async Task OnInitializedAsync()
+	{
+		User = tracker.GetUser();
+		var stars = db.ListStarredSongs(User);
+		Selection = db.ListSongs()
+			.Select(song => new SongSelection(song) { IsStarred = stars.Contains(song) })
+			.ToArray();
+		StateHasChanged();
+	}
+	
+}
