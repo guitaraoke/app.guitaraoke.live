@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GuitaraokeWebApp", "Guitara
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GuitaraokeWebApp.Tests", "GuitaraokeWebApp.Tests\GuitaraokeWebApp.Tests.csproj", "{16832E45-8D8D-40C0-9846-50DB1C5E147C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GuitaraokeBlazorApp", "GuitaraokeBlazorApp\GuitaraokeBlazorApp.csproj", "{E881699D-89A8-4F1D-830B-20BB70B2D9CB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GuitaraokeBlazorApp", "GuitaraokeBlazorApp\GuitaraokeBlazorApp.csproj", "{E881699D-89A8-4F1D-830B-20BB70B2D9CB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GuitaraokeBlazorApp.Tests", "GuitaraokeBlazorApp.Tests\GuitaraokeBlazorApp.Tests.csproj", "{6757D09C-0DF6-4128-9535-5915F2763425}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GuitaraokeBlazorApp.Tests", "GuitaraokeBlazorApp.Tests\GuitaraokeBlazorApp.Tests.csproj", "{6757D09C-0DF6-4128-9535-5915F2763425}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
