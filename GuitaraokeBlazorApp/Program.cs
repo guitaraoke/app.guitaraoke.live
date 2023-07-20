@@ -8,6 +8,21 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ICookieJar, HttpCookieJar>();
+builder.Services.AddScoped<IUserTracker, HttpCookieUserTracker>();
+
+//Add Song data and services
+var songs = File.ReadAllLines("songlist.txt")
+	.Select(line => line.Split(" - "))
+	.Select(tokens => new Song(tokens[0], tokens[1]));
+var db = new SongDatabase(songs);
+#if DEBUG
+db.PopulateSampleData();
+#endif
+builder.Services.AddSingleton<ISongDatabase>(db);
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
