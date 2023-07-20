@@ -1,7 +1,7 @@
 @page "/"
 @inject ISongDatabase db;
 @inject IUserTracker tracker;
-@* @attribute [StreamRendering(true)] *@
+@attribute [StreamRendering(true)]
 
 <PageTitle>Home</PageTitle>
 
@@ -14,7 +14,7 @@ else
 <ol class="song-list">
 	@foreach (var item in Selection) {
 		<li class="song @(item.Song.Played ? "already-played" : "")">
-			<song-star selection="item" />
+			<SongStar Selection="@item" />
 			<a href="/song/{@item.Song.Slug}">
 				@item.Song.Artist
 				<span class="@(item.Song.Title.Length > 30 ? "long-song-name" : "")">- @item.Song.Title</span>
@@ -41,3 +41,27 @@ else
 	}
 	
 }
+
+<script>
+	document.querySelectorAll("a.song-star").forEach(a =>
+		a.addEventListener("click", async evt => {
+			const slug = evt.target.getAttribute("data-song-slug");
+			const result = await fetch(`/star/${slug}`, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' }
+			});
+			const starred = await result.json();
+			if (starred) {
+				a.classList.remove("fa-regular");
+				a.classList.add("fa-solid");
+			} else {
+				a.classList.remove("fa-solid");
+				a.classList.add("fa-regular");
+			}
+			evt.preventDefault();
+			return false;
+		})
+	);
+</script>
+
+

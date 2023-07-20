@@ -1,0 +1,19 @@
+<a class="song-star fa-star @starStyle" data-song-slug="@Selection.Song.Slug" @onclick="ToggleStar"></a>
+
+@code {
+	[Parameter, EditorRequired]
+	public SongSelection Selection { get; set; } = default!;
+
+	public const string STARRED = "fa-solid";
+	public const string NORMAL = "fa-regular";
+	public const string DATA_ATTRIBUTE_NAME = "data-song-slug";
+
+	private string starStyle => Selection.IsStarred ? STARRED : NORMAL;
+
+
+	private void ToggleStar() {
+		Selection.IsStarred = !Selection.IsStarred;
+	}
+
+}
+

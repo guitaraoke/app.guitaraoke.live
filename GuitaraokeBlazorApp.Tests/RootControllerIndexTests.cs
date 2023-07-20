@@ -1,3 +1,5 @@
+using GuitaraokeBlazorApp.Endpoints;
+
 namespace GuitaraokeBlazorApp.Tests;
 
 public class RootControllerIndexTests : RootControllerTestBase {
@@ -47,10 +49,9 @@ public class RootControllerIndexTests : RootControllerTestBase {
 		var db = new SongDatabase(new[] { hurt, torn, once });
 		var user = new User();
 		var tracker = new FakeUserTracker(user);
-		var c = new RootController(new NullLogger<RootController>(), db, tracker);
-		await c.Star(hurt.Slug);
+		SongEndpoints.ToggleSongStar(hurt.Slug, db, tracker);
 		db.ListStarredSongs(user).Count().ShouldBe(1);
-		await c.Star(hurt.Slug);
+		SongEndpoints.ToggleSongStar(hurt.Slug, db, tracker);
 		db.ListStarredSongs(user).Count().ShouldBe(0);
 	}
 
@@ -64,7 +65,7 @@ public class RootControllerIndexTests : RootControllerTestBase {
 		var user = new User();
 		var tracker = new FakeUserTracker(user);
 		var c = new RootController(new NullLogger<RootController>(), db, tracker);
-		await c.Star(slug);
+		SongEndpoints.ToggleSongStar(slug, db, tracker);
 		var result = await c.Queue() as ViewResult;
 		result.ShouldNotBeNull();
 	}

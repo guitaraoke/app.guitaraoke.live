@@ -1,5 +1,5 @@
 using AngleSharp.Dom;
-using GuitaraokeBlazorApp.TagHelpers;
+using GuitaraokeBlazorApp.Components;
 using System.Net;
 
 namespace GuitaraokeBlazorApp.Tests.WebTests;
@@ -15,7 +15,7 @@ public class RootWebTests : WebTestBase {
 	private async Task<(Song, HttpResponseMessage)> GetSong(string? slug = null) {
 		var client = Factory.CreateClient();
 		var song = (slug == null ? Db!.ListSongs().First() : Db.FindSong(slug));
-		var response = await client.GetAsync($"/song/{song.Slug}");
+		var response = await client.GetAsync($"/song/{song!.Slug}");
 		return (song, response);
 	}
 
@@ -40,7 +40,7 @@ public class RootWebTests : WebTestBase {
 		doc.QuerySelector("form").ShouldBeNull();
 	}
 
-	private async Task<(Song, IDocument)> GetSongDocument(string slug = null) {
+	private async Task<(Song, IDocument)> GetSongDocument(string slug = null!) {
 		var (song, response) = await GetSong(slug);
 		var html = await response.Content.ReadAsStringAsync();
 		var document = await AngleSharp.OpenAsync(req => req.Content(html));
@@ -104,8 +104,9 @@ public class RootWebTests : WebTestBase {
 		var html = await response.Content.ReadAsStringAsync();
 		
 		var document = await AngleSharp.OpenAsync(req => req.Content(html));
-		var elements = document.QuerySelectorAll($"li.song a.{SongStarTagHelper.STARRED}");
-		var slug = elements.Single().GetAttribute(SongStarTagHelper.DATA_ATTRIBUTE_NAME);
+		var elements = document.QuerySelectorAll($"li.song a.{SongStar.STARRED}");
+		elements.Length.ShouldBe(1);
+		var slug = elements.Single().GetAttribute(SongStar.DATA_ATTRIBUTE_NAME);
 		slug.ShouldBe(song.Slug);
 	}
 

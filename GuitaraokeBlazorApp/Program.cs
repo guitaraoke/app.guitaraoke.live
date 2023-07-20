@@ -1,4 +1,5 @@
 using GuitaraokeBlazorApp;
+using GuitaraokeBlazorApp.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +40,8 @@ app.UseStaticFiles();
 app.MapRazorComponents<App>();
 
 app.MapControllers();
+
+app.MapSongEndpoints();
 
 app.Run();
 
