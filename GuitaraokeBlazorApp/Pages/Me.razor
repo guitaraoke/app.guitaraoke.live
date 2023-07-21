@@ -1,6 +1,8 @@
 @page "/me"
 @inject ISongDatabase db;
 @inject IUserTracker tracker;
+@inject IJSRuntime JsRuntime
+@attribute [RenderModeServer]
 
 <PageTitle>My Songs</PageTitle>
 
@@ -10,7 +12,7 @@
 	<ul class="signup-list">
 		@foreach (var signup in user.Signups) {
 			<li>
-				<a class="fa-light fa-trash-can remove-song-button" data-song-slug="@signup.Key.Slug"></a>
+				<a class="fa-light fa-trash-can remove-song-button" data-song-slug="@signup.Key.Slug" @onclick="async () => await RemoveSong(user?.Name, signup.Key.Slug)"></a>
 				<a href="song/@signup.Key.Slug">
 					@signup.Key.Artist - <span>@signup.Key.Title</span>
 				</a>
@@ -42,5 +44,15 @@
 		}
 		string message = String.Join(", ", signupArray.Select(i => i.GetDisplayName()).ToArray());
 		return message == "0" ? "" : message; 
+	}
+
+	private async Task RemoveSong(string? name, string slug)
+	{
+		if (name is not null) {
+			bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Are you sure you don’t want to do this one any more?");
+			if (confirmed) {
+				await SongEndpoints.UpdateSong(slug, name, Array.Empty<Instrument>(), db, tracker);
+			}
+		}
 	}
 }
