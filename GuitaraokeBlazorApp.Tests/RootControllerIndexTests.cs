@@ -49,9 +49,9 @@ public class RootControllerIndexTests : RootControllerTestBase {
 		var db = new SongDatabase(new[] { hurt, torn, once });
 		var user = new User();
 		var tracker = new FakeUserTracker(user);
-		SongEndpoints.ToggleSongStar(hurt.Slug, db, tracker);
+		await SongEndpoints.ToggleSongStar(hurt.Slug, db, tracker);
 		db.ListStarredSongs(user).Count().ShouldBe(1);
-		SongEndpoints.ToggleSongStar(hurt.Slug, db, tracker);
+		await SongEndpoints.ToggleSongStar(hurt.Slug, db, tracker);
 		db.ListStarredSongs(user).Count().ShouldBe(0);
 	}
 
@@ -65,7 +65,7 @@ public class RootControllerIndexTests : RootControllerTestBase {
 		var user = new User();
 		var tracker = new FakeUserTracker(user);
 		var c = new RootController(new NullLogger<RootController>(), db, tracker);
-		SongEndpoints.ToggleSongStar(slug, db, tracker);
+		await SongEndpoints.ToggleSongStar(slug, db, tracker);
 		var result = await c.Queue() as ViewResult;
 		result.ShouldNotBeNull();
 	}
