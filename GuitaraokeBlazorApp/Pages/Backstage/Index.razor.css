@@ -1,44 +1,48 @@
 div#dashboard {
-	& a.mark-song-as-played-link {
-		background-color: var(--hotpink);
-		float: right;
-		text-decoration: none;
-		padding: 8px;
-		border-radius: 8px;
-		margin: 8px;
-		color: #fff;
-	}
 
-	height: 100dvh;
+	height: 100vh;
 	overflow: clip;
 	display: grid;
 	grid-template-columns: 60% 40%;
 
-	& div#song-queue {
-		overflow: scroll;
 
-		& > ol {
-			margin: 0;
-			padding: 0;
-		}
+}
 
-		& ol > li {
-			list-style-position: inside;
-			border: 1px solid #fff;
-			border-radius: var(--gutter);
-			margin: var(--gutter);
-			background: rgba(0,0,0,0.5);
-			color: #fff;
-			padding: var(--gutter);
-			line-height: 1.4em;
-			&.drop-target {
-				border-top: 10px solid #f0f;
-			}
-		}
+div#song-queue {
+	overflow: scroll;
+
+	& > ol {
+		margin: 0;
+		padding: 0;
 	}
 
-	& div#starred-songs {
-		padding: 8px;
-		overflow: scroll;
+	& ol > li {
+		list-style-position: inside;
+		border: 1px solid #fff;
+		border-radius: var(--gutter);
+		margin: var(--gutter);
+		background: rgba(0,0,0,0.5);
+		color: #fff;
+		padding: var(--gutter);
+		line-height: 1.4em;
+		&.drop-target {
+			border-top: 10px solid #f0f;
+		}
 	}
+}
+
+div#starred-songs {
+	padding: 8px;
+	overflow: scroll;
+}
+
+a.mark-song-as-played-link {
+	background-color: var(--hotpink);
+	float: right;
+	text-decoration: none;
+	padding: 8px;
+	border-radius: 8px;
+	margin: 8px;
+	color: #fff;
+	cursor: pointer;
 }

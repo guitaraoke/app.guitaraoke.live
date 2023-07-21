@@ -12,7 +12,7 @@
 			@foreach (var item in queuedSongs) {
 				<li draggable="true" class="dropzone" id="li-@item.Song.Slug"
 					data-song-slug="@item.Song.Slug">
-					<a href="#" class="mark-song-as-played-link">PLAYED</a>
+					<a class="mark-song-as-played-link" @onclick="async () => await Played(item.Song.Slug)">PLAYED</a>
 					@item.Song.Name
 					<ul>
 						@foreach (var player in item.Players) {
@@ -34,22 +34,6 @@
 	</div>
 </div>
 <script>
-	document.getElementById('ol-song-queue').addEventListener("click",
-		async ({ target }) => {
-			if (target.tagName === "A" && target.className === "mark-song-as-played-link") {
-				var li = target.closest("li");
-				var slug = li.getAttribute("data-song-slug");
-				fetch(`/backstage/status/${slug}`,
-					{
-						method: 'POST',
-						headers: { 'Content-Type': 'application/json' },
-						body: JSON.stringify(true)
-					}).then(() => {
-						li.classList.add("hide");
-						window.setTimeout(() => li.remove(), 500);
-					});
-			}
-		});
 	let dragged;
 	let id;
 	let index;
@@ -120,6 +104,12 @@
 			.Take((int)NoOfSongs)
 			.ToList();
 		}
+	}
+
+	private async Task Played(string slug)
+	{
+		await BackstageEndpoints.Status(slug, true, db, tracker);
+		OnInitialized();
 	}
 
 }

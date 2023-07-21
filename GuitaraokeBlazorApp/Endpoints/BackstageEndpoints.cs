@@ -27,7 +27,7 @@ public static partial class BackstageEndpoints {
 
 
 	public class MoveSongData {
-		public string Song { get; set; }
+		public string Song { get; set; } = default!;
 		public int Position { get; set; }
 	}
 
