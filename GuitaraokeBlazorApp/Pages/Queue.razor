@@ -21,7 +21,7 @@
 
 	<p>Tonight's most-starred songs:</p>
  	<ol class="star-chart">
-		@foreach (var item in starredSongs.OrderByDescending(pair => pair.NoOfStars).ToList()) {
+		@foreach (var item in starredSongs) {
 			<StarredSong Song="@item.Song" NoOfStars="@item.NoOfStars" />
 		}
 	</ol>
@@ -39,7 +39,11 @@
     protected override void OnInitialized()
     {
 		queuedSongs = db.GetQueuedSongs();
-		starredSongs = db.GetStarredSongs().Select(kv => (kv.Key, kv.Value)).ToList();
+		starredSongs = db.GetStarredSongs().Select(kv => (kv.Key, kv.Value))
+			.OrderByDescending(kv => kv.Value)
+			// Appears to be a bug in .NET 8 Preview 6 if this number gets bigger
+			.Take(2)
+			.ToList();
     }
 
 
