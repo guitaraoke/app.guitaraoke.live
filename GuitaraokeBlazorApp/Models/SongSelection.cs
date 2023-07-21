@@ -16,7 +16,7 @@ public class SongSelection {
 			.GetValues<Instrument>()
 			.Select(item => new SelectListItem {
 				Value = item.ToString(),
-				Text = item.ToString(),
+				Text = item.GetDisplayName(),
 				Selected = this.Instruments.Contains(item)
 			});
 

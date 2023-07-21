@@ -1,0 +1,64 @@
+@page "/song/{id}"
+@inject ISongDatabase db;
+@inject IUserTracker tracker;
+@attribute [StreamRendering(true)]
+
+<PageTitle>@selection?.Song.Name ?? "No song"</PageTitle>
+
+@if (selection is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+<SongStar Selection="@selection" />
+<h1>@selection.Song.Title</h1>
+	<h2>@selection.Song.Artist</h2>
+	@if (selection.Song.Played) {
+	<div class="big-emoji">😕</div>
+	<h1>Sorry!</h1>
+	<p>We already played this one tonight!</p>
+} else {
+	<p>Want to sing or play this one?</p>
+	<EditForm Model="@selection" OnSubmit="@OnSubmit">
+		<input type="hidden" name="slug" value="@selection.Song.Slug" />
+		@foreach (var i in selection.InstrumentOptions) {
+			<label for="input-@i.Value">
+				<input type="checkbox" name="instruments" value="@i.Value"
+					   id="input-@i.Value"
+					   @(i.Selected ? "checked" : "" ) />
+				@i.Text
+			</label>
+			<br />
+		}
+		<input type="text" name="name" placeholder="Your name" value="@selection.User.Name" required />
+		<input type="submit" value="Let's Rock!" />
+	</EditForm>
+	<p class="small-print">Just your first name is fine. We use a cookie to remember your name, and we don't share it with anybody. Hope that's OK.</p>
+}
+}
+
+@code {
+
+	[Parameter]
+	public string Id { get; set; }
+
+	public SongSelection? selection { get; set; }
+
+	protected override async Task OnParametersSetAsync()
+	{
+		var song = db.FindSong(Id);
+		if (song is null) return;
+		var user = tracker.GetUser();
+		selection = new SongSelection(song)
+			{
+				User = user,
+				IsStarred = db.ListStarredSongs(user).Contains(song)
+			};
+	}
+
+	private void OnSubmit()
+	{
+		
+	}
+}

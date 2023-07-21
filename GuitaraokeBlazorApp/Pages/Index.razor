@@ -5,17 +5,17 @@
 
 <PageTitle>Home</PageTitle>
 
-@if (Selection is null)
+@if (selection is null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
 <ol class="song-list">
-	@foreach (var item in Selection) {
+	@foreach (var item in selection) {
 		<li class="song @(item.Song.Played ? "already-played" : "")">
 			<SongStar Selection="@item" />
-			<a href="/song/{@item.Song.Slug}">
+			<a href="/song/@item.Song.Slug">
 				@item.Song.Artist
 				<span class="@(item.Song.Title.Length > 30 ? "long-song-name" : "")">- @item.Song.Title</span>
 			</a>
@@ -28,13 +28,13 @@ else
 @code {
 
 	private User? User;
-	private SongSelection[]? Selection;
+	private SongSelection[]? selection;
 
 	protected override void OnInitialized()
 	{
 		User = tracker.GetUser();
 		var stars = db.ListStarredSongs(User);
-		Selection = db.ListSongs()
+		selection = db.ListSongs()
 			.Select(song => new SongSelection(song) { IsStarred = stars.Contains(song) })
 			.ToArray();
 	}
