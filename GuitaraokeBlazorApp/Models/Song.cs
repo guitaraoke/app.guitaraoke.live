@@ -1,4 +1,4 @@
-namespace GuitaraokeBlazorApp.Model;
+namespace GuitaraokeBlazorApp.Models;
 
 public class SongQueue {
 	public Dictionary<Song, int> StarredSongs { get; set; } = new();

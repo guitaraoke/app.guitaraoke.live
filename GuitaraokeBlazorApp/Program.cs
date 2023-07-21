@@ -8,6 +8,7 @@ builder.Services.AddRazorComponents()
 	.AddServerComponents();
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpClient();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICookieJar, HttpCookieJar>();

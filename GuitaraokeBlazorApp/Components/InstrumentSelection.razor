@@ -1,0 +1,45 @@
+@attribute [RenderModeServer]
+@foreach (var item in CheckableEnums) {
+	<label for="instrument-@item.Instrument"> @item.Instrument.GetDisplayName()
+		<input type="checkbox" id="instrument-@item.Instrument" @bind="item.IsSelected" />
+	</label>
+	<br />
+}
+<br />
+@{
+	Instruments = CheckableEnums
+		.Where(cb => cb.IsSelected)
+		.Select(val => val.Instrument)
+		.Aggregate((Instrument)0, (result, value) => result | value);
+	var _ = Task.Run(() => UpdateParent());
+}
+
+@code {
+	[Parameter]
+	[EditorRequired]
+	public Instrument Instruments { get; set; }
+
+
+	[Parameter]
+	public EventCallback<Instrument> InstrumentsChanged { get; set; }
+
+	class CheckableEnum
+	{
+		public Instrument Instrument { get; set; }
+		public bool IsSelected;
+	}
+
+	List<CheckableEnum> CheckableEnums { get; set; } = new ();
+
+	protected override void OnInitialized()
+	{
+		foreach (var value in Enum.GetValues(typeof(Instrument)))
+			CheckableEnums.Add(new CheckableEnum() { Instrument = (Instrument)value, IsSelected = (Instruments & (Instrument)value) != 0  });
+
+	}
+
+	private async Task UpdateParent()
+	{
+		await InstrumentsChanged.InvokeAsync(Instruments);
+	}
+}

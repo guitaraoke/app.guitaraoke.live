@@ -27,37 +27,3 @@ input[type=submit] {
 }
 
 
-input[type="checkbox"] {
-	-webkit-appearance: none;
-	appearance: none;
-	background-color: var(--form-background);
-	margin: 0 8px 0 0;
-	font: inherit;
-	color: currentColor;
-	width: 1.4em;
-	height: 1.4em;
-	border: 3px solid currentColor;
-	background-color: #000000;
-	background-color: rgba(0, 0, 0, 0.5);
-	border-radius: 4px;
-	transform: translateY(-0.075em);
-	display: grid;
-	place-content: center;
-	float: left;
-}
-
-input[type="checkbox"]::before {
-	background-color: #fff;
-	content: "";
-	width: 0.8em;
-	height: 0.8em;
-	clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
-	transform: scale(0);
-	transform-origin: bottom left;
-	transition: 120ms transform ease-in-out;
-	box-shadow: inset 1em 1em var(--form-control-color);
-}
-
-input[type="checkbox"]:checked::before {
-	transform: scale(1);
-}

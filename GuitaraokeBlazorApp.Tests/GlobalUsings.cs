@@ -8,4 +8,4 @@ global using Shouldly;
 
 global using GuitaraokeBlazorApp.Controllers;
 global using GuitaraokeBlazorApp.Data;
-global using GuitaraokeBlazorApp.Model;
+global using GuitaraokeBlazorApp.Models;

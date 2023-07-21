@@ -1,7 +1,8 @@
 @page "/song/{id}"
 @inject ISongDatabase db;
 @inject IUserTracker tracker;
-@attribute [StreamRendering(true)]
+@inject HttpClient httpClient;
+@attribute [RenderModeServer]
 
 <PageTitle>@selection?.Song.Name ?? "No song"</PageTitle>
 
@@ -22,16 +23,8 @@ else
 	<p>Want to sing or play this one?</p>
 	<EditForm Model="@selection" OnSubmit="@OnSubmit">
 		<input type="hidden" name="slug" value="@selection.Song.Slug" />
-		@foreach (var i in selection.InstrumentOptions) {
-			<label for="input-@i.Value">
-				<input type="checkbox" name="instruments" value="@i.Value"
-					   id="input-@i.Value"
-					   @(i.Selected ? "checked" : "" ) />
-				@i.Text
-			</label>
-			<br />
-		}
-		<input type="text" name="name" placeholder="Your name" value="@selection.User.Name" required />
+		<InstrumentSelection @bind-Instruments="@instruments" />
+		<input type="text" name="name" placeholder="Your name" @bind-value="@selection.User.Name" required />
 		<input type="submit" value="Let's Rock!" />
 	</EditForm>
 	<p class="small-print">Just your first name is fine. We use a cookie to remember your name, and we don't share it with anybody. Hope that's OK.</p>
@@ -44,6 +37,8 @@ else
 	public string Id { get; set; }
 
 	public SongSelection? selection { get; set; }
+	private Instrument instruments;
+	private EditContext? editContext;
 
 	protected override async Task OnParametersSetAsync()
 	{
@@ -55,10 +50,17 @@ else
 				User = user,
 				IsStarred = db.ListStarredSongs(user).Contains(song)
 			};
+		instruments = selection.Instruments.ToInstrument();
+		editContext = new(selection);
 	}
 
-	private void OnSubmit()
+	private async Task OnSubmit()
 	{
-		
+		if (selection is not null) {
+			//using var result = httpClient.PostAsJsonAsync($"/song/{selection.Song.Slug}", selection);
+			if (selection.User.Name is not null) {
+				await SongEndpoints.UpdateSong(selection.Song.Slug, selection.User.Name, instruments.ToArray(), db, tracker);
+			}
+		}
 	}
 }

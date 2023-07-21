@@ -11,6 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GuitaraokeBlazorApp", "Guit
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GuitaraokeBlazorApp.Tests", "GuitaraokeBlazorApp.Tests\GuitaraokeBlazorApp.Tests.csproj", "{6757D09C-0DF6-4128-9535-5915F2763425}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8D12566A-0BEC-4D00-AD50-26FAF975D2EB}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

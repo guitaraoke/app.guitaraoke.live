@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace GuitaraokeBlazorApp.Model;
+namespace GuitaraokeBlazorApp.Models;
 
 public class SongSelection {
 	public SongSelection(Song song) {
@@ -21,5 +21,5 @@ public class SongSelection {
 			});
 
 	public Instrument[] Instruments =>
-		this.User?.Signups.GetValueOrDefault(Song) ?? Array.Empty<Instrument>();
+		User?.Signups.GetValueOrDefault(Song) ?? Array.Empty<Instrument>();
 }
