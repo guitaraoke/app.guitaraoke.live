@@ -5,7 +5,7 @@
 
 <PageTitle>Home</PageTitle>
 
-@if (Selection == null)
+@if (Selection is null)
 {
     <p><em>Loading...</em></p>
 }
@@ -27,17 +27,16 @@ else
 
 @code {
 
-	private User User;
+	private User? User;
 	private SongSelection[]? Selection;
 
-	protected override async Task OnInitializedAsync()
+	protected override void OnInitialized()
 	{
 		User = tracker.GetUser();
 		var stars = db.ListStarredSongs(User);
 		Selection = db.ListSongs()
 			.Select(song => new SongSelection(song) { IsStarred = stars.Contains(song) })
 			.ToArray();
-		StateHasChanged();
 	}
 	
 }

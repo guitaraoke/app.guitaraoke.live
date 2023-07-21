@@ -1,0 +1,46 @@
+@page "/queue"
+@inject ISongDatabase db;
+@attribute [StreamRendering(true)]
+
+<PageTitle>Queue</PageTitle>
+
+<h1>Coming Up...</h1>
+@if (queuedSongs.Any()) {
+	<ol class="song-list">
+		@foreach (var item in queuedSongs) {
+			<QueuedSong Item="@item" />
+		}
+	</ol>
+} else {
+	<div class="big-emoji">😟</div>
+	<h3>There's nothing in the queue!</h3>
+	<p>Why not head over to the <a href="/">song list</a> and sign up to sing or play something?</p>
+}
+<h1>What's Hot?</h1>
+@if (starredSongs.Any()) {
+
+	<p>Tonight's most-starred songs:</p>
+ 	<ol class="star-chart">
+		@foreach (var item in starredSongs.OrderByDescending(pair => pair.NoOfStars).ToList()) {
+			<StarredSong Song="@item.Song" NoOfStars="@item.NoOfStars" />
+		}
+	</ol>
+} else {
+	<h2>Nobody's starred anything!</h2>
+	<div class="big-emoji">⭐</div>
+	<p>Star your favourite songs and you might get to hear them!</p>
+}
+
+@code {
+
+    private List<(Song Song, int NoOfStars)> starredSongs { get; set; } = new();
+    private List<(Song Song, Dictionary<User, Instrument[]> Players)> queuedSongs = new();
+
+    protected override void OnInitialized()
+    {
+		queuedSongs = db.GetQueuedSongs();
+		starredSongs = db.GetStarredSongs().Select(kv => (kv.Key, kv.Value)).ToList();
+    }
+
+
+}

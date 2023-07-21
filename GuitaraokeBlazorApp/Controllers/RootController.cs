@@ -14,6 +14,14 @@ public class RootController : Controller {
 		this.tracker = tracker;
 	}
 
+	public async Task<IActionResult> Index() {
+		var user = tracker.GetUser();
+		var stars = db.ListStarredSongs(user);
+		var selection = db.ListSongs()
+			.Select(song => new SongSelection(song) { IsStarred = stars.Contains(song) });
+		return View(selection);
+	}
+
 	[HttpPost]
 	public async Task<IActionResult> Song(string slug, string name, Instrument[] instruments) {
 		var song = db.FindSong(slug);

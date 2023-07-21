@@ -1,0 +1,53 @@
+li.song {
+	counter-increment: item;
+
+	&:before {
+		margin: 0;
+		position: absolute;
+		left: var(--gutter);
+		top: 12px;
+		content: counter(item);
+		color: #fff;
+		font-size: 14px;
+	}
+
+	&.already-played {
+		text-decoration: line-through;
+		text-decoration-thickness: 2px;
+		text-decoration-color: #fff;
+	}
+
+	border: 1px solid #fff;
+	margin-bottom: var(--gutter);
+	border-radius: var(--gutter);
+	list-style: none;
+	background-color: rgba(0,0,0,0.5);
+	padding: 8px;
+	padding-left: 32px;
+	position: relative;
+
+	& a {
+		text-decoration: none;
+		color: #fff;
+
+		& span {
+			white-space: nowrap;
+
+			&.long-song-name {
+				font-size: 80%;
+			}
+		}
+	}
+}
+
+ul {
+	margin: var(--gutter) 0;
+	padding: 0;
+
+	& li {
+		font-size: 80%;
+		padding: 0;
+		margin: 0 0 calc(var(--gutter)/2) 0;
+		list-style: none;
+	}
+}

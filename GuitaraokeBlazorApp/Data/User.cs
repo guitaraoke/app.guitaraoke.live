@@ -1,19 +1,5 @@
 namespace GuitaraokeBlazorApp.Data;
 
-[Flags]
-public enum Instrument {
-	[Description("Sing")]
-	Sing,
-	[Description("Lead Guitar")]
-	LeadGuitar,
-	[Description("Rhythm Guitar")]
-	RhythmGuitar,
-	[Description("Bass")]
-	BassGuitar,
-	[Description("Piano")]
-	Piano,
-}
-
 public class User {
 
 	public string? Name { get; set; }
