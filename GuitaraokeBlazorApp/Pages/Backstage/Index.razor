@@ -1,0 +1,125 @@
+@page "/backstage"
+@layout BackstageLayout
+@inject ISongDatabase db;
+@inject IUserTracker tracker;
+@attribute [RenderModeServer]
+
+<PageTitle>Backstage</PageTitle>
+
+<div id="dashboard">
+	<div id="song-queue">
+		<ol id="ol-song-queue">
+			@foreach (var item in queuedSongs) {
+				<li draggable="true" class="dropzone" id="li-@item.Song.Slug"
+					data-song-slug="@item.Song.Slug">
+					<a href="#" class="mark-song-as-played-link">PLAYED</a>
+					@item.Song.Name
+					<ul>
+						@foreach (var player in item.Players) {
+							<li>
+								@player.Key.Name
+								<em>
+									@String.Join(", ", player.Value.Select(i => i.GetDisplayName()).ToArray())
+								</em>
+							</li>
+						}
+					</ul>
+				</li>
+
+			}
+		</ol>
+	</div>
+	<div id="starred-songs">
+		<WhatsHot NoOfSongs="@NoOfSongs" />
+	</div>
+</div>
+<script>
+	document.getElementById('ol-song-queue').addEventListener("click",
+		async ({ target }) => {
+			if (target.tagName === "A" && target.className === "mark-song-as-played-link") {
+				var li = target.closest("li");
+				var slug = li.getAttribute("data-song-slug");
+				fetch(`/backstage/status/${slug}`,
+					{
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify(true)
+					}).then(() => {
+						li.classList.add("hide");
+						window.setTimeout(() => li.remove(), 500);
+					});
+			}
+		});
+	let dragged;
+	let id;
+	let index;
+
+	HTMLCollection.prototype.indexOf = Array.prototype.indexOf;
+
+	document.addEventListener("dragstart", ({ target }) => {
+		dragged = target;
+		id = target.id;
+		index = target.parentNode.children.indexOf(target);
+	});
+
+	document.addEventListener("dragenter", ({ target }) => {
+		if (target.classList.contains("dropzone")) target.classList.add("drop-target");
+		event.preventDefault();
+	});
+
+	document.addEventListener("dragleave", ({ target }) => {
+		if (target.classList.contains("dropzone")) target.classList.remove("drop-target");
+		event.preventDefault();
+	});
+
+	document.addEventListener("dragover", _ => event.preventDefault());
+
+	document.addEventListener("drop", async ({ target }) => {
+		if (target.classList.contains("dropzone") && target.id !== id) {
+			target.classList.remove("drop-target");
+			dragged.remove(dragged);
+			const indexDrop = target.parentNode.children.indexOf(target);
+			let offset = 0;
+			if (index > indexDrop) {
+				target.before(dragged);
+			} else {
+				offset = 1;
+				target.after(dragged);
+			}
+			const data = {
+				song: dragged.getAttribute("data-song-slug"),
+				position: indexDrop + offset
+			};
+
+			console.log(data);
+			console.log(index, indexDrop);
+			const response = await fetch('/backstage/move', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify(data)
+			});
+		}
+	});
+</script>
+
+@code {
+	[Parameter]
+	public int? NoOfSongs { get; set; }
+#if DEBUG
+	// TODO: remove this when Preview 7 comes out, maybe it will be fixed
+	= 10;
+#endif
+
+	private List<(Song Song, Dictionary<User, Instrument[]> Players)> queuedSongs = new();
+
+	protected override void OnInitialized()
+	{
+		queuedSongs = db.GetQueuedSongs();
+		if (NoOfSongs is not null) {
+			queuedSongs = queuedSongs
+			.Take((int)NoOfSongs)
+			.ToList();
+		}
+	}
+
+}

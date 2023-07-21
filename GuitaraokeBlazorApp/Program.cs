@@ -43,6 +43,7 @@ app.MapRazorComponents<App>();
 app.MapControllers();
 
 app.MapSongEndpoints();
+app.MapBackstageEndpoints();
 
 app.Run();
 
