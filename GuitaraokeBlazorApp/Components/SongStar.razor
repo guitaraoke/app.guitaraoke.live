@@ -1,3 +1,5 @@
+@inject ISongDatabase db;
+@inject IUserTracker tracker;
 <a class="song-star fa-star @starStyle" data-song-slug="@Selection.Song.Slug" @onclick="ToggleStar"></a>
 
 @code {
@@ -10,8 +12,8 @@
 
 	private string starStyle => Selection.IsStarred ? STARRED : NORMAL;
 
-	private void ToggleStar() {
+	private async Task ToggleStar() {
 		Selection.IsStarred = !Selection.IsStarred;
+		await SongEndpoints.ToggleSongStar(Selection.Song.Slug, db, tracker);
 	}
-
 }
