@@ -1,7 +1,7 @@
 @page "/song/{id}"
 @inject ISongDatabase db;
 @inject IUserTracker tracker;
-@inject HttpClient httpClient;
+@inject NavigationManager navMgr;
 @attribute [RenderModeServer]
 
 <PageTitle>@selection?.Song.Name ?? "No song"</PageTitle>
@@ -60,6 +60,7 @@ else
 			//using var result = httpClient.PostAsJsonAsync($"/song/{selection.Song.Slug}", selection);
 			if (selection.User.Name is not null) {
 				await SongEndpoints.UpdateSong(selection.Song.Slug, selection.User.Name, instruments.ToArray(), db, tracker);
+				navMgr.NavigateTo("/me", true);
 			}
 		}
 	}

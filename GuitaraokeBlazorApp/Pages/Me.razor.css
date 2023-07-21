@@ -1,2 +1,40 @@
-﻿body {
+ul {
+	margin: 0;
+	padding: 0;
 }
+
+li {
+	border: 1px solid #fff;
+	padding: var(--gutter);
+	border-radius: var(--gutter);
+	background-color: rgba(0,0,0,0.5);
+	margin-bottom: var(--gutter);
+	list-style-type: none;
+}
+
+a {
+	text-decoration: none;
+	color: #fff;
+}
+
+span {
+	line-height: 1.4em;
+	white-space: nowrap;
+}
+
+em {
+	margin: var(--gutter);
+	display: block;
+	font-size: 80%;
+}
+
+a.remove-song-button {
+	display: inline-block;
+	float: right;
+	border: 2px solid #fff;
+	background-color: #900;
+	padding: 10px 11px;
+	border-radius: 40px;
+	margin-top: 14px;
+}
+

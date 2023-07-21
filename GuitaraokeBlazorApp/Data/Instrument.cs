@@ -18,11 +18,17 @@ public static class EnumExtensions {
 		.FirstOrDefault()?
 		.GetCustomAttribute<DescriptionAttribute>()?.Description ?? enumValue.ToString();
 
-	public static Instrument[] ToArray(this Enum enumValue) => enumValue
-		.ToString()
+	public static Instrument[] ToArray(this Enum enumValue) {
+		string instrumentString = enumValue.ToString();
+
+		if (instrumentString == "0") {
+			return Array.Empty<Instrument>();
+		}
+		return instrumentString
 		.Split(",")
 		.Select(str => Enum.Parse<Instrument>(str))
 		.ToArray();
+	}
 
 	public static Instrument ToInstrument(this Instrument[] enumArray) {
 		if (enumArray is null || enumArray.Length < 1) {

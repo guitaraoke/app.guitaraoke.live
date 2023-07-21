@@ -22,20 +22,6 @@ public class RootController : Controller {
 		return View(selection);
 	}
 
-	//[HttpPost]
-	//public async Task<IActionResult> Song(string slug, string name, Instrument[] instruments) {
-	//	var song = db.FindSong(slug);
-	//	if (song == default) return NotFound();
-	//	var user = tracker.GetUser();
-	//	if (user.SignUp(song, instruments)) {
-	//		if (!String.IsNullOrEmpty(name)) user.Name = name;
-	//		db.AddSongToQueue(song);
-	//	} else {
-	//		db.PruneQueue();
-	//	}
-	//	return RedirectToAction("me");
-	//}
-
 	[HttpGet]
 	public async Task<IActionResult> Song(string id) {
 		var song = db.FindSong(id);
