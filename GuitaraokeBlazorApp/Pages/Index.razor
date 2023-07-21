@@ -51,11 +51,11 @@ else
 			});
 			const starred = await result.json();
 			if (starred) {
-				a.classList.remove("fa-regular");
+				a.classList.remove("fa-thin");
 				a.classList.add("fa-solid");
 			} else {
 				a.classList.remove("fa-solid");
-				a.classList.add("fa-regular");
+				a.classList.add("fa-thin");
 			}
 			evt.preventDefault();
 			return false;

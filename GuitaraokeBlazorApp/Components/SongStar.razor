@@ -5,15 +5,13 @@
 	public SongSelection Selection { get; set; } = default!;
 
 	public const string STARRED = "fa-solid";
-	public const string NORMAL = "fa-regular";
+	public const string NORMAL = "fa-thin";
 	public const string DATA_ATTRIBUTE_NAME = "data-song-slug";
 
 	private string starStyle => Selection.IsStarred ? STARRED : NORMAL;
-
 
 	private void ToggleStar() {
 		Selection.IsStarred = !Selection.IsStarred;
 	}
 
 }
-

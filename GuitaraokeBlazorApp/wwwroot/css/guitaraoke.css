@@ -1,0 +1,18 @@
+:root {
+	--gutter: 8px;
+	--gold: #f90;
+	--hotpink: #8d2691;
+	--hotpink-rgb: 141,38,145;
+}
+
+@media (prefers-color-scheme: light) {
+	:root {
+	}
+}
+
+html, body {
+	height: 100vh;
+	background: rgb(17,23,45);
+	background: linear-gradient(150deg, rgba(17,23,45,1) 0%, rgba(37,32,79,1) 49%, rgba(78,14,72,1) 100%);
+	background-attachment: fixed;
+}
