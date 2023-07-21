@@ -1,3 +1,5 @@
+using GuitaraokeBlazorApp.Endpoints;
+
 namespace GuitaraokeBlazorApp.Tests;
 
 public class RootControllerQueueTests : RootControllerTestBase {
@@ -12,23 +14,27 @@ public class RootControllerQueueTests : RootControllerTestBase {
 		var geddy = new User { Name = "Geddy" };
 		var alex = new User { Name = "Alex" };
 		var neil = new User { Name = "Neil" };
+		var geddyTracker = new FakeUserTracker(geddy);
+		var alexTracker = new FakeUserTracker(alex);
+		var neilTracker = new FakeUserTracker(neil);
+
 
 		db.SaveUser(geddy);
 		db.SaveUser(alex);
 		db.SaveUser(neil);
 
 		var c = MakeController(geddy);
-		await c.Song(hurt.Slug, "Geddy", new[] { Instrument.Sing, Instrument.BassGuitar });
-		await c.Song(torn.Slug, "Geddy", new[] { Instrument.Piano, Instrument.Sing });
-		await c.Song(lump.Slug, "Geddy", new[] { Instrument.BassGuitar });
+		await SongEndpoints.UpdateSong(hurt.Slug, "Geddy", new[] { Instrument.Sing, Instrument.BassGuitar }, db, geddyTracker);
+		await SongEndpoints.UpdateSong(torn.Slug, "Geddy", new[] { Instrument.Piano, Instrument.Sing }, db, geddyTracker);
+		await SongEndpoints.UpdateSong(lump.Slug, "Geddy", new[] { Instrument.BassGuitar }, db, geddyTracker);
 
 		c = MakeController(alex);
-		await c.Song(hurt.Slug, "Alex", new[] { Instrument.LeadGuitar });
-		await c.Song(lump.Slug, "Alex", new[] { Instrument.LeadGuitar });
+		await SongEndpoints.UpdateSong(hurt.Slug, "Alex", new[] { Instrument.LeadGuitar }, db, alexTracker);
+		await SongEndpoints.UpdateSong(lump.Slug, "Alex", new[] { Instrument.LeadGuitar }, db, alexTracker);
 
 		c = MakeController(neil);
-		await c.Song(hurt.Slug, "Neil", new[] { Instrument.BassGuitar });
-		await c.Song(torn.Slug, "Neil", new[] { Instrument.BassGuitar });
+		await SongEndpoints.UpdateSong(hurt.Slug, "Neil", new[] { Instrument.BassGuitar }, db, neilTracker);
+		await SongEndpoints.UpdateSong(torn.Slug, "Neil", new[] { Instrument.BassGuitar }, db, neilTracker);
 
 		c = MakeController();
 		var result = await c.Queue() as ViewResult;
