@@ -21,5 +21,5 @@ public class SongSelection {
 			});
 
 	public Instrument[] Instruments =>
-		this.User.Signups.GetValueOrDefault(Song) ?? Array.Empty<Instrument>();
+		this.User?.Signups.GetValueOrDefault(Song) ?? Array.Empty<Instrument>();
 }

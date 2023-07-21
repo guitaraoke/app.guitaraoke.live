@@ -1,0 +1,41 @@
+@page "/whatshot"
+@inject ISongDatabase db;
+@attribute [StreamRendering(true)]
+
+<PageTitle>What's Hot?</PageTitle>
+
+<h1>What's Hot?</h1>
+@if (starredSongs.Any()) {
+
+	<p>Tonight's most-starred songs:</p>
+	<ol>
+		@foreach (var item in starredSongs) {
+			<StarredSong Song="@item.Song" NoOfStars="@item.NoOfStars" />
+		}
+	</ol>
+} else {
+	<h2>Nobody's starred anything!</h2>
+	<div class="big-emoji">⭐</div>
+	<p>Star your favourite songs and you might get to hear them!</p>
+}
+
+@code {
+
+	[Parameter]
+	public int? NoOfSongs { get; set; }
+
+	private List<(Song Song, int NoOfStars)> starredSongs { get; set; } = new();
+
+	protected override void OnInitialized()
+	{
+		starredSongs = db.GetStarredSongs().Select(kv => (kv.Key, kv.Value))
+			.OrderByDescending(kv => kv.Value).ToList();
+		if (NoOfSongs is not null) {
+			starredSongs = starredSongs
+			.Take((int)NoOfSongs)
+			.ToList();
+		}
+	}
+
+
+}

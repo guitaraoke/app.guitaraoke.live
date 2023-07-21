@@ -28,7 +28,7 @@ else
 @code {
 
 	private User? User;
-	private SongSelection[]? selection;
+	private List<SongSelection>? selection;
 
 	protected override void OnInitialized()
 	{
@@ -36,7 +36,11 @@ else
 		var stars = db.ListStarredSongs(User);
 		selection = db.ListSongs()
 			.Select(song => new SongSelection(song) { IsStarred = stars.Contains(song) })
-			.ToArray();
+#if DEBUG
+	// TODO: remove this when Preview 7 comes out, maybe it will be fixed
+	.Take(30)
+#endif
+			.ToList();
 	}
 	
 }

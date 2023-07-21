@@ -1,0 +1,5 @@
+ol {
+	counter-reset: item;
+	margin: 0;
+	padding: 0;
+}
