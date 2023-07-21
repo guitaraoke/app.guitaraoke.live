@@ -2,29 +2,20 @@ using GuitaraokeBlazorApp.Endpoints;
 
 namespace GuitaraokeBlazorApp.Tests;
 
-public class RootControllerSongTests : RootControllerTestBase {
+public class SongTests {
 
 	[Fact]
-	public async Task Song_Returns_Song() {
-		var c = MakeController();
-		var song = songs.First();
-		var result = await c.Song(song.Slug) as ViewResult;
-		result.ShouldNotBeNull();
-		var selection = result.Model as SongSelection;
-		selection!.Song.ShouldBe(song);
-	}
-
-	[Fact]
-	public async Task Song_Returns_Song_With_Star() {
+	public async Task Starring_Song_Toggles_Star_On() {
 		var hurt = new Song("Nine Inch Nails", "Hurt");
-		var db = new SongDatabase(new[] { hurt });
+		var torn = new Song("Natalie Imbruglia", "Torn");
+		var once = new Song("Pearl Jam", "Once");
+		var db = new SongDatabase(new[] { hurt, torn, once });
 		var user = new User();
-		db.ToggleStar(user, hurt);
 		var tracker = new FakeUserTracker(user);
-		var c = new RootController(new NullLogger<RootController>(), db, tracker);
-		var result = await c.Song(hurt.Slug) as ViewResult;
-		var model = result!.Model as SongSelection;
-		model!.IsStarred.ShouldBe(true);
+		await SongEndpoints.ToggleSongStar(hurt.Slug, db, tracker);
+		db.ListStarredSongs(user).Count().ShouldBe(1);
+		await SongEndpoints.ToggleSongStar(hurt.Slug, db, tracker);
+		db.ListStarredSongs(user).Count().ShouldBe(0);
 	}
 
 	[Fact]
@@ -93,50 +84,4 @@ public class RootControllerSongTests : RootControllerTestBase {
 		db.FindUser(user.Guid)!.Name.ShouldBe("Surly Dev");
 	}
 
-	[Fact(Skip = "This is an MVC way of redirecting. We will move this to the App")]
-	public async Task POST_Song_Redirects_To_Me() {
-		var hurt = new Song("Nine Inch Nails", "Hurt");
-		var db = new SongDatabase(new[] { hurt });
-		var user = new User();
-		var instruments = new[] { Instrument.Sing, Instrument.BassGuitar };
-		db.SaveUser(user);
-		var tracker = new FakeUserTracker(user);
-		var result = await SongEndpoints.UpdateSong(hurt.Slug, "Surly Dev", instruments, db, tracker) as RedirectToActionResult;
-		result.ShouldNotBeNull();
-		result.ActionName.ShouldBe("me");
-	}
-
-	[Fact]
-	public async Task Song_Returns_Song_With_Name() {
-		const string NAME = "Surly Dev";
-		var hurt = new Song("Nine Inch Nails", "Hurt");
-		var db = new SongDatabase(new[] { hurt });
-		var user = new User(name: NAME);
-		db.SaveUser(user);
-		var tracker = new FakeUserTracker(user);
-		var c = new RootController(new NullLogger<RootController>(), db, tracker);
-		var result = await c.Song(hurt.Slug) as ViewResult;
-		var model = result!.Model as SongSelection;
-		model.User.Name.ShouldBe(NAME);
-	}
-
-
-	[Fact]
-	public async Task Song_Returns_Song_With_Instruments_Selected() {
-		const string NAME = "Surly Dev";
-		var hurt = new Song("Nine Inch Nails", "Hurt");
-		var db = new SongDatabase(new[] { hurt });
-		var user = new User(name: NAME);
-		user.SignUp(hurt, new[] { Instrument.Piano, Instrument.Sing });
-		db.SaveUser(user);
-		var tracker = new FakeUserTracker(user);
-		var c = new RootController(new NullLogger<RootController>(), db, tracker);
-		var result = await c.Song(hurt.Slug) as ViewResult;
-		result.ShouldNotBeNull();
-		var model = result.Model as SongSelection;
-		model.ShouldNotBeNull();
-		model.Instruments.Length.ShouldBe(2);
-		model.Instruments.ShouldContain(Instrument.Piano);
-		model.Instruments.ShouldContain(Instrument.Sing);
-	}
 }
