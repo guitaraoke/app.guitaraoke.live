@@ -7,7 +7,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
 	.AddServerComponents();
 
-builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient();
 
 builder.Services.AddHttpContextAccessor();
