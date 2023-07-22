@@ -1,6 +1,6 @@
 li.song {
 	counter-increment: item;
-
+	line-height: normal;
 	&:before {
 		margin: 0;
 		position: absolute;
@@ -18,7 +18,7 @@ li.song {
 	}
 
 	border: 1px solid #fff;
-	margin-bottom: var(--gutter);
+	margin-bottom: calc(var(--gutter)/2);
 	border-radius: var(--gutter);
 	list-style: none;
 	background-color: rgba(0,0,0,0.5);
@@ -43,6 +43,7 @@ li.song {
 ul {
 	margin: var(--gutter) 0;
 	padding: 0;
+	line-height: normal;
 
 	& li {
 		font-size: 80%;

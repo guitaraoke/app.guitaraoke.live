@@ -17,6 +17,10 @@ a {
 	color: #fff;
 }
 
+.link {
+	text-decoration: underline;
+}
+
 span {
 	line-height: 1.4em;
 	white-space: nowrap;

@@ -1,8 +1,5 @@
-@page "/queuedsongs"
 @inject ISongDatabase db;
 @attribute [StreamRendering(true)]
-
-<PageTitle>Queued Songs</PageTitle>
 
 <h1>Coming Up...</h1>
 @if (queuedSongs.Any()) {

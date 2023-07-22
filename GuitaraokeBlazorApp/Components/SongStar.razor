@@ -1,6 +1,6 @@
 @inject ISongDatabase db;
 @inject IUserTracker tracker;
-<a class="song-star fa-star @starStyle" data-song-slug="@Selection.Song.Slug" @onclick="ToggleStar"></a>
+<a class="fa-star @starStyle" @onclick="ToggleStar"></a>
 
 @code {
 	[Parameter, EditorRequired]

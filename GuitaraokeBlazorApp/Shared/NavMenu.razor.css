@@ -1,10 +1,5 @@
 header {
 	background-color: rgb(21, 22, 48);
-}
-
-
-
-header {
 	background: #1a1b3c;
 }
 
@@ -29,12 +24,12 @@ nav {
 	}
 
 	.nav-item ::deep a.active {
-		background-color: rgba(var(--hotpink-rgb),1);
+		background-color: rgba(var(--hotpink-rgb), 1);
 		color: white;
 	}
 
 	.nav-item ::deep a:hover {
-		background-color: rgba(var(--hotpink-rgb),0.5);
+		background-color: rgba(var(--hotpink-rgb), 0.4);
 		color: white;
 	}
 

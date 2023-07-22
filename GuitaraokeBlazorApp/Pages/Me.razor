@@ -12,7 +12,7 @@
 	<ul class="signup-list">
 		@foreach (var signup in user.Signups) {
 			<li>
-				<a class="fa-light fa-trash-can remove-song-button" data-song-slug="@signup.Key.Slug" @onclick="async () => await RemoveSong(user?.Name, signup.Key.Slug)"></a>
+				<a class="fa-light fa-trash-can remove-song-button" @onclick="async () => await RemoveSong(user?.Name, signup.Key.Slug)"></a>
 				<a href="song/@signup.Key.Slug">
 					@signup.Key.Artist - <span>@signup.Key.Title</span>
 				</a>
@@ -24,7 +24,7 @@
 } else {
 	<div class="no-signups-message">
 		<h2>You haven't signed up to sing or play anything!</h2>
-		<p>Why not pick something from the <a href="/">song list?</a></p>
+		<p>Why not pick something from the <a class="link" href="/">song list?</a></p>
 	</div>
 }
 

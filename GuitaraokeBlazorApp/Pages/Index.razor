@@ -11,13 +11,13 @@
 }
 else
 {
-<ol class="song-list">
+<ol>
 	@foreach (var item in selection) {
-		<li class="song @(item.Song.Played ? "already-played" : "")">
+		<li class="@(item.Song.Played ? "already-played" : null)">
 			<SongStar Selection="@item" />
 			<a href="/song/@item.Song.Slug">
 				@item.Song.Artist
-				<span class="@(item.Song.Title.Length > 30 ? "long-song-name" : "")">- @item.Song.Title</span>
+				<span class="@(item.Song.Title.Length > 30 ? "long-song-name" : null)">- @item.Song.Title</span>
 			</a>
 		</li>
 	}
@@ -37,8 +37,10 @@ else
 		selection = db.ListSongs()
 			.Select(song => new SongSelection(song) { IsStarred = stars.Contains(song) })
 #if DEBUG
-	// TODO: remove this when Preview 7 comes out, maybe it will be fixed
-	.Take(30)
+	// TODO: remove this when RC1 comes out, maybe it will be fixed
+	// StaticHtmlRenderer uses synchronous writes which eventually fails #49172
+	// https://github.com/dotnet/aspnetcore/issues/49172
+	.Take(70)
 #endif
 			.ToList();
 	}
