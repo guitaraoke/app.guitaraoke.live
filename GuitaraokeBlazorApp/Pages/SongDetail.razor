@@ -4,7 +4,7 @@
 @inject NavigationManager navMgr;
 @attribute [RenderModeServer]
 
-<PageTitle>@selection?.Song.Name ?? "No song"</PageTitle>
+<PageTitle>@(selection?.Song.Name ?? "No song")</PageTitle>
 
 @if (selection is null)
 {
