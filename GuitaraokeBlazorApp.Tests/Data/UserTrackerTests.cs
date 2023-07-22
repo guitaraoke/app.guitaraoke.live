@@ -1,4 +1,4 @@
-namespace GuitaraokeBlazorApp.Tests;
+namespace GuitaraokeBlazorApp.Tests.Data;
 
 public class UserTrackerTests {
 

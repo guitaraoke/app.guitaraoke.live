@@ -86,9 +86,11 @@ public class RootWebTests : WebTestBase {
 		var decodedHtml = WebUtility.HtmlDecode(html);
 		var songs = Db!.ListSongs();
 #if DEBUG
-		// TODO: remove this when Preview 7 comes out, maybe it will be fixed
+		// TODO: remove this when RC1 comes out, maybe it will be fixed
+		// StaticHtmlRenderer uses synchronous writes which eventually fails #49172
+		// https://github.com/dotnet/aspnetcore/issues/49172
 		songs = songs
-		.Take(30);
+		.Take(70);
 #endif
 		foreach (var song in songs) {
 			decodedHtml.ShouldContain(song.Title);
@@ -110,10 +112,8 @@ public class RootWebTests : WebTestBase {
 		var html = await response.Content.ReadAsStringAsync();
 		
 		var document = await AngleSharp.OpenAsync(req => req.Content(html));
-		var elements = document.QuerySelectorAll($"li.song a.{SongStar.STARRED}");
+		var elements = document.QuerySelectorAll($"li a.{SongStar.STARRED}");
 		elements.Length.ShouldBe(1);
-		var slug = elements.Single().GetAttribute(SongStar.DATA_ATTRIBUTE_NAME);
-		slug.ShouldBe(song.Slug);
 	}
 
 	[Fact]

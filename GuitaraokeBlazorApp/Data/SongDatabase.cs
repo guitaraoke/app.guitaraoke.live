@@ -1,3 +1,5 @@
+using GuitaraokeBlazorApp.Components;
+
 namespace GuitaraokeBlazorApp.Data;
 
 public class SongDatabase : ISongDatabase {
@@ -15,13 +17,13 @@ public class SongDatabase : ISongDatabase {
 		=> stars.GetValueOrDefault(user) ?? new();
 
 	public bool ToggleStar(User user, Song song) {
-		if (stars.ContainsKey(user)) {
-			if (stars[user].Contains(song)) {
-				stars[user].Remove(song);
+		if (stars.TryGetValue(user, out var value)) {
+			if (value.Contains(song)) {
+				value.Remove(song);
 				return false;
 			}
 
-			stars[user].Add(song);
+			value.Add(song);
 		} else {
 			stars.Add(user, new() { song });
 		}
@@ -59,7 +61,7 @@ public class SongDatabase : ISongDatabase {
 	public void RemoveSongFromQueue(Song song)
 		=> queuedSongs.Remove(song);
 
-	public void PruneQueue() => queuedSongs.RemoveAll(queuedSong => !ListPlayers(queuedSong).Any());
+	public void PruneQueue() => queuedSongs.RemoveAll(queuedSong => ListPlayers(queuedSong).Count == 0);
 
 	private Dictionary<User, Instrument[]> ListPlayers(Song song)
 		=> users.Values
@@ -70,15 +72,18 @@ public class SongDatabase : ISongDatabase {
 
 	public Dictionary<Song, List<User>> ListStarredSongs()
 		=> stars.SelectMany(pair => pair.Value.Select(song => (pair.Key, song)))
-			.GroupBy(item => item.Item2)
-			.ToDictionary(group => group.Key, group => group.Select(g => g.Item1).ToList());
+			.GroupBy(item => item.song)
+			.ToDictionary(group => group.Key, group => group.Select(g => g.Key).ToList());
 
-	public SongSelection FindSongForUser(Song song, User user) {
-		return new(song) {
-			User = user,
-			IsStarred = ListStarredSongs(user).Contains(song)
-		};
-	}
+	public Instrument[] FindInstrumentsForUser(Song song, User user)
+		=> user.Signups.GetValueOrDefault(song) ?? Array.Empty<Instrument>();
+
+	//public SongSelection FindSongForUser(Song song, User user) {
+	//	return new(song) {
+	//		User = user,
+	//		IsStarred = ListStarredSongs(user).Contains(song)
+	//	};
+	//}
 
 	public void PopulateSampleData() {
 		var alicia = new User { Name = "Alicia" };

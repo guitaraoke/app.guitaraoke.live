@@ -5,37 +5,33 @@
 
 <PageTitle>Home</PageTitle>
 
-@if (selection is null)
-{
-    <p><em>Loading...</em></p>
+@if (selection is null) {
+	<p><em>Loading...</em></p>
+} else {
+	<ol>
+		@foreach (var item in selection) {
+			<li class="@(item.Song.Played ? "already-played" : null)">
+				<SongStar Slug="@item.Song.Slug" IsStarred="@item.IsStarred" />
+				<a href="/song/@item.Song.Slug">
+					@item.Song.Artist
+					<span class="@(item.Song.Title.Length > 30 ? "long-song-name" : null)">- @item.Song.Title</span>
+				</a>
+			</li>
+		}
+	</ol>
 }
-else
-{
-<ol>
-	@foreach (var item in selection) {
-		<li class="@(item.Song.Played ? "already-played" : null)">
-			<SongStar Selection="@item" />
-			<a href="/song/@item.Song.Slug">
-				@item.Song.Artist
-				<span class="@(item.Song.Title.Length > 30 ? "long-song-name" : null)">- @item.Song.Title</span>
-			</a>
-		</li>
-	}
-</ol>
-}
-
 
 @code {
 
 	private User? User;
-	private List<SongSelection>? selection;
+	private List<(Song Song, bool IsStarred)> selection = new();
 
 	protected override void OnInitialized()
 	{
 		User = tracker.GetUser();
 		var stars = db.ListStarredSongs(User);
 		selection = db.ListSongs()
-			.Select(song => new SongSelection(song) { IsStarred = stars.Contains(song) })
+			.Select(song => (song, stars.Contains(song)))
 #if DEBUG
 	// TODO: remove this when RC1 comes out, maybe it will be fixed
 	// StaticHtmlRenderer uses synchronous writes which eventually fails #49172
@@ -44,5 +40,5 @@ else
 #endif
 			.ToList();
 	}
-	
+
 }

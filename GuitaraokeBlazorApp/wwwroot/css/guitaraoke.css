@@ -46,3 +46,6 @@ a {
 	color: var(--text-color);
 }
 
+	a:hover {
+		color: var(--text-color);
+	}

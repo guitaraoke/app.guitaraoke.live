@@ -22,8 +22,11 @@ input[type=submit] {
 	padding: 8px;
 	border: 0;
 	border-radius: 8px;
-	background: #821b78;
-	color: #fff;
+	background-color: var(--button);
+	color: var(--button-text);
 }
 
-
+.big-emoji {
+	font-size: 800%;
+	text-align: center;
+}

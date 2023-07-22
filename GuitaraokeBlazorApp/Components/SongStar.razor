@@ -4,16 +4,18 @@
 
 @code {
 	[Parameter, EditorRequired]
-	public SongSelection Selection { get; set; } = default!;
+	public bool IsStarred{ get; set; }
 
+	[Parameter, EditorRequired]
+	public required string Slug{ get; set; }
+
+	public const string NORMAL  = "fa-thin";
 	public const string STARRED = "fa-solid";
-	public const string NORMAL = "fa-thin";
-	public const string DATA_ATTRIBUTE_NAME = "data-song-slug";
 
-	private string starStyle => Selection.IsStarred ? STARRED : NORMAL;
+	private string starStyle => IsStarred ? STARRED : NORMAL;
 
 	private async Task ToggleStar() {
-		Selection.IsStarred = !Selection.IsStarred;
-		await SongEndpoints.ToggleSongStar(Selection.Song.Slug, db, tracker);
+		IsStarred = !IsStarred;
+		await SongEndpoints.ToggleSongStar(Slug, db, tracker);
 	}
 }

@@ -32,7 +32,7 @@
 	private User user = new();
 
 
-	protected override async Task OnInitializedAsync()
+	protected override void OnInitialized()
 	{
 		user = tracker.GetUser();
 	}
@@ -51,7 +51,7 @@
 		if (name is not null) {
 			bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Are you sure you don’t want to do this one any more?");
 			if (confirmed) {
-				await SongEndpoints.UpdateSong(slug, name, Array.Empty<Instrument>(), db, tracker);
+				await SongEndpoints.SignUpForSong(slug, name, Array.Empty<Instrument>(), db, tracker);
 			}
 		}
 	}

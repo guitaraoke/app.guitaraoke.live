@@ -1,13 +1,14 @@
 @attribute [RenderModeServer]
-@foreach (var item in CheckableEnums) {
-	<label for="instrument-@item.Instrument"> @item.Instrument.GetDisplayName()
+@foreach (var item in CheckableInstruments) {
+	<label for="instrument-@item.Instrument">
+		@item.Instrument.GetDisplayName()
 		<input type="checkbox" id="instrument-@item.Instrument" @bind="item.IsSelected" />
 	</label>
 	<br />
 }
 <br />
 @{
-	Instruments = CheckableEnums
+	Instruments = CheckableInstruments
 		.Where(cb => cb.IsSelected)
 		.Select(val => val.Instrument)
 		.Aggregate((Instrument)0, (result, value) => result | value);
@@ -19,27 +20,27 @@
 	[EditorRequired]
 	public Instrument Instruments { get; set; }
 
-
 	[Parameter]
 	public EventCallback<Instrument> InstrumentsChanged { get; set; }
 
-	class CheckableEnum
-	{
-		public Instrument Instrument { get; set; }
-		public bool IsSelected;
-	}
 
-	List<CheckableEnum> CheckableEnums { get; set; } = new ();
+	List<CheckableInstrument> CheckableInstruments { get; set; } = new();
 
 	protected override void OnInitialized()
 	{
-		foreach (var value in Enum.GetValues(typeof(Instrument)))
-			CheckableEnums.Add(new CheckableEnum() { Instrument = (Instrument)value, IsSelected = (Instruments & (Instrument)value) != 0  });
-
+		foreach (Instrument value in Enum.GetValues(typeof(Instrument))) {
+			CheckableInstruments.Add(new CheckableInstrument() { Instrument = value, IsSelected = (Instruments & value) != 0 });
+		}
 	}
 
 	private async Task UpdateParent()
 	{
 		await InstrumentsChanged.InvokeAsync(Instruments);
+	}
+
+	class CheckableInstrument
+	{
+		public Instrument Instrument;
+		public bool IsSelected;
 	}
 }

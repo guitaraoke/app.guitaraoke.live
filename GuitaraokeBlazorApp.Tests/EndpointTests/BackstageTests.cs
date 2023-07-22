@@ -1,8 +1,8 @@
 using GuitaraokeBlazorApp.Endpoints;
 
-namespace GuitaraokeBlazorApp.Tests;
+namespace GuitaraokeBlazorApp.Tests.EndpointTests;
 
-public class BackstageControllerTests {
+public class BackstageTests {
 
 	[Fact]
 	public async Task BackstagePlayedReturnsOk() {
@@ -22,7 +22,7 @@ public class BackstageControllerTests {
 		var songs = new List<Song>() { song };
 		var db = new SongDatabase(songs);
 		var user = new User();
-		await SongEndpoints.UpdateSong(song.Slug, "Benny", new[] { Instrument.Sing }, db, new FakeUserTracker(user));
+		await SongEndpoints.SignUpForSong(song.Slug, "Benny", new[] { Instrument.Sing }, db, new FakeUserTracker(user));
 		db.GetQueuedSongs().Single().Song.ShouldBe(song);
 		await BackstageEndpoints.Status(song.Slug, true, db);
 		db.GetQueuedSongs().ShouldBeEmpty();
@@ -32,7 +32,7 @@ public class BackstageControllerTests {
 		var db = new SongDatabase(songs);
 		var tracker = new FakeUserTracker(user);
 		foreach (var song in songs) {
-			await SongEndpoints.UpdateSong(song.Slug, "", new[] { Instrument.Sing }, db, tracker);
+			await SongEndpoints.SignUpForSong(song.Slug, "", new[] { Instrument.Sing }, db, tracker);
 		}
 		var queue = db.GetQueuedSongs();
 		queue.Select(q => q.Song).ToArray().ShouldBe(songs);

@@ -1,6 +1,6 @@
 using GuitaraokeBlazorApp.Endpoints;
 
-namespace GuitaraokeBlazorApp.Tests;
+namespace GuitaraokeBlazorApp.Tests.EndpointTests;
 
 public class SongTests {
 
@@ -25,10 +25,10 @@ public class SongTests {
 		var user = new User();
 		db.SaveUser(user);
 		var tracker = new FakeUserTracker(user);
-		await SongEndpoints.UpdateSong(hurt.Slug, "Surly Dev", new[] { Instrument.Sing, Instrument.BassGuitar }, db, tracker);
-		var selection = db.FindSongForUser(hurt, user);
-		selection.Instruments.ShouldContain(Instrument.Sing);
-		selection.Instruments.ShouldContain(Instrument.BassGuitar);
+		await SongEndpoints.SignUpForSong(hurt.Slug, "Surly Dev", new[] { Instrument.Sing, Instrument.BassGuitar }, db, tracker);
+		var instrumentsArray = db.FindInstrumentsForUser(hurt, user);
+		instrumentsArray.ShouldContain(Instrument.Sing);
+		instrumentsArray.ShouldContain(Instrument.BassGuitar);
 	}
 
 	[Fact]
@@ -39,10 +39,10 @@ public class SongTests {
 		db.SaveUser(user);
 		var tracker = new FakeUserTracker(user);
 
-		await SongEndpoints.UpdateSong(hurt.Slug, "Surly Dev", new[] { Instrument.LeadGuitar }, db, tracker);
+		await SongEndpoints.SignUpForSong(hurt.Slug, "Surly Dev", new[] { Instrument.LeadGuitar }, db, tracker);
 		var queue = db.GetQueuedSongs();
 		queue.Select(pair => pair.Song).ShouldContain(hurt);
-		await SongEndpoints.UpdateSong(hurt.Slug, "Surly Dev", Array.Empty<Instrument>(), db, tracker);
+		await SongEndpoints.SignUpForSong(hurt.Slug, "Surly Dev", Array.Empty<Instrument>(), db, tracker);
 
 		user.Signups.ShouldBeEmpty();
 		queue = db.GetQueuedSongs();
@@ -59,12 +59,12 @@ public class SongTests {
 		var user2 = new User();
 		db.SaveUser(user2);
 		var tracker = new FakeUserTracker(user1);
-		await SongEndpoints.UpdateSong(hurt.Slug, "Surly Dev", new[] { Instrument.LeadGuitar }, db, tracker);
-		await SongEndpoints.UpdateSong(hurt.Slug, "User 2", new[] { Instrument.BassGuitar }, db, new FakeUserTracker(user2));
+		await SongEndpoints.SignUpForSong(hurt.Slug, "Surly Dev", new[] { Instrument.LeadGuitar }, db, tracker);
+		await SongEndpoints.SignUpForSong(hurt.Slug, "User 2", new[] { Instrument.BassGuitar }, db, new FakeUserTracker(user2));
 
 		var queue = db.GetQueuedSongs();
 		queue.Select(pair => pair.Song).ShouldContain(hurt);
-		await SongEndpoints.UpdateSong(hurt.Slug, "Surly Dev", new Instrument[] { }, db, tracker);
+		await SongEndpoints.SignUpForSong(hurt.Slug, "Surly Dev", Array.Empty<Instrument>(), db, tracker);
 
 		user1.Signups.ShouldBeEmpty();
 		queue = db.GetQueuedSongs();
@@ -80,7 +80,7 @@ public class SongTests {
 		var instruments = new[] { Instrument.Sing, Instrument.BassGuitar };
 		db.SaveUser(user);
 		var tracker = new FakeUserTracker(user);
-		await SongEndpoints.UpdateSong(hurt.Slug, "Surly Dev", instruments, db, tracker);
+		await SongEndpoints.SignUpForSong(hurt.Slug, "Surly Dev", instruments, db, tracker);
 		db.FindUser(user.Guid)!.Name.ShouldBe("Surly Dev");
 	}
 

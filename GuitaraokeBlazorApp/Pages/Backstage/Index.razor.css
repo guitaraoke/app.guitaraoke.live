@@ -1,19 +1,20 @@
-div#dashboard {
+#dashboard {
 	height: 100vh;
 	overflow: clip;
 	display: grid;
 	grid-template-columns: 60% 40%;
 }
 
-div#song-queue {
+#song-queue {
 	overflow: scroll;
 
-	& > ol {
+}
+	#song-queue > ol {
 		margin: 0;
 		padding: 0;
 	}
 
-	& ol > li {
+	#song-queue ol > li {
 		list-style-position: inside;
 		border: 1px solid currentColor;
 		border-radius: var(--gutter);
@@ -21,14 +22,13 @@ div#song-queue {
 		background-color: rgba(var(--panel-rgb), 0.5);
 		padding: var(--gutter);
 		line-height: 1.4em;
+	}
 
-		&.drop-target {
+		#song-queue ol > li.drop-target {
 			border-top: 10px solid #f0f;
 		}
-	}
-}
 
-div#starred-songs {
+#starred-songs {
 	padding: 8px;
 	overflow: scroll;
 }

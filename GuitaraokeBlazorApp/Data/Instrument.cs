@@ -1,33 +1,34 @@
 using System.Reflection;
-using System.Runtime.InteropServices;
 
 namespace GuitaraokeBlazorApp.Data;
 
 [Flags]
 public enum Instrument {
-	
 	[Description("Sing")]          Sing         =  1,
 	[Description("Lead Guitar")]   LeadGuitar   =  2,
 	[Description("Rhythm Guitar")] RhythmGuitar =  4,
 	[Description("Bass")]          BassGuitar   =  8,
-	[Description("Piano")]         Piano        = 16
+	[Description("Piano")]         Piano        = 16,
 }
 
 public static class EnumExtensions {
-	public static string GetDisplayName(this Enum enumValue) => enumValue.GetType().GetMember(enumValue.ToString())?
-		.FirstOrDefault()?
-		.GetCustomAttribute<DescriptionAttribute>()?.Description ?? enumValue.ToString();
+	public static string GetDisplayName(this Instrument enumValue)
+		=> enumValue
+			.GetType()
+			.GetMember(enumValue.ToString())?
+			.FirstOrDefault()?
+			.GetCustomAttribute<DescriptionAttribute>()?.Description ?? enumValue.ToString();
 
-	public static Instrument[] ToArray(this Enum enumValue) {
-		string instrumentString = enumValue.ToString();
+	public static Instrument[] ToArray(this Instrument enumValue) {
+		var instrumentString = enumValue.ToString();
 
 		if (instrumentString == "0") {
 			return Array.Empty<Instrument>();
 		}
 		return instrumentString
-		.Split(",")
-		.Select(str => Enum.Parse<Instrument>(str))
-		.ToArray();
+			.Split(",")
+			.Select(str => Enum.Parse<Instrument>(str))
+			.ToArray();
 	}
 
 	public static Instrument ToInstrument(this Instrument[] enumArray) {
