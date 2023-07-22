@@ -1,12 +1,19 @@
 :root {
 	--gutter: 8px;
 	--gold: #f90;
-	--hotpink: #8d2691;
-	--hotpink-rgb: 141,38,145;
+	--text-color: #fff;
+	--background-rgb: 17, 23, 45;
+	--panel-rgb: 17, 23, 45;
+	--button: #8d2691;
+	--button-rgb: 141, 38, 145;
+	--button-text: #fff;
 }
 
 @media (prefers-color-scheme: light) {
 	:root {
+		--text-color: #000;
+		--background-rgb: 240, 240,240;
+		--panel-rgb: 200, 200, 200;
 	}
 }
 
@@ -16,10 +23,18 @@ html {
 
 html, body {
 	height: 100vh;
-	background: rgb(17,23,45);
-	background: linear-gradient(150deg, rgba(17,23,45,1) 0%, rgba(37,32,79,1) 49%, rgba(78,14,72,1) 100%);
+	background: rgb(var(--background-rgb));
+	background: linear-gradient(150deg, rgba(17, 23, 45, 1) 0%, rgba(37, 32, 79, 1) 49%, rgba(78, 14, 72, 1) 100%);
 	background-attachment: fixed;
 	font-family: Arial,Verdana,sans-serif;
+	color: var(--text-color);
+}
+
+@media (prefers-color-scheme: light) {
+	html, body {
+		background: linear-gradient(150deg, rgba(220, 230, 240, 1) 0%, rgba(220, 210, 220, 1) 49%, rgba(230, 230, 200, 1) 100%);
+		background-attachment: fixed;
+	}
 }
 
 h1 {
@@ -28,5 +43,6 @@ h1 {
 }
 
 a {
-	color: #fff;
+	color: var(--text-color);
 }
+

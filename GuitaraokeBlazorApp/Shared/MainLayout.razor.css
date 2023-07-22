@@ -8,6 +8,5 @@ main {
 	flex: 1;
 	margin: 0;
 	padding: 0;
-	color: #fff;
 	padding: var(--gutter) var(--gutter) 40px var(--gutter)
 }

@@ -1,7 +1,8 @@
 li {
-	border-top: 1px solid #fff;
+	border-top: 1px solid currentColor;
 	padding: var(--gutter) 0;
 	line-height: 1.4em;
+	list-style: none;
 }
 
 span.artist {
