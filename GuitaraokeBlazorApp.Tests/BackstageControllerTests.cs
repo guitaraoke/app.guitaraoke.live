@@ -5,23 +5,11 @@ namespace GuitaraokeBlazorApp.Tests;
 public class BackstageControllerTests {
 
 	[Fact]
-	public async Task BackstageIndexReturnsView() {
-		var songs = new List<Song>();
-		var db = new SongDatabase(songs);
-		var bc = new BackstageController(db);
-		var result = await bc.Index() as ViewResult;
-		result.ShouldNotBeNull();
-		var model = result.Model as SongQueue;
-		model.ShouldNotBeNull();
-	}
-
-	[Fact]
 	public async Task BackstagePlayedReturnsOk() {
 		var song = new Song("Battle Beast", "Familiar Hell");
 		var songs = new List<Song>() { song };
 		var db = new SongDatabase(songs);
-		var bc = new BackstageController(db);
-		var result = await bc.Status(song.Slug, true) as JsonResult;
+		var result = await BackstageEndpoints.Status(song.Slug, true, db);
 		result.ShouldNotBeNull();
 		song = db.FindSong("battle-beast-familiar-hell");
 		song.ShouldNotBeNull();
@@ -36,8 +24,7 @@ public class BackstageControllerTests {
 		var user = new User();
 		await SongEndpoints.UpdateSong(song.Slug, "Benny", new[] { Instrument.Sing }, db, new FakeUserTracker(user));
 		db.GetQueuedSongs().Single().Song.ShouldBe(song);
-		var bc = new BackstageController(db);
-		await bc.Status(song.Slug, true);
+		await BackstageEndpoints.Status(song.Slug, true, db);
 		db.GetQueuedSongs().ShouldBeEmpty();
 	}
 
@@ -59,11 +46,10 @@ public class BackstageControllerTests {
 		var cave = new Song("Muse", "Cave");
 		var user = new User();
 		var db = await SetUpQueue(user, adia, bang, cave);
-		var bc = new BackstageController(db);
-		var result = await bc.Move(new() {
+		var result = await BackstageEndpoints.Move(new() {
 			Song = cave.Slug,
 			Position = 0,
-		});
+		}, db);
 		result.ShouldNotBeNull();
 		var queue = db.GetQueuedSongs();
 		queue[0].Song.Name.ShouldBe(cave.Name);
@@ -78,11 +64,10 @@ public class BackstageControllerTests {
 		var cave = new Song("Muse", "Cave");
 		var user = new User();
 		var db = await SetUpQueue(user, adia, bang, cave);
-		var bc = new BackstageController(db);
-		var result = await bc.Move(new() {
+		var result = await BackstageEndpoints.Move(new() {
 			Song = adia.Slug,
 			Position = 1,
-		});
+		}, db);
 		result.ShouldNotBeNull();
 		var queue = db.GetQueuedSongs();
 		queue[0].Song.Name.ShouldBe(bang.Name);
@@ -97,14 +82,13 @@ public class BackstageControllerTests {
 		var cave = new Song("Muse", "Cave");
 		var user = new User();
 		var db = await SetUpQueue(user, adia, bang, cave);
-		var bc = new BackstageController(db);
-		await bc.Move(new() { Song = cave.Slug, Position = Int32.MinValue, });
+		await BackstageEndpoints.Move(new() { Song = cave.Slug, Position = Int32.MinValue, }, db);
 		var queue = db.GetQueuedSongs();
 		queue[0].Song.Name.ShouldBe(cave.Name);
 		queue[1].Song.Name.ShouldBe(adia.Name);
 		queue[2].Song.Name.ShouldBe(bang.Name);
 
-		await bc.Move(new() { Song = cave.Slug, Position = Int32.MaxValue, });
+		await BackstageEndpoints.Move(new() { Song = cave.Slug, Position = Int32.MaxValue, }, db);
 		queue = db.GetQueuedSongs();
 		queue[0].Song.Name.ShouldBe(adia.Name);
 		queue[1].Song.Name.ShouldBe(bang.Name);

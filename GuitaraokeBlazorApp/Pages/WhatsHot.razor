@@ -4,10 +4,14 @@
 
 <PageTitle>What's Hot?</PageTitle>
 
-<h1>What's Hot?</h1>
+@if (ShowHeaders) {
+	<h1>What's Hot?</h1>
+}
 @if (starredSongs.Any()) {
 
-	<p>Tonight's most-starred songs:</p>
+	@if (ShowHeaders) {
+		<p>Tonight's most-starred songs:</p>
+	}
 	<ol>
 		@foreach (var item in starredSongs) {
 			<StarredSong Song="@item.Song" NoOfStars="@item.NoOfStars" />
@@ -23,6 +27,9 @@
 
 	[Parameter]
 	public int? NoOfSongs { get; set; }
+
+	[Parameter]
+	public bool ShowHeaders { get; set; } = true;
 
 	private List<(Song Song, int NoOfStars)> starredSongs { get; set; } = new();
 

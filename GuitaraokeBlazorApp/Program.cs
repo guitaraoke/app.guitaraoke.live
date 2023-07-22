@@ -40,8 +40,6 @@ app.UseStaticFiles();
 
 app.MapRazorComponents<App>();
 
-app.MapControllers();
-
 app.MapSongEndpoints();
 app.MapBackstageEndpoints();
 

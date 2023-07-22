@@ -1,7 +1,6 @@
 @page "/backstage"
 @layout BackstageLayout
 @inject ISongDatabase db;
-@inject IUserTracker tracker;
 @attribute [RenderModeServer]
 
 <PageTitle>Backstage</PageTitle>
@@ -25,14 +24,14 @@
 						}
 					</ul>
 				</li>
-
 			}
 		</ol>
 	</div>
 	<div id="starred-songs">
-		<WhatsHot NoOfSongs="@NoOfSongs" />
+		<WhatsHot NoOfSongs="@NoOfSongs" ShowHeaders="false" />
 	</div>
 </div>
+
 <script>
 	let dragged;
 	let id;
@@ -82,6 +81,7 @@
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify(data)
 			});
+			location.reload();
 		}
 	});
 </script>
@@ -108,7 +108,7 @@
 
 	private async Task Played(string slug)
 	{
-		await BackstageEndpoints.Status(slug, true, db, tracker);
+		await BackstageEndpoints.Status(slug, true, db);
 		OnInitialized();
 	}
 
