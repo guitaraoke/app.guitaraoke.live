@@ -1,5 +1,3 @@
-using GuitaraokeBlazorApp.Components;
-
 namespace GuitaraokeBlazorApp.Data;
 
 public class SongDatabase : ISongDatabase {
@@ -9,6 +7,10 @@ public class SongDatabase : ISongDatabase {
 
 	public SongDatabase(IEnumerable<Song> songs) {
 		this.songs = songs.ToList();
+	}
+
+	public SongDatabase(string filename) {
+		songs = LoadSongsFromFile(filename).ToList();
 	}
 
 	public IEnumerable<Song> ListSongs() => songs;
@@ -68,8 +70,6 @@ public class SongDatabase : ISongDatabase {
 			.Where(user => user.Signups.ContainsKey(song))
 			.ToDictionary(user => user, user => user.Signups[song]);
 
-
-
 	public Dictionary<Song, List<User>> ListStarredSongs()
 		=> stars.SelectMany(pair => pair.Value.Select(song => (pair.Key, song)))
 			.GroupBy(item => item.song)
@@ -78,12 +78,11 @@ public class SongDatabase : ISongDatabase {
 	public Instrument[] FindInstrumentsForUser(Song song, User user)
 		=> user.Signups.GetValueOrDefault(song) ?? Array.Empty<Instrument>();
 
-	//public SongSelection FindSongForUser(Song song, User user) {
-	//	return new(song) {
-	//		User = user,
-	//		IsStarred = ListStarredSongs(user).Contains(song)
-	//	};
-	//}
+	public IEnumerable<Song> LoadSongsFromFile(string filename) {
+		return File.ReadAllLines(filename)
+			.Select(line => line.Split(" - "))
+			.Select(tokens => new Song(tokens[0], tokens[1]));
+	}
 
 	public void PopulateSampleData() {
 		var alicia = new User { Name = "Alicia" };

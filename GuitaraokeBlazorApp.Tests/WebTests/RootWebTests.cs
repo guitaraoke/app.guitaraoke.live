@@ -90,7 +90,7 @@ public class RootWebTests : WebTestBase {
 		// StaticHtmlRenderer uses synchronous writes which eventually fails #49172
 		// https://github.com/dotnet/aspnetcore/issues/49172
 		songs = songs
-		.Take(70);
+		.Take(50);
 #endif
 		foreach (var song in songs) {
 			decodedHtml.ShouldContain(song.Title);

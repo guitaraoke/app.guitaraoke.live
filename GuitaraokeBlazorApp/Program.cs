@@ -7,22 +7,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
 	.AddServerComponents();
 
-builder.Services.AddHttpClient();
-
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICookieJar, HttpCookieJar>();
 builder.Services.AddScoped<IUserTracker, HttpCookieUserTracker>();
 
 //Add Song data and services
-var songs = File.ReadAllLines("songlist.txt")
-	.Select(line => line.Split(" - "))
-	.Select(tokens => new Song(tokens[0], tokens[1]));
-var db = new SongDatabase(songs);
-#if DEBUG
-db.PopulateSampleData();
-#endif
+var db = new SongDatabase(builder.Configuration["songs:filename"] ?? "songlist.txt");
+if (builder.Configuration.GetValue<bool>("songs:sampledata")) {
+	db.PopulateSampleData();
+}
 builder.Services.AddSingleton<ISongDatabase>(db);
-
 
 var app = builder.Build();
 
@@ -37,7 +31,8 @@ app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 
-app.MapRazorComponents<App>();
+app.MapRazorComponents<App>()
+	.AddServerRenderMode();
 
 app.MapSongEndpoints();
 app.MapBackstageEndpoints();
