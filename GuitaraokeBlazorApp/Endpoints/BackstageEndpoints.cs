@@ -15,9 +15,9 @@ public static partial class BackstageEndpoints {
 
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
 	public static async Task<IResult> Move([FromBody] MoveSongData post, ISongDatabase db) {
-	var song = db.FindSong(post.Song);
+		var song = db.FindSong(post.Song);
 		if (song == default) return Results.BadRequest();
-	db.MoveSongToPosition(song, post.Position);
+		db.MoveSongToPosition(song, post.Position);
 		return Results.Ok();
 	}
 

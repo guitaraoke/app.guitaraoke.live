@@ -1,8 +1,19 @@
+using Microsoft.AspNetCore.Http.HttpResults;
 using GuitaraokeBlazorApp.Endpoints;
 
 namespace GuitaraokeBlazorApp.Tests.EndpointTests;
 
 public class SongTests {
+
+	[Fact]
+	public async Task Starring_Invalid_Slug_Returns_Not_Found() {
+		var hurt = new Song("Nine Inch Nails", "Hurt");
+		var db = new SongDatabase(new[] { hurt });
+		var user = new User();
+		var tracker = new FakeUserTracker(user);
+		var response = await SongEndpoints.ToggleSongStar("not-a-real-slug", db, tracker);
+		response.ShouldBeOfType<NotFound>();
+	}
 
 	[Fact]
 	public async Task Starring_Song_Toggles_Star_On() {
@@ -12,27 +23,43 @@ public class SongTests {
 		var db = new SongDatabase(new[] { hurt, torn, once });
 		var user = new User();
 		var tracker = new FakeUserTracker(user);
-		await SongEndpoints.ToggleSongStar(hurt.Slug, db, tracker);
+		var response = await SongEndpoints.ToggleSongStar(hurt.Slug, db, tracker);
+		response.ShouldBeOfType<Ok<bool>>();
+		((Ok<bool>)response).Value.ShouldBe(true);
 		db.ListStarredSongs(user).Count().ShouldBe(1);
-		await SongEndpoints.ToggleSongStar(hurt.Slug, db, tracker);
+		response = await SongEndpoints.ToggleSongStar(hurt.Slug, db, tracker);
+		response.ShouldBeOfType<Ok<bool>>();
+		((Ok<bool>) response).Value.ShouldBe(false);
 		db.ListStarredSongs(user).Count().ShouldBe(0);
 	}
 
 	[Fact]
-	public async Task POST_Song_Signs_Up_For_Song() {
+	public async Task Sign_Up_With_Invalid_Slug_Returns_Not_Found() {
 		var hurt = new Song("Nine Inch Nails", "Hurt");
 		var db = new SongDatabase(new[] { hurt });
 		var user = new User();
 		db.SaveUser(user);
 		var tracker = new FakeUserTracker(user);
-		await SongEndpoints.SignUpForSong(hurt.Slug, "Surly Dev", new[] { Instrument.Sing, Instrument.BassGuitar }, db, tracker);
+		var response = await SongEndpoints.SignUpForSong("this-is-a-bad-slug", "Surly Dev", new[] { Instrument.Sing, Instrument.BassGuitar }, db, tracker);
+		response.ShouldBeOfType<NotFound>();
+	}
+
+	[Fact]
+	public async Task Song_Signs_Up_For_Song() {
+		var hurt = new Song("Nine Inch Nails", "Hurt");
+		var db = new SongDatabase(new[] { hurt });
+		var user = new User();
+		db.SaveUser(user);
+		var tracker = new FakeUserTracker(user);
+		var response = await SongEndpoints.SignUpForSong(hurt.Slug, "Surly Dev", new[] { Instrument.Sing, Instrument.BassGuitar }, db, tracker);
+		response.ShouldBeOfType<Ok>();
 		var instrumentsArray = db.FindInstrumentsForUser(hurt, user);
 		instrumentsArray.ShouldContain(Instrument.Sing);
 		instrumentsArray.ShouldContain(Instrument.BassGuitar);
 	}
 
 	[Fact]
-	public async Task POST_Song_With_No_Instruments_Deletes_Signup() {
+	public async Task Song_With_No_Instruments_Deletes_Signup() {
 		var hurt = new Song("Nine Inch Nails", "Hurt");
 		var db = new SongDatabase(new[] { hurt });
 		var user = new User();
@@ -51,7 +78,7 @@ public class SongTests {
 
 
 	[Fact]
-	public async Task POST_Song_With_No_Instruments_Leaves_Song_In_Queue_If_Other_Signups_Exist() {
+	public async Task Song_With_No_Instruments_Leaves_Song_In_Queue_If_Other_Signups_Exist() {
 		var hurt = new Song("Nine Inch Nails", "Hurt");
 		var db = new SongDatabase(new[] { hurt });
 		var user1 = new User();
@@ -73,7 +100,7 @@ public class SongTests {
 
 
 	[Fact]
-	public async Task POST_Song_Updates_User_Name_In_Database() {
+	public async Task Song_Updates_User_Name_In_Database() {
 		var hurt = new Song("Nine Inch Nails", "Hurt");
 		var db = new SongDatabase(new[] { hurt });
 		var user = new User();

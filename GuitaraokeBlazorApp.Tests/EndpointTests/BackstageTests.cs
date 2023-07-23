@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http.HttpResults;
 using GuitaraokeBlazorApp.Endpoints;
 
 namespace GuitaraokeBlazorApp.Tests.EndpointTests;
@@ -9,8 +10,9 @@ public class BackstageTests {
 		var song = new Song("Battle Beast", "Familiar Hell");
 		var songs = new List<Song>() { song };
 		var db = new SongDatabase(songs);
-		var result = await BackstageEndpoints.Status(song.Slug, true, db);
-		result.ShouldNotBeNull();
+		var response = await BackstageEndpoints.Status(song.Slug, true, db);
+		response.ShouldBeOfType<Ok<bool>>();
+		((Ok<bool>) response).Value.ShouldBe(true);
 		song = db.FindSong("battle-beast-familiar-hell");
 		song.ShouldNotBeNull();
 		song.Played.ShouldBe(true);
@@ -28,7 +30,7 @@ public class BackstageTests {
 		db.GetQueuedSongs().ShouldBeEmpty();
 	}
 
-	private async Task<SongDatabase> SetUpQueue(User user, params Song[] songs) {
+	private static async Task<SongDatabase> SetUpQueue(User user, params Song[] songs) {
 		var db = new SongDatabase(songs);
 		var tracker = new FakeUserTracker(user);
 		foreach (var song in songs) {
@@ -46,11 +48,11 @@ public class BackstageTests {
 		var cave = new Song("Muse", "Cave");
 		var user = new User();
 		var db = await SetUpQueue(user, adia, bang, cave);
-		var result = await BackstageEndpoints.Move(new() {
+		var response = await BackstageEndpoints.Move(new() {
 			Song = cave.Slug,
 			Position = 0,
 		}, db);
-		result.ShouldNotBeNull();
+		response.ShouldBeOfType<Ok>();
 		var queue = db.GetQueuedSongs();
 		queue[0].Song.Name.ShouldBe(cave.Name);
 		queue[1].Song.Name.ShouldBe(adia.Name);
@@ -64,11 +66,11 @@ public class BackstageTests {
 		var cave = new Song("Muse", "Cave");
 		var user = new User();
 		var db = await SetUpQueue(user, adia, bang, cave);
-		var result = await BackstageEndpoints.Move(new() {
+		var response = await BackstageEndpoints.Move(new() {
 			Song = adia.Slug,
 			Position = 1,
 		}, db);
-		result.ShouldNotBeNull();
+		response.ShouldBeOfType<Ok>();
 		var queue = db.GetQueuedSongs();
 		queue[0].Song.Name.ShouldBe(bang.Name);
 		queue[1].Song.Name.ShouldBe(adia.Name);
