@@ -1,28 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk.Razor">
 
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFrameworks>net7.0;net8.0</TargetFrameworks>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<RazorLangVersion>8.0</RazorLangVersion>
 	</PropertyGroup>
 
-	<ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)'=='net8.0'">
 		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.0-preview.6.23329.11" />
 	</ItemGroup>
-
-	<ItemGroup>
-	  <Content Update="Components\SongStar.razor">
-	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-	  </Content>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Pages\" />
-	</ItemGroup>
 	
-	<!--<ItemGroup Condition="'$(TargetFramework)'=='net7.0'">
+	<ItemGroup Condition="'$(TargetFramework)'=='net7.0'">
 		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.9" />
-	</ItemGroup>-->
+	</ItemGroup>
 
 </Project>

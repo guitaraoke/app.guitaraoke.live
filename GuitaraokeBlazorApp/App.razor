@@ -22,7 +22,7 @@
 <body>
 
     <Router AppAssembly="@typeof(App).Assembly"
-		AdditionalAssemblies="new[] { typeof(GuitaraokeBlazorApp.Common.Data.Song).Assembly }">
+		AdditionalAssemblies="new[] { typeof(GuitaraokeBlazorApp.Common.Pages.Queue).Assembly }">
         <Found Context="routeData">
             <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
             <FocusOnNavigate RouteData="@routeData" Selector="h1" />

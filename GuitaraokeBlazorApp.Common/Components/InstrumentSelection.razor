@@ -1,4 +1,3 @@
-@attribute [RenderModeServer]
 @foreach (var item in CheckableInstruments) {
 	<label for="instrument-@item.Instrument">
 		@item.Instrument.GetDisplayName()
@@ -38,7 +37,7 @@
 		await InstrumentsChanged.InvokeAsync(Instruments);
 	}
 
-	class CheckableInstrument
+		class CheckableInstrument
 	{
 		public Instrument Instrument;
 		public bool IsSelected;

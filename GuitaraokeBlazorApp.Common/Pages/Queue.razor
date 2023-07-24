@@ -1,0 +1,18 @@
+@page "/queue"
+
+<PageTitle>Queue</PageTitle>
+
+<QueuedSongs NoOfSongs="@NoOfSongs" />
+<br />
+<WhatsHot    NoOfSongs="@NoOfSongs" />
+
+@code {
+	[Parameter]
+	public int? NoOfSongs { get; set; }
+#if DEBUG
+	// TODO: remove this when RC1 comes out, maybe it will be fixed
+	// StaticHtmlRenderer uses synchronous writes which eventually fails #49172
+	// https://github.com/dotnet/aspnetcore/issues/49172
+	= 10;
+#endif
+}
