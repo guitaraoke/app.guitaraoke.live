@@ -26,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\GuitaraokeBlazorApp.Shared\GuitaraokeBlazorApp.Shared.csproj" />
     <ProjectReference Include="..\GuitaraokeBlazorApp\GuitaraokeBlazorApp.csproj" />
   </ItemGroup>
 

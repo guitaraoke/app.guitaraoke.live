@@ -16,6 +16,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GuitaraokeBlazorApp.Shared", "GuitaraokeBlazorApp.Shared\GuitaraokeBlazorApp.Shared.csproj", "{E82DEDA7-F1B2-4A0E-91A2-DA143D1A4C8E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +40,10 @@ Global
 		{6757D09C-0DF6-4128-9535-5915F2763425}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6757D09C-0DF6-4128-9535-5915F2763425}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6757D09C-0DF6-4128-9535-5915F2763425}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E82DEDA7-F1B2-4A0E-91A2-DA143D1A4C8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E82DEDA7-F1B2-4A0E-91A2-DA143D1A4C8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E82DEDA7-F1B2-4A0E-91A2-DA143D1A4C8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E82DEDA7-F1B2-4A0E-91A2-DA143D1A4C8E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

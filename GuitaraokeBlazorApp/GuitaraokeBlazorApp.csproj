@@ -6,6 +6,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GuitaraokeBlazorApp.Shared\GuitaraokeBlazorApp.Shared.csproj" />
+  </ItemGroup>
+
 	<ItemGroup>
     <None Update="songlist.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

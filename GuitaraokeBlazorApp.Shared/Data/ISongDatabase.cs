@@ -1,4 +1,4 @@
-namespace GuitaraokeBlazorApp.Data;
+namespace GuitaraokeBlazorApp.Shared.Data;
 
 public interface ISongDatabase {
 	IEnumerable<Song> ListSongs();

@@ -1,6 +1,6 @@
 using System.Reflection;
 
-namespace GuitaraokeBlazorApp.Data;
+namespace GuitaraokeBlazorApp.Shared.Data;
 
 [Flags]
 public enum Instrument {
