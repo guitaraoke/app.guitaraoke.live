@@ -16,7 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GuitaraokeBlazorApp.Shared", "GuitaraokeBlazorApp.Shared\GuitaraokeBlazorApp.Shared.csproj", "{E82DEDA7-F1B2-4A0E-91A2-DA143D1A4C8E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GuitaraokeBlazorApp.Common", "GuitaraokeBlazorApp.Common\GuitaraokeBlazorApp.Common.csproj", "{E82DEDA7-F1B2-4A0E-91A2-DA143D1A4C8E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

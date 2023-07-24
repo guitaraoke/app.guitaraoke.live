@@ -1,4 +1,4 @@
-namespace GuitaraokeBlazorApp.Shared.Data;
+namespace GuitaraokeBlazorApp.Common.Data;
 
 public interface ICookieJar {
 	public string? Get(string name);

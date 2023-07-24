@@ -11,7 +11,7 @@ public class SongTests {
 		var db = new SongDatabase(new[] { hurt });
 		var user = new User();
 		var tracker = new FakeUserTracker(user);
-		var response = await SongEndpoints.ToggleSongStar("not-a-real-slug", db, tracker);
+		var response = await SongEndpoints.ToggleStar("not-a-real-slug", db, tracker);
 		response.ShouldBeOfType<NotFound>();
 	}
 
@@ -23,11 +23,11 @@ public class SongTests {
 		var db = new SongDatabase(new[] { hurt, torn, once });
 		var user = new User();
 		var tracker = new FakeUserTracker(user);
-		var response = await SongEndpoints.ToggleSongStar(hurt.Slug, db, tracker);
+		var response = await SongEndpoints.ToggleStar(hurt.Slug, db, tracker);
 		response.ShouldBeOfType<Ok<bool>>();
 		((Ok<bool>)response).Value.ShouldBe(true);
 		db.ListStarredSongs(user).Count().ShouldBe(1);
-		response = await SongEndpoints.ToggleSongStar(hurt.Slug, db, tracker);
+		response = await SongEndpoints.ToggleStar(hurt.Slug, db, tracker);
 		response.ShouldBeOfType<Ok<bool>>();
 		((Ok<bool>) response).Value.ShouldBe(false);
 		db.ListStarredSongs(user).Count().ShouldBe(0);

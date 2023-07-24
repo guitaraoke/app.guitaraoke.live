@@ -18,7 +18,7 @@ public class SongDatabase : ISongDatabase {
 	public IEnumerable<Song> ListStarredSongs(User user)
 		=> stars.GetValueOrDefault(user) ?? new();
 
-	public bool ToggleStar(User user, Song song) {
+	public bool ToggleStar(Song song, User user) {
 		if (stars.TryGetValue(user, out var value)) {
 			if (value.Contains(song)) {
 				value.Remove(song);
@@ -78,6 +78,15 @@ public class SongDatabase : ISongDatabase {
 	public Instrument[] FindInstrumentsForUser(Song song, User user)
 		=> user.Signups.GetValueOrDefault(song) ?? Array.Empty<Instrument>();
 
+	public void SignUpForSong(Song song, User user, Instrument[] instruments) {
+		if (song == null) return;
+		if (user.SignUp(song, instruments)) {
+			AddSongToQueue(song);
+		} else {
+			PruneQueue();
+		}
+	}
+
 	public IEnumerable<Song> LoadSongsFromFile(string filename) {
 		return File.ReadAllLines(filename)
 			.Select(line => line.Split(" - "))
@@ -91,7 +100,7 @@ public class SongDatabase : ISongDatabase {
 		var david = new User { Name = "David C" };
 		var eddie = new User { Name = "Ed van H" };
 		var freddie = new User { Name = "Freddie M" };
-		var gloria = new User { Name = "Gloria"};
+		var gloria = new User { Name = "Gloria" };
 		var harry = new User { Name = "Harry" };
 		var iggy = new User { Name = "I. Pop" };
 		var joe = new User { Name = "Joe B" };
@@ -129,7 +138,9 @@ public class SongDatabase : ISongDatabase {
 		for (var i = 0; i < 1000; i++) {
 			var song = this.songs[Random.Shared.Next(this.songs.Count)];
 			var user = testUsers[Random.Shared.Next(testUsers.Length)];
-			ToggleStar(user, song);
+			ToggleStar(song, user);
 		}
 	}
+
 }
+

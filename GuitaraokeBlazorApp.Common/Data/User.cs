@@ -1,4 +1,4 @@
-namespace GuitaraokeBlazorApp.Shared.Data;
+namespace GuitaraokeBlazorApp.Common.Data;
 
 public class User {
 

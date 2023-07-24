@@ -1,4 +1,4 @@
-namespace GuitaraokeBlazorApp.Shared.Data;
+namespace GuitaraokeBlazorApp.Common.Data;
 
 public interface ISongDatabase {
 	IEnumerable<Song> ListSongs();
@@ -6,7 +6,7 @@ public interface ISongDatabase {
 	IEnumerable<Song> ListStarredSongs(User user);
 	/// <summary>Toggle the specified song star for the specified user.</summary>
 	/// <returns>True if the song is now starred; otherwise false.</returns>
-	bool ToggleStar(User user, Song song);
+	bool ToggleStar(Song song, User user );
 	Song? FindSong(string slug);
 	User? FindUser(Guid guid);
 	User SaveUser(User user);
@@ -16,4 +16,5 @@ public interface ISongDatabase {
 	void MoveSongToPosition(Song song, int newIndex);
 	void RemoveSongFromQueue(Song song);
 	void PruneQueue();
+	void SignUpForSong(Song song, User user, Instrument[] instruments);
 }

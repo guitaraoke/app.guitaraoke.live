@@ -1,5 +1,5 @@
 using AngleSharp.Dom;
-using GuitaraokeBlazorApp.Components;
+using GuitaraokeBlazorApp.Common.Components;
 using System.Net;
 
 namespace GuitaraokeBlazorApp.Tests.WebTests;
@@ -104,7 +104,7 @@ public class RootWebTests : WebTestBase {
 		var client = Factory.CreateClient();
 		Db.SaveUser(user);
 		var song = Db!.ListSongs().First();
-		Db!.ToggleStar(user, song);
+		Db!.ToggleStar(song, user);
 		var request = new HttpRequestMessage(HttpMethod.Get, "/");
 		var cookie = new Cookie(HttpCookieUserTracker.COOKIE_NAME, user.Guid.ToString());
 		request.Headers.Add("Cookie", cookie.ToString());

@@ -15,12 +15,14 @@
 	<link rel="stylesheet" href="css/guitaraoke.css" />
     <link rel="icon" type="image/png" href="favicon.png" />
     <link rel="stylesheet" href="GuitaraokeBlazorApp.styles.css" />
+    <link rel="stylesheet" href="GuitaraokeBlazorApp.Common.styles.css" />
     <HeadOutlet />
 </head>
 
 <body>
 
-    <Router AppAssembly="@typeof(App).Assembly">
+    <Router AppAssembly="@typeof(App).Assembly"
+		AdditionalAssemblies="new[] { typeof(GuitaraokeBlazorApp.Common.Data.Song).Assembly }">
         <Found Context="routeData">
             <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
             <FocusOnNavigate RouteData="@routeData" Selector="h1" />

@@ -21,7 +21,7 @@
 		<form @onsubmit="@OnSubmit">
 			<input type="hidden" name="slug" value="@Slug" />
 			<InstrumentSelection @bind-Instruments="@instruments" />
-			<input type="text" name="name" placeholder="Your name" @bind-value="@name" required />
+			<input type="text" name="name" placeholder="Your name" @bind-value="@user.Name" required />
 			<input type="submit" value="Let's Rock!" />
 		</form>
 		<p class="small-print">Just your first name is fine. We use a cookie to remember your name, and we don't share it with anybody. Hope that's OK.</p>
@@ -37,27 +37,28 @@
 
 	private Instrument instruments;
 	private bool isStarred;
-	private string? name;
+	// private string? name;
+	private User user = default!;
 
 	protected override void OnParametersSet()
 	{
 		var song = db.FindSong(Slug);
 		if (song is null) return;
 		Song = song;
-		var user = tracker.GetUser();
-		name = user.Name;
+		user = tracker.GetUser();
+		// name = user.Name;
 		isStarred = db.ListStarredSongs(user).Contains(song);
 		instruments = (user?.Signups.GetValueOrDefault(song) ?? Array.Empty<Instrument>())
 			.ToInstrument();
 	}
 
-	private async Task OnSubmit()
+	private void OnSubmit()
 	{
-		if (String.IsNullOrEmpty(Slug) || String.IsNullOrEmpty(name)) {
+		if (String.IsNullOrEmpty(Slug) || String.IsNullOrEmpty(user?.Name)) {
 			return;
 		}
 
-		await SongEndpoints.SignUpForSong(Slug, name, instruments.ToArray(), db, tracker);
+		db.SignUpForSong(Song, user, instruments.ToArray());
 		navMgr.NavigateTo("/me", true);
 	}
 }

@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace GuitaraokeBlazorApp.Shared.Data;
+namespace GuitaraokeBlazorApp.Common.Data;
 
 public partial class Song {
 

@@ -14,8 +14,10 @@
 
 	private string starStyle => IsStarred ? STARRED : NORMAL;
 
-	private async Task ToggleStar() {
-		IsStarred = !IsStarred;
-		await SongEndpoints.ToggleSongStar(Slug, db, tracker);
+	private void ToggleStar() {
+		var user = tracker.GetUser();
+		var song = db.FindSong(Slug);
+		if (song is null) { return; };
+		IsStarred =  db.ToggleStar(song, user);
 	}
 }

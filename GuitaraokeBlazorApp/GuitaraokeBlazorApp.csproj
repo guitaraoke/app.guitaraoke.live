@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GuitaraokeBlazorApp.Shared\GuitaraokeBlazorApp.Shared.csproj" />
+    <ProjectReference Include="..\GuitaraokeBlazorApp.Common\GuitaraokeBlazorApp.Common.csproj" />
   </ItemGroup>
 
 	<ItemGroup>
@@ -15,5 +15,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Components\" />
+	  <Folder Include="Shared\" />
+	</ItemGroup>
 
 </Project>

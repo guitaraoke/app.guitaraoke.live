@@ -8,12 +8,12 @@ public class SongDatabaseTests {
 		var b = new Song("b", "b");
 		var c = new Song("c", "c");
 		var db = new SongDatabase(new[] { a, b, c });
-		db.ToggleStar(new(), a);
-		db.ToggleStar(new(), a);
-		db.ToggleStar(new(), a);
-		db.ToggleStar(new(), b);
-		db.ToggleStar(new(), b);
-		db.ToggleStar(new(), c);
+		db.ToggleStar(a, new());
+		db.ToggleStar(a, new());
+		db.ToggleStar(a, new());
+		db.ToggleStar(b, new());
+		db.ToggleStar(b, new());
+		db.ToggleStar(c, new());
 		var result = db.ListStarredSongs();
 		result[a].Count.ShouldBe(3);
 		result[b].Count.ShouldBe(2);
@@ -28,19 +28,19 @@ public class SongDatabaseTests {
 		var db = new SongDatabase(new[] { humanLove, oneSecond });
 		db.ListStarredSongs(user).ShouldBeEmpty();
 
-		db.ToggleStar(user, humanLove);
+		db.ToggleStar(humanLove, user);
 		db.ListStarredSongs(user).Single().ShouldBe(humanLove);
 
-		db.ToggleStar(user, oneSecond);
+		db.ToggleStar(oneSecond, user);
 		var list = db.ListStarredSongs(user).ToList();
 		list.Count.ShouldBe(2);
 		list.ShouldContain(oneSecond);
 		list.ShouldContain(humanLove);
 
-		db.ToggleStar(user, humanLove);
+		db.ToggleStar(humanLove, user);
 		db.ListStarredSongs(user).Single().ShouldBe(oneSecond);
 
-		db.ToggleStar(user, oneSecond);
+		db.ToggleStar(oneSecond, user );
 		db.ListStarredSongs(user).ShouldBeEmpty();
 
 	}
