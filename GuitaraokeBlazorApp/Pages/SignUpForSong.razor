@@ -54,7 +54,7 @@
 
 	private void OnSubmit()
 	{
-		if (String.IsNullOrEmpty(Slug) || String.IsNullOrEmpty(user?.Name)) {
+		if (String.IsNullOrWhiteSpace(Slug) || String.IsNullOrWhiteSpace(user?.Name)) {
 			return;
 		}
 

@@ -19,7 +19,7 @@ public static partial class SongEndpoints {
 		var user = tracker.GetUser();
 		var song = db.FindSong(slug);
 		if (song == null) return Results.NotFound();
-		user.Name = name;
+		if (!String.IsNullOrWhiteSpace(name)) user.Name = name;
 		db.SaveUser(user);
 		db.SignUpForSong(song, user, instruments);
 		return Results.Ok();
