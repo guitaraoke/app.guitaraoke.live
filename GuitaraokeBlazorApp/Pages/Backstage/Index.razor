@@ -9,25 +9,23 @@
 	<div id="song-queue">
 		<ol id="ol-song-queue">
 			@foreach (var item in queuedSongs) {
-				<li draggable="true" class="dropzone @(item.Song.Slug == dropTarget ? "drop-target" : null)" id="li-@item.Song.Slug"
+				<li draggable="true"
+					class="@(item.Song.Slug == dropTarget ? "drop-target" : null)"
 					@ondragenter:preventDefault
 					@ondragleave:preventDefault
 					@ondragover:preventDefault
 					@ondragstart="() => DragStart(item.Song.Slug)"
 					@ondragenter="() => DragEnter(item.Song.Slug)"
-					@ondragover="() => DragOver()"
 					@ondragleave="() => DragLeave()"
-					@ondrop="() => HandleDrop()"
-					data-song-slug="@item.Song.Slug">
+					@ondragover= "() => DragOver()"
+					@ondrop="() => Drop()">
 					<a class="mark-song-as-played-link" @onclick="() => Played(item.Song.Slug)">PLAYED</a>
 					@item.Song.Name
 					<ul>
 						@foreach (var player in item.Players) {
 							<li>
 								@player.Key.Name
-								<em>
-									@String.Join(", ", player.Value.Select(i => i.GetDisplayName()).ToArray())
-								</em>
+								<em>@String.Join(", ", player.Value.Select(i => i.GetDisplayName()).ToArray())</em>
 							</li>
 						}
 					</ul>
@@ -45,7 +43,6 @@
 	public int? NoOfSongs { get; set; }
 
 	private List<(Song Song, Dictionary<User, Instrument[]> Players)> queuedSongs = new();
-
 
 	private string dragId = "";
 	private string dropTarget = "";
@@ -75,37 +72,19 @@
 		StateHasChanged();
 	}
 
-	private void DragStart(string slug) {
-		dragId = slug;
-	}
+	private void DragStart(string slug) => dragId = slug;
+	private void DragEnter(string slug) => dropTarget = slug;
+	private void DragLeave() => dropTarget = "";
+	private void DragOver() { }
 
-	private void DragEnter(string slug)
-	{
-		dropTarget = slug;
-		Console.WriteLine($"Enter {dropTarget}");
-		StateHasChanged();
-	}
-
-	private void DragLeave()
-	{
-		Console.WriteLine($"Leave {dropTarget}");
-		dropTarget = "";
-		StateHasChanged();
-	}
-
-	private void DragOver()
-	{
-		StateHasChanged();
-	}
-
-	private void HandleDrop()
+	private void Drop()
 	{
 		if (String.IsNullOrWhiteSpace(dropTarget)) return;
 		var song = db.FindSong(dragId);
 		if (song == default) return;
 
 		var songPosition = queuedSongs.IndexOf(queuedSongs.FirstOrDefault(s => s.Song.Slug == dragId));
-		var newPosition = queuedSongs.IndexOf(queuedSongs.FirstOrDefault(s => s.Song.Slug == dropTarget));
+		var newPosition  = queuedSongs.IndexOf(queuedSongs.FirstOrDefault(s => s.Song.Slug == dropTarget));
 		if (songPosition <= newPosition) {
 			newPosition--;
 		}
