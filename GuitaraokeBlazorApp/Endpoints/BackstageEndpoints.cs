@@ -22,7 +22,7 @@ public static partial class BackstageEndpoints {
 	}
 
 	public static async Task<IResult> Status(string slug, bool played, ISongDatabase db) {
-	var song = db.FindSong(slug);
+		var song = db.FindSong(slug);
 		if (song == default) return Results.NotFound();
 		song.PlayedAt = (played ? DateTime.UtcNow : null);
 		if (song.Played) db.RemoveSongFromQueue(song);

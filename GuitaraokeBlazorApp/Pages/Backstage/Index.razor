@@ -9,9 +9,17 @@
 	<div id="song-queue">
 		<ol id="ol-song-queue">
 			@foreach (var item in queuedSongs) {
-				<li draggable="true" class="dropzone" id="li-@item.Song.Slug"
+				<li draggable="true" class="dropzone @(item.Song.Slug == dropTarget ? "drop-target" : null)" id="li-@item.Song.Slug"
+					@ondragenter:preventDefault
+					@ondragleave:preventDefault
+					@ondragover:preventDefault
+					@ondragstart="() => DragStart(item.Song.Slug)"
+					@ondragenter="() => DragEnter(item.Song.Slug)"
+					@ondragover="() => DragOver()"
+					@ondragleave="() => DragLeave()"
+					@ondrop="() => HandleDrop()"
 					data-song-slug="@item.Song.Slug">
-					<a class="mark-song-as-played-link" @onclick="async () => await Played(item.Song.Slug)">PLAYED</a>
+					<a class="mark-song-as-played-link" @onclick="() => Played(item.Song.Slug)">PLAYED</a>
 					@item.Song.Name
 					<ul>
 						@foreach (var player in item.Players) {
@@ -33,31 +41,81 @@
 </div>
 
 @code {
-    [Parameter]
-    public int? NoOfSongs { get; set; }
+	[Parameter]
+	public int? NoOfSongs { get; set; }
 
-    private List<(Song Song, Dictionary<User, Instrument[]> Players)> queuedSongs = new();
+	private List<(Song Song, Dictionary<User, Instrument[]> Players)> queuedSongs = new();
 
-    protected override void OnInitialized()
-    {
-        queuedSongs = db.GetQueuedSongs();
-        if (NoOfSongs is not null) {
-            queuedSongs = queuedSongs
-            .Take((int)NoOfSongs)
-            .ToList();
-        }
+
+	private string dragId = "";
+	private string dropTarget = "";
+
+	protected override void OnInitialized()
+	{
+		ReloadQueue();
 	}
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        var js = new GuitaraokeJsInterop(JsRuntime);
-        _ = await js.InitDragAndDrop();
-    }
-
-    private async Task Played(string slug)
-    {
-		await BackstageEndpoints.Status(slug, true, db);
-		OnInitialized();
+	private void ReloadQueue()
+	{
+		queuedSongs = db.GetQueuedSongs();
+		if (NoOfSongs is not null) {
+			queuedSongs = queuedSongs
+			.Take((int)NoOfSongs)
+			.ToList();
+		}
 	}
+
+	private void Played(string slug)
+	{
+		var song = db.FindSong(slug);
+		if (song == default) return;
+		song.PlayedAt = DateTime.UtcNow;
+		db.RemoveSongFromQueue(song);
+		ReloadQueue();
+		StateHasChanged();
+	}
+
+	private void DragStart(string slug) {
+		dragId = slug;
+	}
+
+	private void DragEnter(string slug)
+	{
+		dropTarget = slug;
+		Console.WriteLine($"Enter {dropTarget}");
+		StateHasChanged();
+	}
+
+	private void DragLeave()
+	{
+		Console.WriteLine($"Leave {dropTarget}");
+		dropTarget = "";
+		StateHasChanged();
+	}
+
+	private void DragOver()
+	{
+		StateHasChanged();
+	}
+
+	private void HandleDrop()
+	{
+		if (String.IsNullOrWhiteSpace(dropTarget)) return;
+		var song = db.FindSong(dragId);
+		if (song == default) return;
+
+		var songPosition = queuedSongs.IndexOf(queuedSongs.FirstOrDefault(s => s.Song.Slug == dragId));
+		var newPosition = queuedSongs.IndexOf(queuedSongs.FirstOrDefault(s => s.Song.Slug == dropTarget));
+		if (songPosition <= newPosition) {
+			newPosition--;
+		}
+
+		db.MoveSongToPosition(song, newPosition);
+
+		dragId ="";
+		dropTarget = "";
+		ReloadQueue();
+	}
+
 
 }

@@ -12,33 +12,11 @@ public class GuitaraokeJsInterop : IAsyncDisposable
             "import", "./_content/GuitaraokeBlazorApp.Common/guitaraokeJsInterop.js").AsTask());
     }
 
-
-    public async ValueTask<string> Prompt(string message)
-    {
-        var module = await moduleTask.Value;
-        return await module.InvokeAsync<string>("showPrompt", message);
-    }
-
     public async ValueTask<bool> Confirm(string message)
     {
         var module = await moduleTask.Value;
         return await module.InvokeAsync<bool>("showConfirm", message);
     }
-
-
-	// Start of Drag and Drop
-
-
-	public async ValueTask<object> InitDragAndDrop() {
-		var module = await moduleTask.Value;
-		return await module.InvokeAsync<object>("initDragAndDrop");
-	}
-
-
-
-	//   End of Drag and Drop
-
-
 
 	public async ValueTask DisposeAsync()
     {
