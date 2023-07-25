@@ -1,20 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\GuitaraokeBlazorApp.Common\GuitaraokeBlazorApp.Common.csproj" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
 
 	<ItemGroup>
-    <None Update="songlist.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+		<ProjectReference Include="..\GuitaraokeBlazorApp.Common\GuitaraokeBlazorApp.Common.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="songlist.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
 	<ItemGroup>
 	  <Folder Include="Components\" />

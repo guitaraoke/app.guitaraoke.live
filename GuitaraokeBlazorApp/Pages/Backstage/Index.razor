@@ -1,7 +1,6 @@
 @page "/backstage"
 @layout BackstageLayout
 @inject ISongDatabase db;
-@attribute [RenderModeServer]
 
 <PageTitle>Backstage</PageTitle>
 
@@ -89,12 +88,6 @@
 @code {
 	[Parameter]
 	public int? NoOfSongs { get; set; }
-#if DEBUG
-	// TODO: remove this when RC1 comes out, maybe it will be fixed
-	// StaticHtmlRenderer uses synchronous writes which eventually fails #49172
-	// https://github.com/dotnet/aspnetcore/issues/49172
-	= 10;
-#endif
 
 	private List<(Song Song, Dictionary<User, Instrument[]> Players)> queuedSongs = new();
 
