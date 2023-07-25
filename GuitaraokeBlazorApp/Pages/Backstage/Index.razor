@@ -10,7 +10,7 @@
 		<ol id="ol-song-queue">
 			@foreach (var item in queuedSongs) {
 				<li draggable="true"
-					class="@(item.Song.Slug == dropTarget ? "drop-target" : null)"
+					class="@GenerateSongClass(item.Song.Slug)"
 					@ondragenter:preventDefault
 					@ondragleave:preventDefault
 					@ondragover:preventDefault
@@ -19,7 +19,8 @@
 					@ondragleave="() => DragLeave()"
 					@ondragover= "() => DragOver()"
 					@ondrop="() => Drop()">
-					<a class="mark-song-as-played-link" @onclick="() => Played(item.Song.Slug)">PLAYED</a>
+					<a id="mark-song-as-played-link"
+						@onclick="async () => await Played(item.Song.Slug)">PLAYED</a>
 					@item.Song.Name
 					<ul>
 						@foreach (var player in item.Players) {
@@ -44,6 +45,7 @@
 
 	private List<(Song Song, Dictionary<User, Instrument[]> Players)> queuedSongs = new();
 
+	private string playedId = "";
 	private string dragId = "";
 	private string dropTarget = "";
 
@@ -62,13 +64,17 @@
 		}
 	}
 
-	private void Played(string slug)
+	private async Task Played(string slug)
 	{
 		var song = db.FindSong(slug);
 		if (song == default) return;
+		playedId = slug;
 		song.PlayedAt = DateTime.UtcNow;
+		StateHasChanged();
+		await Task.Delay(500);
 		db.RemoveSongFromQueue(song);
 		ReloadQueue();
+		playedId = "";
 		StateHasChanged();
 	}
 
@@ -96,5 +102,12 @@
 		ReloadQueue();
 	}
 
+	private string? GenerateSongClass(string slug)
+	{
+		string? hide = slug == playedId ? "hide" : null;
+		string? target = slug == dropTarget ? "drop-target" : null;
+		if (hide is null && target is null) return null;
+		return $"{hide} {target}".Trim();
+	}
 
 }
