@@ -10,19 +10,20 @@
 		<ol id="ol-song-queue">
 			@foreach (var item in queuedSongs) {
 				<li draggable="true"
-					class="@GenerateSongClass(item.Song.Slug)"
-					@ondragenter:preventDefault
-					@ondragleave:preventDefault
-					@ondragover:preventDefault
-					@ondragstart="() => DragStart(item.Song.Slug)"
-					@ondragenter="() => DragEnter(item.Song.Slug)"
-					@ondragleave="() => DragLeave()"
-					@ondragover= "() => DragOver()"
-					@ondrop="() => Drop()">
+				class="@GenerateSongClass(item.Song.Slug)"
+				@ondragenter:preventDefault
+				@ondragleave:preventDefault
+				@ondragover:preventDefault
+				@ondragstart="() => DragStart(item.Song.Slug)"
+				@ondragenter="() => DragEnter(item.Song.Slug)"
+				@ondragleave="() => DragLeave()"
+				@ondragover= "() => DragOver()"
+				@ondragend="() => DragEnd()"
+				@ondrop="() => Drop()">
 					<a id="mark-song-as-played-link"
-						@onclick="async () => await Played(item.Song.Slug)">PLAYED</a>
+					@onclick="async () => await Played(item.Song.Slug)">PLAYED</a>
 					@item.Song.Name
-					<ul>
+					<ul class="drop">
 						@foreach (var player in item.Players) {
 							<li>
 								@player.Key.Name
@@ -75,13 +76,18 @@
 		db.RemoveSongFromQueue(song);
 		ReloadQueue();
 		playedId = "";
-		StateHasChanged();
 	}
 
 	private void DragStart(string slug) => dragId = slug;
 	private void DragEnter(string slug) => dropTarget = slug;
-	private void DragLeave() => dropTarget = "";
+	private void DragLeave() { }
 	private void DragOver() { }
+
+	private void DragEnd()
+	{
+		dragId = "";
+		dropTarget = "";
+	}
 
 	private void Drop()
 	{
