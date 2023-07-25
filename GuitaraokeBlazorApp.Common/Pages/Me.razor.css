@@ -43,3 +43,26 @@ a.remove-song-button {
 	color: #fff;
 }
 
+.warn {
+	border-color: red;
+}
+
+.hide {
+	opacity: 0;
+	transition: opacity 500ms;
+}
+
+.shrink-height {
+	animation-name: shrink-height;
+	animation-duration: 500ms;
+}
+
+@keyframes shrink-height {
+	from {
+		transform: scale(1, 1);
+	}
+
+	to {
+		transform: scale(1, 0);
+	}
+}

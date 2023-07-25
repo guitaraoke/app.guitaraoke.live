@@ -1,8 +1,3 @@
-.hide {
-	opacity: 0;
-	transition: opacity 500ms;
-}
-
 #dashboard {
 	height: 100vh;
 	overflow: clip;
@@ -47,4 +42,25 @@
 	border-radius: 8px;
 	margin: 8px;
 	cursor: pointer;
+}
+
+
+.hide {
+	opacity: 0;
+	transition: opacity 500ms;
+}
+
+.shrink-height {
+	animation-name: shrink-height;
+	animation-duration: 500ms;
+}
+
+@keyframes shrink-height {
+	from {
+		transform: scale(1, 1);
+	}
+
+	to {
+		transform: scale(1, 0);
+	}
 }
