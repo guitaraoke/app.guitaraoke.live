@@ -29,11 +29,13 @@
 
 @code {
 	private User user = new();
+	private GuitaraokeJsInterop js = default!;
 
 
 	protected override void OnInitialized()
 	{
 		user = tracker.GetUser();
+		js = new GuitaraokeJsInterop(JsRuntime);
 	}
 
 	private string InstrumentString(Instrument[] signupArray)
@@ -48,7 +50,7 @@
 	private async Task RemoveSong(string slug)
 	{
 		if (user.Name is not null) {
-			bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Are you sure you don’t want to do this one any more?");
+			bool confirmed = await js.Confirm("Are you sure you don’t want to do this one any more?");
 			if (confirmed) {
 				var song = db.FindSong(slug);
 				db.SignUpForSong(song!, user, Array.Empty<Instrument>());
