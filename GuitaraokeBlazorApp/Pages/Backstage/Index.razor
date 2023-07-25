@@ -1,6 +1,7 @@
 @page "/backstage"
 @layout BackstageLayout
 @inject ISongDatabase db;
+@inject IJSRuntime JsRuntime
 
 <PageTitle>Backstage</PageTitle>
 
@@ -31,78 +32,30 @@
 	</div>
 </div>
 
-<script>
-	let dragged;
-	let id;
-	let index;
-
-	HTMLCollection.prototype.indexOf = Array.prototype.indexOf;
-
-	document.addEventListener("dragstart", ({ target }) => {
-		dragged = target;
-		id = target.id;
-		index = target.parentNode.children.indexOf(target);
-	});
-
-	document.addEventListener("dragenter", ({ target }) => {
-		if (target.classList.contains("dropzone")) target.classList.add("drop-target");
-		event.preventDefault();
-	});
-
-	document.addEventListener("dragleave", ({ target }) => {
-		if (target.classList.contains("dropzone")) target.classList.remove("drop-target");
-		event.preventDefault();
-	});
-
-	document.addEventListener("dragover", _ => event.preventDefault());
-
-	document.addEventListener("drop", async ({ target }) => {
-		if (target.classList.contains("dropzone") && target.id !== id) {
-			target.classList.remove("drop-target");
-			dragged.remove(dragged);
-			const indexDrop = target.parentNode.children.indexOf(target);
-			let offset = 0;
-			if (index > indexDrop) {
-				target.before(dragged);
-			} else {
-				offset = 1;
-				target.after(dragged);
-			}
-			const data = {
-				song: dragged.getAttribute("data-song-slug"),
-				position: indexDrop + offset
-			};
-
-			console.log(data);
-			console.log(index, indexDrop);
-			const response = await fetch('/backstage/move', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify(data)
-			});
-			location.reload();
-		}
-	});
-</script>
-
 @code {
-	[Parameter]
-	public int? NoOfSongs { get; set; }
+    [Parameter]
+    public int? NoOfSongs { get; set; }
 
-	private List<(Song Song, Dictionary<User, Instrument[]> Players)> queuedSongs = new();
+    private List<(Song Song, Dictionary<User, Instrument[]> Players)> queuedSongs = new();
 
-	protected override void OnInitialized()
-	{
-		queuedSongs = db.GetQueuedSongs();
-		if (NoOfSongs is not null) {
-			queuedSongs = queuedSongs
-			.Take((int)NoOfSongs)
-			.ToList();
-		}
+    protected override void OnInitialized()
+    {
+        queuedSongs = db.GetQueuedSongs();
+        if (NoOfSongs is not null) {
+            queuedSongs = queuedSongs
+            .Take((int)NoOfSongs)
+            .ToList();
+        }
 	}
 
-	private async Task Played(string slug)
-	{
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        var js = new GuitaraokeJsInterop(JsRuntime);
+        _ = await js.InitDragAndDrop();
+    }
+
+    private async Task Played(string slug)
+    {
 		await BackstageEndpoints.Status(slug, true, db);
 		OnInitialized();
 	}

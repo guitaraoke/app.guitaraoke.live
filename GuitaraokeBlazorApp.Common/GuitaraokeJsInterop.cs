@@ -26,9 +26,21 @@ public class GuitaraokeJsInterop : IAsyncDisposable
     }
 
 
+	// Start of Drag and Drop
 
 
-    public async ValueTask DisposeAsync()
+	public async ValueTask<object> InitDragAndDrop() {
+		var module = await moduleTask.Value;
+		return await module.InvokeAsync<object>("initDragAndDrop");
+	}
+
+
+
+	//   End of Drag and Drop
+
+
+
+	public async ValueTask DisposeAsync()
     {
         if (moduleTask.IsValueCreated)
         {
