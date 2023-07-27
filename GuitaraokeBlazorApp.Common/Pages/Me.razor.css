@@ -31,9 +31,15 @@ em {
 	font-size: 80%;
 }
 
-a.remove-song-button {
+.remove-song-button {
 	display: inline-block;
 	float: right;
+}
+
+.trash {
+	display: block;
+	line-height: 1em;
+	text-decoration: none; 
 	border: 2px solid currentColor;
 	background-color: #900;
 	padding: 10px 11px;

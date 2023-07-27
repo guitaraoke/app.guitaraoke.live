@@ -1,7 +1,6 @@
 @page "/me"
 @inject ISongDatabase db;
 @inject IUserTracker tracker;
-@inject IJSRuntime JsRuntime
 
 <PageTitle>My Songs</PageTitle>
 
@@ -10,8 +9,21 @@
 	<p>Your Songs:</p>
 	<ul class="signup-list">
 		@foreach (var signup in user.Signups) {
-			<li class ="@GenerateSongClass(signup.Key.Slug)">
-				<a class="fa-light fa-trash-can remove-song-button" @onclick="async () => await RemoveSong(signup.Key.Slug)"></a>
+			<li class="@GenerateSongClass(signup.Key.Slug)">
+				<div class="remove-song-button">
+					<Confirm
+						Title="Remove signup?"
+						ButtonCssClass=""
+						ConfirmYes="async () => await RemoveSong(signup.Key.Slug)">
+						<ButtonContent>
+							<span class="fa-light fa-trash-can trash" style="height: 2rem;"/>
+						</ButtonContent>
+						<MessageTemplate>
+							<p>@signup.Key.Artist - <span>@signup.Key.Title</span></p>
+							<p>Are you sure you don’t want to do this one any more?</p>
+						</MessageTemplate>
+					</Confirm>
+				</div>
 				<a href="song/@signup.Key.Slug">
 					@signup.Key.Artist - <span>@signup.Key.Title</span>
 				</a>
@@ -33,11 +45,9 @@
 	private string? removeId = "";
 	private string? warnId = "";
 
-
 	protected override void OnInitialized()
 	{
 		user = tracker.GetUser();
-		js = new GuitaraokeJsInterop(JsRuntime);
 	}
 
 	private string InstrumentString(Instrument[] signupArray)
@@ -46,32 +56,25 @@
 			return "";
 		}
 		string message = String.Join(", ", signupArray.Select(i => i.GetDisplayName()).ToArray());
-		return message == "0" ? "" : message; 
+		return message == "0" ? "" : message;
 	}
 
 	private async Task RemoveSong(string slug)
 	{
 		if (user.Name is not null) {
-			warnId = slug;
-			StateHasChanged();
-				await Task.Delay(100);
-			bool confirmed = await js.Confirm("Are you sure you don’t want to do this one any more?");
-			if (confirmed) {
-				var song = db.FindSong(slug);
-				if (song is null) return;
-				removeId = slug;
-				StateHasChanged();
-				await Task.Delay(500);
-				db.SignUpForSong(song!, user, Array.Empty<Instrument>());
-				removeId = "";
-				warnId = "";
-			}
-			else {
-				removeId = "";
-				warnId = "";
-			}
+		warnId = slug;
+		StateHasChanged();
+		await Task.Delay(100);
+		var song = db.FindSong(slug);
+		if (song is null) return;
+		removeId = slug;
+		StateHasChanged();
+		await Task.Delay(500);
+		db.SignUpForSong(song!, user, Array.Empty<Instrument>());
+		removeId = "";
+		warnId = "";
 		}
-		}
+	}
 
 	private string? GenerateSongClass(string slug)
 	{
