@@ -23,6 +23,7 @@ html {
 
 html, body {
 	height: 100vh;
+	margin: 0;
 	background: rgb(var(--background-rgb));
 	background: linear-gradient(150deg, rgba(17, 23, 45, 1) 0%, rgba(37, 32, 79, 1) 49%, rgba(78, 14, 72, 1) 100%);
 	background-attachment: fixed;

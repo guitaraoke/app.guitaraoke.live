@@ -7,9 +7,9 @@
 </a>
 @if (Show) {
 	<div class="confirm-container">
-		<div class="confirm-dialog confirm-bg">
-			<div class="row">
-				<div class="col">
+		<div class="confirm-dialog">
+			<div>
+				<div>
 					@if (MessageTemplate is not null) {
 						@MessageTemplate
 					} else {
@@ -19,10 +19,10 @@
 			</div>
 			<div class="row">
 				<div class="col-6">
-					<button type="button" class="btn @YesCssClass" @onclick="() => Confirmation(true)">Yes</button>
+					<a class="btn @YesCssClass" @onclick="() => Confirmation(true)">Yes</a>
 				</div>
 				<div class="col-6">
-					<button type="button" class="btn @NoCssClass" @onclick="() => Confirmation(false)">No</button>
+					<a class="btn @NoCssClass" @onclick="() => Confirmation(false)">No</a>
 				</div>
 			</div>
 		</div>

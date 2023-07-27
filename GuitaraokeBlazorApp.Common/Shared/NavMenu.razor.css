@@ -10,6 +10,7 @@ nav {
 }
 
 	.nav-item ::deep a {
+		display: block;
 		text-align: center;
 		text-decoration: none;
 		background-color: rgba(var(--button-rgb), 0.8);
@@ -28,3 +29,8 @@ nav {
 			color: var(--button-text);
 		}
 
+.nav-link {
+	display: block;
+	text-decoration: none;
+	transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out;
+}

@@ -5,7 +5,7 @@ footer {
 	left: 0;
 	right: 0;
 	padding: var(--gutter);
-	height: 44px;
+	height: 1rem;
 	background-color: rgba(var(--panel-rgb), 1);
 	text-align: left;
 	font-weight: normal;
