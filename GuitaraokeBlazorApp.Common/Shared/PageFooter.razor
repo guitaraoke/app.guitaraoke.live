@@ -1,0 +1,33 @@
+<footer>
+	@ChildContent
+	<span class="social-media-icons">
+		@if (FacebookId is not null) {
+			<a href="@FacebookId">
+				<i class="fa-brands fa-square-facebook"></i>
+			</a>
+		}
+		@if (InstagramId is not null) {
+			<a href="@InstagramId">
+				<i class="fa-brands fa-square-instagram"></i>
+			</a>
+		}
+		@if (WhatsAppId is not null) {
+			<a href="@WhatsAppId">
+				<i class="fa-brands fa-square-whatsapp"></i>
+			</a>
+		}
+	</span>
+</footer>
+
+
+@code {
+	[Parameter]
+	public RenderFragment? ChildContent { get; set; }
+
+	[Parameter]
+	public string? FacebookId { get; set; }
+	[Parameter]
+	public string? InstagramId { get; set; }
+	[Parameter]
+	public string? WhatsAppId { get; set; }
+}

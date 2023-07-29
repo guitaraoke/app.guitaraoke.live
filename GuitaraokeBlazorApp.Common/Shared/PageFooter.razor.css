@@ -20,6 +20,10 @@ footer {
 	margin-left: 8px;
 }
 
+.social-media-icons a {
+	margin: calc(var(--gutter) / 2);
+}
+
 .fa-square-facebook {
 	color: #1a6ed8;
 }
