@@ -8,9 +8,11 @@
 <div id="dashboard">
 	<div id="song-queue">
 		<ol id="ol-song-queue">
+			@{int i = 0;}
 			@foreach (var item in queuedSongs) {
 				<li draggable="true"
-				class="@GenerateSongClass(item.Song.Slug)"
+				class="@GenerateSongClass(item.Song.Slug, i)"
+				style="@GenerateSongStyle(i)"
 				@ondragenter:preventDefault
 				@ondragleave:preventDefault
 				@ondragover:preventDefault
@@ -19,7 +21,7 @@
 				@ondragleave="() => DragLeave()"
 				@ondragover= "() => DragOver()"
 				@ondragend="() => DragEnd()"
-				@ondrop="() => Drop()">
+				@ondrop="async () => await Drop()">
 					<a id="mark-song-as-played-link"
 					@onclick="async () => await Played(item.Song.Slug)">PLAYED</a>
 					@item.Song.Name
@@ -32,6 +34,7 @@
 						}
 					</ul>
 				</li>
+				i++;
 			}
 		</ol>
 	</div>
@@ -47,6 +50,8 @@
 	private List<(Song Song, Dictionary<User, Instrument[]> Players)> queuedSongs = new();
 
 	private string playedId = "";
+	private int moveFromPos = int.MaxValue;
+	private int moveToPos = int.MaxValue;
 	private string dragId = "";
 	private string dropTarget = "";
 
@@ -89,7 +94,7 @@
 		dropTarget = "";
 	}
 
-	private void Drop()
+	private async Task Drop()
 	{
 		if (String.IsNullOrWhiteSpace(dropTarget)) return;
 		var song = db.FindSong(dragId);
@@ -97,23 +102,68 @@
 
 		var songPosition = queuedSongs.IndexOf(queuedSongs.FirstOrDefault(s => s.Song.Slug == dragId));
 		var newPosition  = queuedSongs.IndexOf(queuedSongs.FirstOrDefault(s => s.Song.Slug == dropTarget));
+		moveFromPos = songPosition;
+		moveToPos = newPosition;
 		if (songPosition <= newPosition) {
 			newPosition--;
 		}
 
+		await Task.Delay(700);
+
 		db.MoveSongToPosition(song, newPosition);
 
-		dragId ="";
+		moveFromPos = int.MaxValue;
+		moveToPos = int.MaxValue;
+		dragId = "";
 		dropTarget = "";
 		ReloadQueue();
 	}
 
-	private string? GenerateSongClass(string slug)
+	private string? GenerateSongClass(string slug, int position)
 	{
 		string? hide = slug == playedId ? "hide shrink-height" : null;
-		string? target = slug == dropTarget ? "drop-target" : null;
-		if (hide is null && target is null) return null;
-		return $"{hide} {target}".Trim();
+		string? target = slug == dropTarget ? " drop-target" : null;
+		string? moveMe = (position == moveFromPos) ? " moveme" : null;
+
+		string? move = null;
+
+		if (moveMe is null) {
+			if (moveToPos < moveFromPos) {
+				if ((position >= moveToPos && position <= moveFromPos)) {
+					move = " move";
+				}
+			} else {
+				if (position >= moveFromPos && position < moveToPos) {
+					move = " move";
+				}
+			}
+		}
+		if (hide is null && target is null && move is null && moveMe is null) return null;
+		return $"{hide}{target}{moveMe}{move}".Trim();
 	}
 
+	private string? GenerateSongStyle(int position)
+	{
+		int? movePlaces = null;
+		int newPosition = moveToPos;
+		if (moveFromPos <= moveToPos) {
+			newPosition--;
+		}
+
+		if (position == moveFromPos) {
+			movePlaces = newPosition - moveFromPos;
+		} else if (moveToPos < moveFromPos) {
+			if ((position >= moveToPos && position <= moveFromPos)) {
+				movePlaces = 1;
+			}
+		} else if (position >= moveFromPos && position <= newPosition) {
+			movePlaces = -1;
+		}
+
+		return movePlaces switch
+		{
+			null => null,
+			_ => $"--guitar-move-places: {movePlaces};",
+		};
+	}
 }

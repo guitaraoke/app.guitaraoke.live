@@ -64,3 +64,24 @@
 		transform: scale(1, 0);
 	}
 }
+
+.moveme {
+	animation-duration: 700ms;
+	animation-name: updown;
+}
+
+.move {
+	animation-delay: 200ms;
+	animation-duration: 500ms;
+	animation-name: updown;
+}
+
+@keyframes updown {
+	0% {
+		transform: translateY(0%);
+	}
+
+	100% {
+		transform: translateY(calc(var(--guitar-move-places, 1) * (100% + 8px)));
+	}
+}
