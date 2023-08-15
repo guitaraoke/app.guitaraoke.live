@@ -84,9 +84,16 @@
 	}
 
 	private void DragStart(string slug) => dragId = slug;
-	private void DragEnter(string slug) => dropTarget = slug;
-	private void DragLeave() { }
-	private void DragOver() { }
+	private void DragEnter(string slug)
+	{
+		if (String.IsNullOrEmpty(slug) || dropTarget == slug) {
+			return;
+		}
+        dropTarget = slug;
+    }
+
+    private void DragLeave() { }
+    private void DragOver() { }
 
 	private void DragEnd()
 	{
