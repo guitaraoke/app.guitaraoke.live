@@ -7,7 +7,7 @@
 
 <div id="dashboard">
 	<div id="song-queue">
-		<ol id="ol-song-queue">
+		<ol id="ol-song-queue" @ondragover:preventDefault @ondrop="() => Drop()">
 			@{int i = 0;}
 			@foreach (var item in queuedSongs) {
 				<li draggable="true"
@@ -55,6 +55,9 @@
 	private string dragId = "";
 	private string dropTarget = "";
 
+	static readonly object dropLock = new();
+	private bool dropIsProcessing = false;
+
 	protected override void OnInitialized()
 	{
 		ReloadQueue();
@@ -89,11 +92,11 @@
 		if (String.IsNullOrEmpty(slug) || dropTarget == slug) {
 			return;
 		}
-        dropTarget = slug;
-    }
+		dropTarget = slug;
+	}
 
-    private void DragLeave() { }
-    private void DragOver() { }
+	private void DragLeave() { }
+	private void DragOver() { }
 
 	private void DragEnd()
 	{
@@ -103,7 +106,12 @@
 
 	private async Task Drop()
 	{
-		if (String.IsNullOrWhiteSpace(dropTarget)) return;
+		if (String.IsNullOrWhiteSpace(dropTarget) || dropIsProcessing) return;
+
+		lock (dropLock) {
+			dropIsProcessing = true;
+		}
+
 		var song = db.FindSong(dragId);
 		if (song == default) return;
 
@@ -123,6 +131,8 @@
 		moveToPos = int.MaxValue;
 		dragId = "";
 		dropTarget = "";
+		dropIsProcessing = false;
+
 		ReloadQueue();
 	}
 
