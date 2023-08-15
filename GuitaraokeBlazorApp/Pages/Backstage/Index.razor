@@ -50,12 +50,13 @@
 	private List<(Song Song, Dictionary<User, Instrument[]> Players)> queuedSongs = new();
 
 	private string playedId = "";
-	private int moveFromPos = int.MaxValue;
-	private int moveToPos = int.MaxValue;
 	private string dragId = "";
 	private string dropTarget = "";
 
-	static readonly object dropLock = new();
+	private int moveFromPos = int.MaxValue;
+	private int moveToPos = int.MaxValue;
+	private bool moveIsInProcess => moveFromPos != int.MaxValue;
+
 	private bool dropIsProcessing = false;
 
 	protected override void OnInitialized()
@@ -108,9 +109,7 @@
 	{
 		if (String.IsNullOrWhiteSpace(dropTarget) || dropIsProcessing) return;
 
-		lock (dropLock) {
-			dropIsProcessing = true;
-		}
+		dropIsProcessing = true;
 
 		var song = db.FindSong(dragId);
 		if (song == default) return;
@@ -140,47 +139,32 @@
 	{
 		string? hide = slug == playedId ? "hide shrink-height" : null;
 		string? target = slug == dropTarget ? " drop-target" : null;
-		string? moveMe = (position == moveFromPos) ? " moveme" : null;
+		string? moveMe = null;
+		string? moveTo = null;
 
-		string? move = null;
-
-		if (moveMe is null) {
-			if (moveToPos < moveFromPos) {
-				if ((position >= moveToPos && position <= moveFromPos)) {
-					move = " move";
-				}
-			} else {
-				if (position >= moveFromPos && position < moveToPos) {
-					move = " move";
-				}
-			}
+		if (moveIsInProcess) {
+			moveMe = (position == moveFromPos) ? " moveme" : null;
+			moveTo = (position == moveToPos) ? " moveto" : null;
 		}
-		if (hide is null && target is null && move is null && moveMe is null) return null;
-		return $"{hide}{target}{moveMe}{move}".Trim();
+		if (hide is null && target is null && moveTo is null && moveMe is null) return null;
+		return $"{hide}{target}{moveMe}{moveTo}".Trim();
 	}
 
 	private string? GenerateSongStyle(int position)
 	{
-		int? movePlaces = null;
+		if (moveIsInProcess is false || position != moveFromPos) {
+			return null;
+		}
+
+		int directionOffset = -1;
 		int newPosition = moveToPos;
 		if (moveFromPos <= moveToPos) {
 			newPosition--;
+			directionOffset = 1;
 		}
 
-		if (position == moveFromPos) {
-			movePlaces = newPosition - moveFromPos;
-		} else if (moveToPos < moveFromPos) {
-			if ((position >= moveToPos && position <= moveFromPos)) {
-				movePlaces = 1;
-			}
-		} else if (position >= moveFromPos && position <= newPosition) {
-			movePlaces = -1;
-		}
+		int movePlaces = directionOffset + newPosition - moveFromPos;
 
-		return movePlaces switch
-		{
-			null => null,
-			_ => $"--guitar-move-places: {movePlaces};",
-		};
+		return $"--move-places: {movePlaces};";
 	}
 }

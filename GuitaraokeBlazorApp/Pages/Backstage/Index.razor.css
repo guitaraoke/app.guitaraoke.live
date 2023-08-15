@@ -3,6 +3,7 @@
 	overflow: clip;
 	display: grid;
 	grid-template-columns: 60% 40%;
+	--drop-gap: 70px;
 }
 
 #song-queue {
@@ -25,8 +26,19 @@
 	}
 
 		#song-queue ol > li.drop-target {
-			border-top: 10px solid #f0f;
+			margin-top: var(--drop-gap);
 		}
+
+		#song-queue ol > li.moveto {
+			margin-top: var(--drop-gap);
+		}
+
+			#song-queue ol > li.drop-target::before {
+				display: block;
+				position: absolute;
+				content: '→';
+				transform: translateY(calc(-60px - (var(--drop-gap)/2)));
+			}
 
 #starred-songs {
 	padding: 8px;
@@ -70,18 +82,12 @@
 	animation-name: updown;
 }
 
-.move {
-	animation-delay: 200ms;
-	animation-duration: 500ms;
-	animation-name: updown;
-}
-
 @keyframes updown {
 	0% {
 		transform: translateY(0%);
 	}
 
 	100% {
-		transform: translateY(calc(var(--guitar-move-places, 1) * (100% + 8px)));
+		transform: translateY(calc(var(--move-places, 1) * (100% + 8px)));
 	}
 }
