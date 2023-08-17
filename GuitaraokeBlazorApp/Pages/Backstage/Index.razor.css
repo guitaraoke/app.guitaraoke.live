@@ -36,6 +36,7 @@
 			#song-queue ol > li.drop-target::before {
 				display: block;
 				position: absolute;
+				width: 100%;
 				content: '→';
 				transform: translateY(calc(-60px - (var(--drop-gap)/2)));
 			}
