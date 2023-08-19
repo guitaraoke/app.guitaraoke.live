@@ -1,6 +1,7 @@
+using GuitaraokeWebApp.Hubs;
 using GuitaraokeWebApp.Model;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel.Client.Payloads;
-using Xunit.Sdk;
+using Microsoft.AspNetCore.SignalR;
+
 
 namespace GuitaraokeWebApp.Tests;
 
@@ -8,7 +9,6 @@ public class RootControllerIndexTests : RootControllerTestBase {
 
 	[Fact]
 	public async Task Index_Returns_SongList() {
-		var db = new SongDatabase(songs);
 		var c = MakeController();
 		var result = await c.Index() as ViewResult;
 		result.ShouldNotBeNull();
@@ -26,7 +26,7 @@ public class RootControllerIndexTests : RootControllerTestBase {
 		var user = new User();
 		db.ToggleStar(user, hurt);
 		var tracker = new FakeUserTracker(user);
-		var c = new RootController(new NullLogger<RootController>(), db, tracker);
+		var c = new RootController(new NullLogger<RootController>(), db, tracker, hc);
 		var selection = ((await c.Index() as ViewResult)!.Model as IEnumerable<SongSelection>)!.ToList();
 		selection.ShouldNotBeEmpty();
 		selection.Single(s => s.Song == hurt).IsStarred.ShouldBe(true);
@@ -36,7 +36,7 @@ public class RootControllerIndexTests : RootControllerTestBase {
 	[Fact]
 	public async Task Index_For_New_User_Has_No_Stars() {
 		var db = new SongDatabase(songs);
-		var c = new RootController(new NullLogger<RootController>(), db, new FakeUserTracker());
+		var c = new RootController(new NullLogger<RootController>(), db, new FakeUserTracker(), hc);
 		var result = await c.Index() as ViewResult;
 		result.ShouldNotBeNull();
 		var model = ((result.Model as IEnumerable<SongSelection>)!).ToList();
@@ -51,7 +51,7 @@ public class RootControllerIndexTests : RootControllerTestBase {
 		var db = new SongDatabase(new[] { hurt, torn, once });
 		var user = new User();
 		var tracker = new FakeUserTracker(user);
-		var c = new RootController(new NullLogger<RootController>(), db, tracker);
+		var c = new RootController(new NullLogger<RootController>(), db, tracker, hc);
 		await c.Star(hurt.Slug);
 		db.ListStarredSongs(user).Count().ShouldBe(1);
 		await c.Star(hurt.Slug);
@@ -67,7 +67,7 @@ public class RootControllerIndexTests : RootControllerTestBase {
 		var db = new SongDatabase(new[] { hurt });
 		var user = new User();
 		var tracker = new FakeUserTracker(user);
-		var c = new RootController(new NullLogger<RootController>(), db, tracker);
+		var c = new RootController(new NullLogger<RootController>(), db, tracker, hc);
 		await c.Star(slug);
 		var result = await c.Queue() as ViewResult;
 		result.ShouldNotBeNull();

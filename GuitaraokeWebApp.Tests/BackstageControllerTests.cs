@@ -1,15 +1,20 @@
+using GuitaraokeWebApp.Hubs;
 using GuitaraokeWebApp.Model;
+using Microsoft.AspNetCore.SignalR;
+using Moq;
 using Shouldly;
 
 namespace GuitaraokeWebApp.Tests;
 
 public class BackstageControllerTests {
 
+	private readonly IHubContext<SongHub> hc = new FakeHubContext();
+
 	[Fact]
 	public async Task BackstageIndexReturnsView() {
 		var songs = new List<Song>();
 		var db = new SongDatabase(songs);
-		var bc = new BackstageController(db);
+		var bc = new BackstageController(db, hc);
 		var result = await bc.Index() as ViewResult;
 		result.ShouldNotBeNull();
 		var model = result.Model as SongQueue;
@@ -21,7 +26,7 @@ public class BackstageControllerTests {
 		var song = new Song("Battle Beast", "Familiar Hell");
 		var songs = new List<Song>() { song };
 		var db = new SongDatabase(songs);
-		var bc = new BackstageController(db);
+		var bc = new BackstageController(db, hc);
 		var result = await bc.Status(song.Slug, true) as JsonResult;
 		result.ShouldNotBeNull();
 		song = db.FindSong("battle-beast-familiar-hell");
@@ -35,17 +40,17 @@ public class BackstageControllerTests {
 		var songs = new List<Song>() { song };
 		var db = new SongDatabase(songs);
 		var user = new User();
-		var rc = new RootController(new NullLogger<RootController>(), db, new FakeUserTracker(user));
+		var rc = new RootController(new NullLogger<RootController>(), db, new FakeUserTracker(user), hc);
 		await rc.Song(song.Slug, "Benny", new[] { Instrument.Sing });
 		db.GetQueuedSongs().Single().Song.ShouldBe(song);
-		var bc = new BackstageController(db);
+		var bc = new BackstageController(db, hc);
 		await bc.Status(song.Slug, true);
 		db.GetQueuedSongs().ShouldBeEmpty();
 	}
 
 	private async Task<SongDatabase> SetUpQueue(User user, params Song[] songs) {
 		var db = new SongDatabase(songs);
-		var rc = new RootController(new NullLogger<RootController>(), db, new FakeUserTracker(user));
+		var rc = new RootController(new NullLogger<RootController>(), db, new FakeUserTracker(user), hc);
 		foreach (var song in songs) {
 			await rc.Song(song.Slug, "", new[] { Instrument.Sing });
 		}
@@ -61,7 +66,7 @@ public class BackstageControllerTests {
 		var cave = new Song("Muse", "Cave");
 		var user = new User();
 		var db = await SetUpQueue(user, adia, bang, cave);
-		var bc = new BackstageController(db);
+		var bc = new BackstageController(db, hc);
 		var result = await bc.Move(new() {
 			Song = cave.Slug,
 			Position = 0,
@@ -80,7 +85,7 @@ public class BackstageControllerTests {
 		var cave = new Song("Muse", "Cave");
 		var user = new User();
 		var db = await SetUpQueue(user, adia, bang, cave);
-		var bc = new BackstageController(db);
+		var bc = new BackstageController(db, hc);
 		var result = await bc.Move(new() {
 			Song = adia.Slug,
 			Position = 1,
@@ -99,7 +104,7 @@ public class BackstageControllerTests {
 		var cave = new Song("Muse", "Cave");
 		var user = new User();
 		var db = await SetUpQueue(user, adia, bang, cave);
-		var bc = new BackstageController(db);
+		var bc = new BackstageController(db, hc);
 		await bc.Move(new() { Song = cave.Slug, Position = Int32.MinValue, });
 		var queue = db.GetQueuedSongs();
 		queue[0].Song.Name.ShouldBe(cave.Name);

@@ -1,5 +1,7 @@
+using GuitaraokeWebApp.Hubs;
 using GuitaraokeWebApp.Model;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json.Serialization;
 
 namespace GuitaraokeWebApp.Tests;
@@ -62,7 +64,7 @@ public class RootControllerQueueTests : RootControllerTestBase {
 		foreach (var user in new[] { user1, user2, user3 }) db.ToggleStar(user, hurt);
 		foreach (var user in new[] { user1, user2 }) db.ToggleStar(user, torn);
 		foreach (var user in new[] { user1 }) db.ToggleStar(user, once);
-		var c = new RootController(new NullLogger<RootController>(), db, new FakeUserTracker());
+		var c = new RootController(new NullLogger<RootController>(), db, new FakeUserTracker(), hc);
 		var result = await c.Queue() as ViewResult;
 		var model = result!.Model as SongQueue;
 		model.ShouldNotBeNull();

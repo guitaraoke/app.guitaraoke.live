@@ -23,7 +23,7 @@ public class RootControllerSongTests : RootControllerTestBase {
 		var user = new User();
 		db.ToggleStar(user, hurt);
 		var tracker = new FakeUserTracker(user);
-		var c = new RootController(new NullLogger<RootController>(), db, tracker);
+		var c = new RootController(new NullLogger<RootController>(), db, tracker, hc);
 		var result = await c.Song(hurt.Slug) as ViewResult;
 		var model = result!.Model as SongSelection;
 		model!.IsStarred.ShouldBe(true);
@@ -36,7 +36,7 @@ public class RootControllerSongTests : RootControllerTestBase {
 		var user = new User();
 		db.SaveUser(user);
 		var tracker = new FakeUserTracker(user);
-		var c = new RootController(new NullLogger<RootController>(), db, tracker);
+		var c = new RootController(new NullLogger<RootController>(), db, tracker, hc);
 		await c.Song(hurt.Slug, "Surly Dev", new[] { Instrument.Sing, Instrument.BassGuitar });
 		var selection = db.FindSongForUser(hurt, user);
 		selection.Instruments.ShouldContain(Instrument.Sing);
@@ -50,7 +50,7 @@ public class RootControllerSongTests : RootControllerTestBase {
 		var user = new User();
 		db.SaveUser(user);
 		var tracker = new FakeUserTracker(user);
-		var c = new RootController(new NullLogger<RootController>(), db, tracker);
+		var c = new RootController(new NullLogger<RootController>(), db, tracker, hc);
 
 		await c.Song(hurt.Slug, "Surly Dev", new[] { Instrument.LeadGuitar });
 		var queue = db.GetQueuedSongs();
@@ -72,9 +72,9 @@ public class RootControllerSongTests : RootControllerTestBase {
 		var user2 = new User();
 		db.SaveUser(user2);
 		var tracker = new FakeUserTracker(user1);
-		var c = new RootController(new NullLogger<RootController>(), db, tracker);
+		var c = new RootController(new NullLogger<RootController>(), db, tracker, hc);
 		await c.Song(hurt.Slug, "Surly Dev", new[] { Instrument.LeadGuitar });
-		await new RootController(new NullLogger<RootController>(), db, new FakeUserTracker(user2)).Song(hurt.Slug, "User 2",
+		await new RootController(new NullLogger<RootController>(), db, new FakeUserTracker(user2), hc).Song(hurt.Slug, "User 2",
 			new[] { Instrument.BassGuitar });
 
 		var queue = db.GetQueuedSongs();
@@ -95,7 +95,7 @@ public class RootControllerSongTests : RootControllerTestBase {
 		var instruments = new[] { Instrument.Sing, Instrument.BassGuitar };
 		db.SaveUser(user);
 		var tracker = new FakeUserTracker(user);
-		var c = new RootController(new NullLogger<RootController>(), db, tracker);
+		var c = new RootController(new NullLogger<RootController>(), db, tracker, hc);
 		await c.Song(hurt.Slug, "Surly Dev", instruments);
 		db.FindUser(user.Guid)!.Name.ShouldBe("Surly Dev");
 	}
@@ -108,7 +108,7 @@ public class RootControllerSongTests : RootControllerTestBase {
 		var instruments = new[] { Instrument.Sing, Instrument.BassGuitar };
 		db.SaveUser(user);
 		var tracker = new FakeUserTracker(user);
-		var c = new RootController(new NullLogger<RootController>(), db, tracker);
+		var c = new RootController(new NullLogger<RootController>(), db, tracker, hc);
 		var result = await c.Song(hurt.Slug, "Surly Dev", instruments) as RedirectToActionResult;
 		result.ShouldNotBeNull();
 		result.ActionName.ShouldBe("me");
@@ -122,7 +122,7 @@ public class RootControllerSongTests : RootControllerTestBase {
 		var user = new User(name: NAME);
 		db.SaveUser(user);
 		var tracker = new FakeUserTracker(user);
-		var c = new RootController(new NullLogger<RootController>(), db, tracker);
+		var c = new RootController(new NullLogger<RootController>(), db, tracker, hc);
 		var result = await c.Song(hurt.Slug) as ViewResult;
 		var model = result!.Model as SongSelection;
 		model.User.Name.ShouldBe(NAME);
@@ -138,7 +138,7 @@ public class RootControllerSongTests : RootControllerTestBase {
 		user.SignUp(hurt, new[] { Instrument.Piano, Instrument.Sing });
 		db.SaveUser(user);
 		var tracker = new FakeUserTracker(user);
-		var c = new RootController(new NullLogger<RootController>(), db, tracker);
+		var c = new RootController(new NullLogger<RootController>(), db, tracker, hc);
 		var result = await c.Song(hurt.Slug) as ViewResult;
 		result.ShouldNotBeNull();
 		var model = result.Model as SongSelection;
