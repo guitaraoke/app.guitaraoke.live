@@ -60,6 +60,10 @@ public class SongDatabase : ISongDatabase {
 		=> queuedSongs.Remove(song);
 
 	public void PruneQueue() => queuedSongs.RemoveAll(queuedSong => !ListPlayers(queuedSong).Any());
+	public void RemoveUser(Guid guid) {
+		users.Remove(guid);
+		PruneQueue();
+	}
 
 	private Dictionary<User, Instrument[]> ListPlayers(Song song)
 		=> users.Values

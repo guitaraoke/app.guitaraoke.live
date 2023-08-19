@@ -1,3 +1,5 @@
+using GuitaraokeWebApp.Hubs;
+
 var songs = File.ReadAllLines("songlist.txt")
 	.Select(line => line.Split(" - "))
 	.Select(tokens => new Song(tokens[0], tokens[1]));
@@ -6,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUserTracker, HttpCookieUserTracker>();
 builder.Services.AddScoped<ICookieJar, HttpCookieJar>();
+builder.Services.AddSignalR();
 var db = new SongDatabase(songs);
 #if DEBUG
 db.PopulateSampleData();
@@ -22,7 +25,7 @@ builder.Services.AddSassCompiler();
 var app = builder.Build();
 app.UseStaticFiles();
 app.MapGet("/hello", () => "Hello World");
-
+app.MapHub<SongHub>("/songhub");
 app.MapControllerRoute(
 	name: "root",
 	pattern: "{action=Index}/{id?}",

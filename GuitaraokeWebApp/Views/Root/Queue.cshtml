@@ -48,3 +48,27 @@ else {
 	<div class="big-emoji">⭐</div>
 	<p>Star your favourite songs and you might get to hear them!</p>
 }
+
+<script>
+	function initialiseSignalR() {
+		const connection = new signalR.HubConnectionBuilder()
+			.withUrl("/songhub")
+			.build();
+
+		async function start() {
+			try {
+				await connection.start();
+				console.log("SignalR Connected.");
+			} catch (err) {
+				console.log(err);
+				setTimeout(start, 5000);
+			}
+		};
+		connection.on("refresh-queue", () => location.reload());
+		connection.onclose(async () => await start());
+		start();
+	}
+
+	initialiseSignalR();
+
+</script>

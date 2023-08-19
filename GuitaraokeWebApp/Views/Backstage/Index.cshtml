@@ -14,13 +14,14 @@
 						@foreach (var player in item.Players) {
 							<li>
 								@player.Key.Name
-								<em>@String.Join(", ", player.Value.Select(i => i.GetDisplayName()).ToArray())
+								<em>
+									@String.Join(", ", player.Value.Select(i => i.GetDisplayName()).ToArray())
 								</em>
+								<a class="yeet-user-link" asp-action="RemoveUser" asp-route-id="@player.Key.Guid">yeet</a>
 							</li>
 						}
 					</ul>
 				</li>
-
 			}
 		</ol>
 	</div>
@@ -41,6 +42,59 @@
 	</div>
 </div>
 <script>
+	function showSignupAlert(user, message) {
+		var alerts = document.getElementById('alerts');
+		if (! alerts) {
+			alerts = document.createElement("div");
+			alerts.id = "alerts";
+			alerts.addEventListener("click", () => location.reload());
+			document.body.prepend(alerts);
+		}
+		const section = document.createElement("section");
+		const h1 = document.createElement("h1");
+		h1.innerHTML = user;
+		section.append(h1);
+		const p = document.createElement("p");
+		p.innerHTML = message;
+		section.append(p);
+		alerts.append(section);
+		console.log(section);
+	}
+	function initialiseSignalR() {
+		const connection = new signalR.HubConnectionBuilder()
+			.withUrl("/songhub")
+			.build();
+
+		async function start() {
+			try {
+				await connection.start();
+				console.log("SignalR Connected.");
+				connection.invoke("JoinGroup", "backstage");
+				console.log("Joined Backstage group");
+			} catch (err) {
+				console.log(err);
+				setTimeout(start, 5000);
+			}
+		};
+
+		connection.on("signup", showSignupAlert);
+
+		connection.on("blah",
+			(user, message) => {
+				console.log(user);
+				console.log(message);
+			});
+
+		connection.onclose(async () => {
+			await start();
+		});
+		start();
+	}
+
+	initialiseSignalR();
+
+
+
 	document.getElementById('ol-song-queue').addEventListener("click",
 		async ({ target }) => {
 			if (target.tagName === "A" && target.className === "mark-song-as-played-link") {
@@ -97,7 +151,7 @@
 				song: dragged.getAttribute("data-song-slug"),
 				position: indexDrop + offset
 			};
-			
+
 			console.log(data);
 			console.log(index, indexDrop);
 			const response = await fetch('/backstage/move', {

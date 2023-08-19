@@ -248,12 +248,14 @@ ol.star-chart {
 		border-top: 1px solid #fff;
 		padding: $gutter 0;
 		line-height: 1.4em;
+		list-style-position: inside;
 	}
 
-	span.artist {
-		display: block;
+	span.artist {		
 		font-weight: bold;
 	}
+
+	span.title { display: block; }
 
 	span.starfield {
 		display: inline-block;
@@ -272,6 +274,9 @@ div#dashboard {
 		padding: 8px;
 		border-radius: 8px;
 		margin: 8px;
+	}
+	a.yeet-user-link {
+		font-size: 70%;
 	}
 
 	height: 100vh;
@@ -300,6 +305,10 @@ div#dashboard {
 			&.drop-target {
 				border-top: 10px solid #f0f;
 			}
+			ul li {
+				font-size: 80%;
+				line-height: 1.2em;
+			}
 		}
 	}
 
@@ -324,11 +333,11 @@ footer {
 	color: #fff;
 	text-align: left;
 	font-weight: normal;
-	
 	font-size: 14px;
+
 	span.social-media-icons a {
-	position: relative;
-	top: -8px;
+		position: relative;
+		top: -8px;
 		font-size: 30px;
 		float: right;
 		margin-left: 8px;
@@ -376,4 +385,39 @@ input[type="checkbox"]:checked::before {
 	background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%,#d6249f 60%,#285AEB 90%);
 	-webkit-background-clip: text;
 	-webkit-text-fill-color: transparent;
+}
+
+div#alerts {
+	position: absolute;
+	z-index: 9;
+	text-align: center;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	background-color: rgba(255,255,255,0.8);
+	padding: 50px;
+
+	section {
+		p {
+			margin: 0;
+		}
+
+		position: relative;
+		padding: 8px;
+		width: 50%;
+		margin: 10px auto;
+		background-color: #f00;
+		border-radius: $gutter;
+		border: 8px solid $hotpink;
+		background-color: #000;
+
+		a {
+			position: absolute;
+			text-decoration: none;
+			top: 0px;
+			right: 16px;
+			font-size: 200%;
+		}
+	}
 }

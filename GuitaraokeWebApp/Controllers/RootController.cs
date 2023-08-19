@@ -1,6 +1,8 @@
 using GuitaraokeWebApp.Data;
+using GuitaraokeWebApp.Hubs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace GuitaraokeWebApp.Controllers;
 
@@ -8,11 +10,13 @@ public class RootController : Controller {
 	private readonly ILogger<RootController> logger;
 	private readonly ISongDatabase db;
 	private readonly IUserTracker tracker;
+	private readonly IHubContext<SongHub> hubContext;
 
-	public RootController(ILogger<RootController> logger, ISongDatabase db, IUserTracker tracker) {
+	public RootController(ILogger<RootController> logger, ISongDatabase db, IUserTracker tracker, IHubContext<SongHub> hubContext) {
 		this.logger = logger;
 		this.db = db;
 		this.tracker = tracker;
+		this.hubContext = hubContext;
 	}
 
 	public async Task<IActionResult> Index() {
@@ -39,6 +43,8 @@ public class RootController : Controller {
 		if (user.SignUp(song, instruments)) {
 			if (!String.IsNullOrEmpty(name)) user.Name = name;
 			db.AddSongToQueue(song);
+			var message = $"{song.Title} ({String.Join(", ", instruments.Select(i => i.ToString()))})";
+			await hubContext.Clients.Group("backstage").SendAsync("signup", name, message);
 		} else {
 			db.PruneQueue();
 		}
