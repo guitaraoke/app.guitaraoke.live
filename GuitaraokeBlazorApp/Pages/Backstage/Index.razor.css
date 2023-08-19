@@ -37,7 +37,7 @@
 				display: block;
 				position: absolute;
 				width: 100%;
-				content: '→';
+				content: '';
 				transform: translateY(calc(-60px - (var(--drop-gap)/2)));
 			}
 
@@ -89,6 +89,6 @@
 	}
 
 	100% {
-		transform: translateY(calc(var(--move-places, 1) * (100% + 8px)));
+		transform: translateY(calc((var(--move-players, 1) * 40px) + var(--move-places, 1) * (40px)));
 	}
 }
