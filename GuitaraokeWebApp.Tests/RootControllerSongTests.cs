@@ -135,7 +135,7 @@ public class RootControllerSongTests : RootControllerTestBase {
 		var hurt = new Song("Nine Inch Nails", "Hurt");
 		var db = new SongDatabase(new[] { hurt });
 		var user = new User(name: NAME);
-		user.SignUp(hurt, new[] { Instrument.Piano, Instrument.Sing });
+		user.SignUp(hurt, new[] { Instrument.RhythmGuitar, Instrument.Sing });
 		db.SaveUser(user);
 		var tracker = new FakeUserTracker(user);
 		var c = new RootController(new NullLogger<RootController>(), db, tracker, hc);
@@ -144,7 +144,7 @@ public class RootControllerSongTests : RootControllerTestBase {
 		var model = result.Model as SongSelection;
 		model.ShouldNotBeNull();
 		model.Instruments.Length.ShouldBe(2);
-		model.Instruments.ShouldContain(Instrument.Piano);
+		model.Instruments.ShouldContain(Instrument.RhythmGuitar);
 		model.Instruments.ShouldContain(Instrument.Sing);
 	}
 }

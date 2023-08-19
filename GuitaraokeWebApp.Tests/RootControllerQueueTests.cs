@@ -25,7 +25,7 @@ public class RootControllerQueueTests : RootControllerTestBase {
 
 		var c = MakeController(geddy);
 		await c.Song(hurt.Slug, "Geddy", new[] { Instrument.Sing, Instrument.BassGuitar });
-		await c.Song(torn.Slug, "Geddy", new[] { Instrument.Piano, Instrument.Sing });
+		await c.Song(torn.Slug, "Geddy", new[] { Instrument.RhythmGuitar, Instrument.Sing });
 		await c.Song(lump.Slug, "Geddy", new[] { Instrument.BassGuitar });
 
 		c = MakeController(alex);
