@@ -25,11 +25,11 @@
 		line-height: 1.4em;
 	}
 
-		#song-queue ol > li.drop-target {
+		#song-queue ol > li.moveto {
 			margin-top: var(--drop-gap);
 		}
 
-		#song-queue ol > li.moveto {
+		#song-queue ol > li.drop-target {
 			margin-top: var(--drop-gap);
 		}
 
@@ -37,7 +37,8 @@
 				display: block;
 				position: absolute;
 				width: 100%;
-				content: '';
+				content: '→';
+				color: transparent;
 				transform: translateY(calc(-60px - (var(--drop-gap)/2)));
 			}
 
