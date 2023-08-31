@@ -2,7 +2,6 @@
 A Star Is Born - Shallow
 A-Ha - Take On Me
 Abba - Waterloo
-AC/DC - Highway to Hell
 AC/DC - You Shook Me All Night Long
 Adele - Rolling in the Deep
 Aerosmith - Dream On
@@ -14,14 +13,12 @@ Baddiel & Skinner - Three Lions
 Barenaked Ladies - If I Had $1000000
 Belinda Carlisle - Heaven is a Place on Earth
 Billy Idol - Rebel Yell
-Billy Joel - We Didn’t Start The Fire
 Black Crowes - Hard to Handle
 Bon Jovi - Bed of Roses
 Bon Jovi - Livin on a Prayer
 Bon Jovi - Runaway
 Bon Jovi - Wanted Dead or Alive
 Bon Jovi - You Give Love a Bad Name
-Bryan Adams - Summer of 69
 Cher - If I Could Turn Back Time
 Chesney Hawkes - The One and Only
 Counting Crows - A Long December
@@ -64,11 +61,9 @@ Nirvana - Come As You Are
 Oasis - Live Forever
 Pearl Jam - Alive
 Phil Collins - Easy Lover
-Pink Floyd - Another Brick In The Wall (Pt 2)
 Pink Floyd - Comfortably Numb
 Pink Floyd - Time
 Pulp - Common People
-Pulp - Disco 2000
 Queen - I Want It All
 Queen - Tie Your Mother Down
 Radiohead - Creep
