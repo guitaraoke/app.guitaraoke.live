@@ -8,7 +8,7 @@ public enum Instrument {
 	[Description("Lead Guitar")]   LeadGuitar   =  2,
 	[Description("Rhythm Guitar")] RhythmGuitar =  4,
 	[Description("Bass")]          BassGuitar   =  8,
-	[Description("Piano")]         Piano        = 16,
+	//[Description("Piano")]         Piano        = 16,
 }
 
 public static class EnumExtensions {
