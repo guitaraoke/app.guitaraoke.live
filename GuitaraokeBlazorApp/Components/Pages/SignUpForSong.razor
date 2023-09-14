@@ -2,6 +2,7 @@
 @inject ISongDatabase db;
 @inject IUserTracker tracker;
 @inject NavigationManager navMgr;
+@attribute [RenderModeServer]
 
 <PageTitle>@(Song.Name ?? "No song")</PageTitle>
 

@@ -16,9 +16,4 @@
 		</None>
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Components\" />
-	  <Folder Include="Shared\" />
-	</ItemGroup>
-
 </Project>

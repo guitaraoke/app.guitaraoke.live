@@ -1,14 +1,12 @@
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
-using GuitaraokeBlazorApp.Data;
 using GuitaraokeBlazorApp.Endpoints;
-using GuitaraokeBlazorApp;
+using GuitaraokeBlazorApp.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-builder.Services.AddServerSideBlazor();
+builder.Services.AddServerSideBlazor()
+	.AddServerComponents();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICookieJar, HttpCookieJar>();
@@ -37,8 +35,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.MapBlazorHub();
-app.MapFallbackToPage("/_Host");
+app.MapRazorComponents<App>()
+	.AddServerRenderMode();
 
 app.MapSongEndpoints();
 app.MapBackstageEndpoints();
