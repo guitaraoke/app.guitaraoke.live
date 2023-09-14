@@ -1,5 +1,5 @@
 using AngleSharp.Dom;
-using GuitaraokeBlazorApp.Common.Components;
+using GuitaraokeBlazorApp.Components;
 using System.Net;
 
 namespace GuitaraokeBlazorApp.Tests.WebTests;
