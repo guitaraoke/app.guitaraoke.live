@@ -3,6 +3,7 @@
 @inject IUserTracker tracker;
 @inject NavigationManager navMgr;
 @attribute [RenderModeServer]
+@attribute [StreamRendering(true)]
 
 <PageTitle>@(Song.Name ?? "No song")</PageTitle>
 
