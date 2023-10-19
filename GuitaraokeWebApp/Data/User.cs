@@ -9,9 +9,9 @@ public enum Instrument {
 	[Display("Lead Guitar")]
 	LeadGuitar,
 	[Display("Rhythm Guitar")]
-	RhythmGuitar
-	// [Display("Bass")]
-	// BassGuitar,
+	RhythmGuitar,
+	[Display("Bass")]
+	BassGuitar,
 	//[Display("Piano")]
 	//Piano,
 }
