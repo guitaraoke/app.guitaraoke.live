@@ -18,6 +18,11 @@ public enum Instrument {
 
 public class User {
 
+	public bool CanSignUpForMoreSongs
+		=> this.Signups.Count(pair => !pair.Key.Played) < MaximumSignups;
+
+	public static int MaximumSignups = 2;
+
 	public string? Name { get; set; }
 
 	public Guid Guid { get; set; }

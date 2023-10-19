@@ -10,7 +10,7 @@
 	<div class="big-emoji">😕</div>
 	<h1>Sorry!</h1>
 	<p>We already played this one tonight!</p>
-} else {
+} else if (@Model.User.CanSignUpForMoreSongs) {
 	<p>Want to sing or play this one?</p>
 	<form asp-action="Song" method="post">
 		<input type="hidden" name="slug" value="@Model.Song.Slug" />
@@ -27,4 +27,8 @@
 		<input type="submit" value="Let's Rock!" />
 	</form>
 	<p class="small-print">Just your first name is fine. We use a cookie to remember your name, and we don't share it with anybody. Hope that's OK.</p>
+} else {
+	<h3>You can only have @GuitaraokeWebApp.Data.User.MaximumSignups songs in the queue.</h3>
+	<p>Wait until they're done - or delete on if you've changed your mind!</p>
+	<a href="/me">See your songs here</a>
 }
