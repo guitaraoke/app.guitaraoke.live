@@ -1,0 +1,31 @@
+@inject ISongDatabase db;
+<h1>Coming Up...</h1>
+@if (queuedSongs.Any()) {
+	<ol>
+		@foreach (var item in queuedSongs) {
+			<QueuedSong Item="@item" />
+		}
+	</ol>
+} else {
+	<div class="big-emoji">😟</div>
+	<h3>There's nothing in the queue!</h3>
+	<p>Why not head over to the <a href="/">song list</a> and sign up to sing or play something?</p>
+}
+
+@code {
+
+	[Parameter]
+	public int? NoOfSongs { get; set; }
+
+	private List<(Song Song, Dictionary<User, Instrument[]> Players)> queuedSongs = new();
+
+	protected override void OnInitialized()
+	{
+		queuedSongs = db.GetQueuedSongs();
+		if (NoOfSongs is not null) {
+			queuedSongs = queuedSongs
+			.Take((int)NoOfSongs)
+			.ToList();
+		}
+	}
+}

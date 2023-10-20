@@ -1,0 +1,52 @@
+:root {
+	--gutter: 8px;
+	--gold: #f90;
+	--text-color: #fff;
+	--background-rgb: 17, 23, 45;
+	--panel-rgb: 17, 23, 45;
+	--button: #8d2691;
+	--button-rgb: 141, 38, 145;
+	--button-text: #fff;
+}
+
+@media (prefers-color-scheme: light) {
+	:root {
+		--text-color: #000;
+		--background-rgb: 240, 240,240;
+		--panel-rgb: 200, 200, 200;
+	}
+}
+
+html {
+	font-size: 140%;
+}
+
+html, body {
+	height: 100vh;
+	margin: 0;
+	background: rgb(var(--background-rgb));
+	background: linear-gradient(150deg, rgba(17, 23, 45, 1) 0%, rgba(37, 32, 79, 1) 49%, rgba(78, 14, 72, 1) 100%);
+	background-attachment: fixed;
+	font-family: Arial,Verdana,sans-serif;
+	color: var(--text-color);
+}
+
+@media (prefers-color-scheme: light) {
+	html, body {
+		background: linear-gradient(150deg, rgba(220, 230, 240, 1) 0%, rgba(220, 210, 220, 1) 49%, rgba(230, 230, 200, 1) 100%);
+		background-attachment: fixed;
+	}
+}
+
+h1 {
+	font-size: 130%;
+	font-weight: 700;
+}
+
+a {
+	color: var(--text-color);
+}
+
+	a:hover {
+		color: var(--text-color);
+	}

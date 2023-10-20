@@ -1,0 +1,17 @@
+<li>
+ 	<span class="starfield">
+		@for (var i = 0; i < NoOfStars; i++) {
+			<i class="fa-solid fa-star"></i>
+		}
+	</span>
+	<span class="artist">@Song.Artist</span>
+	<span class="title">@Song.Title</span>
+</li>
+
+@code {
+	[Parameter, EditorRequired]
+	public required Song Song { get; set; }
+	[Parameter, EditorRequired]
+	public required int NoOfStars { get; set; }
+
+}

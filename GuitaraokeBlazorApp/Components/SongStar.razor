@@ -1,0 +1,23 @@
+@inject ISongDatabase db;
+@inject IUserTracker tracker;
+<a class="fa-star @starStyle" @onclick="ToggleStar"></a>
+
+@code {
+	[Parameter, EditorRequired]
+	public bool IsStarred{ get; set; }
+
+	[Parameter, EditorRequired]
+	public required string Slug{ get; set; }
+
+	public const string NORMAL  = "fa-thin";
+	public const string STARRED = "fa-solid";
+
+	private string starStyle => IsStarred ? STARRED : NORMAL;
+
+	private void ToggleStar() {
+		var user = tracker.GetUser();
+		var song = db.FindSong(Slug);
+		if (song is null) { return; };
+		IsStarred =  db.ToggleStar(song, user);
+	}
+}

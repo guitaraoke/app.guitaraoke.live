@@ -1,0 +1,45 @@
+@foreach (var item in CheckableInstruments) {
+	<label for="instrument-@item.Instrument">
+		@item.Instrument.GetDisplayName()
+		<input type="checkbox" id="instrument-@item.Instrument" @bind="item.IsSelected" />
+	</label>
+	<br />
+}
+<br />
+@{
+	Instruments = CheckableInstruments
+		.Where(cb => cb.IsSelected)
+		.Select(val => val.Instrument)
+		.Aggregate((Instrument)0, (result, value) => result | value);
+	var _ = Task.Run(() => UpdateParent());
+}
+
+@code {
+	[Parameter]
+	[EditorRequired]
+	public Instrument Instruments { get; set; }
+
+	[Parameter]
+	public EventCallback<Instrument> InstrumentsChanged { get; set; }
+
+
+	List<CheckableInstrument> CheckableInstruments { get; set; } = new();
+
+	protected override void OnInitialized()
+	{
+		foreach (Instrument value in Enum.GetValues(typeof(Instrument))) {
+			CheckableInstruments.Add(new CheckableInstrument() { Instrument = value, IsSelected = (Instruments & value) != 0 });
+		}
+	}
+
+	private async Task UpdateParent()
+	{
+		await InstrumentsChanged.InvokeAsync(Instruments);
+	}
+
+		class CheckableInstrument
+	{
+		public Instrument Instrument;
+		public bool IsSelected;
+	}
+}

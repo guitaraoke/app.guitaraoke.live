@@ -1,0 +1,12 @@
+@page "/queue"
+
+<PageTitle>Queue</PageTitle>
+
+<QueuedSongs NoOfSongs="@NoOfSongs" />
+<br />
+<WhatsHot    NoOfSongs="@NoOfSongs" />
+
+@code {
+	[Parameter]
+	public int? NoOfSongs { get; set; }
+}

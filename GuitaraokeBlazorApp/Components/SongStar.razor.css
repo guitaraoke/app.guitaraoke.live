@@ -1,0 +1,9 @@
+a {
+	float: right;
+	font-size: 120%;
+	text-decoration: none;
+}
+
+.fa-solid {
+	color: var(--gold);
+}

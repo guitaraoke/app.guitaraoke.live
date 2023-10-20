@@ -1,0 +1,189 @@
+@page "/backstage"
+@layout BackstageLayout
+@inject ISongDatabase db;
+
+<PageTitle>Backstage</PageTitle>
+
+<div id="dashboard">
+	<div id="song-queue">
+		<ol id="ol-song-queue" @ondragover:preventDefault @ondrop="() => Drop()">
+			@{
+				int index = 0;
+			}
+			@foreach (var item in queuedSongs) {
+				int i = index;
+				<li draggable="true"
+					class="@GenerateSongClass(item.Song.Slug, i)"
+					style="@GenerateSongStyle(i)"
+				@ondragenter:preventDefault
+				@ondragleave:preventDefault
+				@ondragover:preventDefault
+				@ondragstart="() => DragStart(item.Song.Slug, i)"
+				@ondragenter="() => DragEnter(item.Song.Slug, i)"
+				@ondragleave="() => DragLeave()"
+				@ondragover="() => DragOver()"
+				@ondragend="() => DragEnd()"
+				@ondrop="async () => await Drop()">
+					<a id="mark-song-as-played-link"
+					@onclick="async () => await Played(item.Song.Slug)">PLAYED</a>
+					@item.Song.Name
+					<ul class="drop">
+						@foreach (var player in item.Players) {
+							<li>
+								@player.Key.Name
+								<em>@String.Join(", ", player.Value.Select(i => i.GetDisplayName()).ToArray())</em>
+							</li>
+						}
+					</ul>
+				</li>
+				index++;
+			}
+		</ol>
+	</div>
+	<div id="starred-songs">
+		<WhatsHot NoOfSongs="@NoOfSongs" ShowHeaders="false" />
+	</div>
+</div>
+
+@code {
+	[Parameter]
+	public int? NoOfSongs { get; set; }
+
+	private List<(Song Song, Dictionary<User, Instrument[]> Players)> queuedSongs = new();
+
+	private string playedId = "";
+	private string dragId = "";
+	private string dropTarget = "";
+
+	private int? moveFromPos = null;
+	private int? moveToPos = null;
+
+	private bool dropIsProcessing = false;
+
+	protected override void OnInitialized()
+	{
+		ReloadQueue();
+	}
+
+	private void ReloadQueue()
+	{
+		queuedSongs = db.GetQueuedSongs();
+		if (NoOfSongs is not null) {
+			queuedSongs = queuedSongs
+			.Take((int)NoOfSongs)
+			.ToList();
+		}
+	}
+
+	private async Task Played(string slug)
+	{
+		var song = db.FindSong(slug);
+		if (song == default) return;
+		playedId = slug;
+		song.PlayedAt = DateTime.UtcNow;
+		StateHasChanged();
+		await Task.Delay(500);
+		db.RemoveSongFromQueue(song);
+		ReloadQueue();
+		playedId = "";
+	}
+
+	private void DragStart(string slug, int position)
+	{
+		dragId = slug;
+		moveFromPos = position;
+	}
+
+	private void DragEnter(string slug, int position)
+	{
+		if (String.IsNullOrEmpty(slug) || dropTarget == slug) return;
+		dropTarget = slug;
+		moveToPos = position;
+	}
+
+	private void DragLeave() { }
+	private void DragOver() { }
+
+	private void DragEnd()
+	{
+		dragId = "";
+		dropTarget = "";
+	}
+
+	private async Task Drop()
+	{
+		if (String.IsNullOrWhiteSpace(dropTarget) || dropIsProcessing) return;
+		if ((moveToPos is null) || (moveFromPos is null)) return;
+
+		dropIsProcessing = true;
+
+		var song = db.FindSong(dragId);
+		if (song == default) return;
+
+		var songPosition = moveFromPos;
+		var newPosition = moveToPos;
+		if (songPosition <= newPosition) {
+			newPosition--;
+		}
+
+		await Task.Delay(700);
+
+		db.MoveSongToPosition(song, (int)newPosition!);
+
+		moveFromPos = int.MaxValue;
+		moveToPos = int.MaxValue;
+		dragId = "";
+		dropTarget = "";
+		dropIsProcessing = false;
+
+		ReloadQueue();
+	}
+
+	private string? GenerateSongClass(string slug, int position)
+	{
+		string? hide = slug == playedId ? "hide shrink-height" : null;
+		string? target = (slug == dropTarget && (moveToPos != moveFromPos) && (moveToPos != moveFromPos + 1)) ? " drop-target" : null;
+		string? moveMe = null;
+		string? moveTo = null;
+
+		if (dropIsProcessing) {
+			moveMe = (position == moveFromPos) ? " moveme" : null;
+			moveTo = (position == moveToPos) ? " moveto" : null;
+		}
+		if (hide is null && target is null && moveTo is null && moveMe is null) return null;
+		return $"{hide}{target}{moveMe}{moveTo}".Trim();
+	}
+
+	private string? GenerateSongStyle(int position)
+	{
+		if (dropIsProcessing is false || position != moveFromPos) return null;
+		if ((moveToPos is null) || (moveFromPos is null)) return null;
+
+		var direction = -1;
+		var originalPosition = (int)moveFromPos!;
+		var newPosition = (int)moveToPos!;
+		if (moveFromPos <= moveToPos) {
+			newPosition--;
+			direction = 1;
+		}
+
+		int movePlaces = direction + newPosition - originalPosition;
+		int noOfPlayers = 0;
+
+		if (direction == 1) {
+			noOfPlayers = queuedSongs
+			.Skip(originalPosition + 1)
+			.Take(newPosition - originalPosition)
+			.Select(kv => kv.Players.Count)
+			.Sum();
+		} else {
+			noOfPlayers = queuedSongs
+			.Skip(newPosition)
+			.Take(originalPosition - newPosition)
+			.Select(kv => kv.Players.Count)
+			.Sum();
+		}
+
+		return $"--move-places: {movePlaces}; --move-players: {noOfPlayers * direction}";
+	}
+}

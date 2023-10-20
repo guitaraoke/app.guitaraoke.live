@@ -1,0 +1,33 @@
+label {
+	display: block;
+}
+
+input[type=text] {
+	width: 100%;
+	box-sizing: border-box;
+	margin: 8px 0;
+	font-size: 20px;
+	padding: 8px;
+	border: 0;
+	border-radius: 8px;
+	color: #213;
+	font-weight: bold;
+}
+
+input[type=submit] {
+	width: 100%;
+	box-sizing: border-box;
+	margin: 8px 0;
+	font-size: 20px;
+	padding: 8px;
+	border: 0;
+	border-radius: 8px;
+	background-color: var(--button);
+	color: var(--button-text);
+	cursor: pointer; 
+}
+
+.big-emoji {
+	font-size: 800%;
+	text-align: center;
+}

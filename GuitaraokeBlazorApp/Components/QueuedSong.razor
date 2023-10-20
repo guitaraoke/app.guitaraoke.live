@@ -1,0 +1,15 @@
+<li class="song">
+	<a href="song/@Item.Song.Slug">
+		@Item.Song.Artist - <span>@Item.Song.Title</span>
+	</a>
+	<ul>
+		@foreach (var player in Item.Players) {
+			<li><strong>@player.Key.Name</strong>: @String.Join(", ", player.Value.Select(i => i.GetDisplayName()).ToArray())</li>
+		}
+	</ul>
+</li>
+
+@code {
+	[Parameter, EditorRequired]
+	public (Song Song, Dictionary<User, Instrument[]> Players) Item { get; set; }
+}

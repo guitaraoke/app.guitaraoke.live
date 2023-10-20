@@ -1,0 +1,12 @@
+.page {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+}
+
+main {
+	flex: 1;
+	margin: 0;
+	padding: 0;
+	padding: var(--gutter) var(--gutter) 40px var(--gutter)
+}

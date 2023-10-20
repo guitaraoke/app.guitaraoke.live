@@ -1,0 +1,85 @@
+<a title="@Title" class="button @ButtonCssClass" @onclick="ShowPop">
+	@if (ButtonContent is not null) {
+		@ButtonContent
+	} else {
+		@Title
+	}
+</a>
+@if (Show) {
+	<div class="confirm-container">
+		<div class="confirm-dialog">
+			<div>
+				<div>
+					@if (MessageTemplate is not null) {
+						@MessageTemplate
+					} else {
+						@Message
+					}
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-6">
+					<a class="btn @YesCssClass" @onclick="() => Confirmation(true)">Yes</a>
+				</div>
+				<div class="col-6">
+					<a class="btn @NoCssClass" @onclick="() => Confirmation(false)">No</a>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+@code {
+	public class MessageTemp
+	{
+		public string? msg { get; set; }
+	}
+
+	public bool Show { get; set; }
+
+	[Parameter]
+	public string Title { get; set; } = "Delete";
+
+	[Parameter]
+	public string ButtonCssClass { get; set; } = "btn btn-danger";
+
+	[Parameter]
+	public string YesCssClass { get; set; } = "btn btn-yes";
+
+	[Parameter]
+	public string NoCssClass { get; set; } = "btn btn-no";
+
+	[Parameter]
+	public string Message { get; set; } = "Are you sure?";
+
+	[Parameter]
+	public EventCallback<bool> ConfirmChanged { get; set; }
+
+	[Parameter]
+	public EventCallback ConfirmYes { get; set; }
+
+	[Parameter]
+	public EventCallback ConfirmNo { get; set; }
+
+	[Parameter]
+	public RenderFragment? ButtonContent { get; set; }
+
+	[Parameter]
+	public RenderFragment? MessageTemplate { get; set; }
+
+	public async Task Confirmation(bool value)
+	{
+		Show = false;
+		await ConfirmChanged.InvokeAsync(value);
+		if (value) {
+			await ConfirmYes.InvokeAsync(value);
+		} else {
+			await ConfirmNo.InvokeAsync(value);
+		}
+	}
+
+	public void ShowPop()
+	{
+		Show = true;
+	}
+}

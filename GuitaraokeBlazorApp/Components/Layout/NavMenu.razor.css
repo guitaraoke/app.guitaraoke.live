@@ -1,0 +1,36 @@
+nav {
+	display: grid;
+	grid-auto-flow: column;
+	grid-auto-columns: 1fr;
+	grid-column-gap: 8px;
+	margin: var(--gutter, 8px);
+}
+
+.nav-item {
+}
+
+	.nav-item ::deep a {
+		display: block;
+		text-align: center;
+		text-decoration: none;
+		background-color: rgba(var(--button-rgb), 0.8);
+		color: var(--button-text);
+		padding: 4px;
+		border-radius: 4px;
+	}
+
+		.nav-item ::deep a.active {
+			background-color: rgba(var(--button-rgb), 1);
+			color: var(--button-text);
+		}
+
+		.nav-item ::deep a:hover {
+			background-color: rgba(var(--button-rgb), 0.6);
+			color: var(--button-text);
+		}
+
+.nav-link {
+	display: block;
+	text-decoration: none;
+	transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out;
+}

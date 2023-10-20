@@ -1,0 +1,26 @@
+# For more info on HTTP files go to https://aka.ms/vs/httpfile
+
+@hostname=localhost
+@port=7061
+
+
+###
+
+POST https://{{hostname}}:{{port}}/backstage/move
+Content-Type: application/json
+
+{
+    "song": "james-sit-down",
+    "position": 2
+}
+
+###
+
+POST https://{{hostname}}:{{port}}/backstage/status/bon-jovi-you-give-love-a-bad-name
+
+###
+
+POST https://{{hostname}}:{{port}}/star/bon-jovi-you-give-love-a-bad-name
+
+###
+

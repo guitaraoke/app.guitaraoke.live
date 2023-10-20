@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "GuitaraokeBlazorApp.Shared": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:3644;http://localhost:3645"
+    }
+  }
+}

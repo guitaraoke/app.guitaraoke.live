@@ -1,0 +1,10 @@
+ol {
+	counter-reset: item;
+	margin: 0;
+	padding: 0;
+}
+
+.big-emoji {
+	font-size: 800%;
+	text-align: center;
+}

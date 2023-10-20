@@ -1,0 +1,86 @@
+@page "/me"
+@inject ISongDatabase db;
+@inject IUserTracker tracker;
+
+<PageTitle>My Songs</PageTitle>
+
+<h1>Hi @(user?.Name ?? "there")</h1>
+@if (user is not null && user.Signups.Any()) {
+	<p>Your Songs:</p>
+	<ul class="signup-list">
+		@foreach (var signup in user.Signups) {
+			<li class="@GenerateSongClass(signup.Key.Slug)">
+				<div class="remove-song-button">
+					<Confirm
+						Title="Remove signup?"
+						ButtonCssClass=""
+						ConfirmYes="async () => await RemoveSong(signup.Key.Slug)">
+						<ButtonContent>
+							<span class="fa-light fa-trash-can trash"/>
+						</ButtonContent>
+						<MessageTemplate>
+							<p>@signup.Key.Artist - <span>@signup.Key.Title</span></p>
+							<p>Are you sure you don’t want to perform this song any more?</p>
+						</MessageTemplate>
+					</Confirm>
+				</div>
+				<a href="song/@signup.Key.Slug">
+					@signup.Key.Artist - <span>@signup.Key.Title</span>
+				</a>
+				<em>@InstrumentString(signup.Value)</em>
+			</li>
+		}
+	</ul>
+
+} else {
+	<div class="no-signups-message">
+		<h2>You haven't signed up to sing or play anything!</h2>
+		<p>Why not pick something from the <a class="link" href="/">song list?</a></p>
+	</div>
+}
+
+@code {
+	private User user = new();
+	private string? removeId = "";
+	private string? warnId = "";
+
+	protected override void OnInitialized()
+	{
+		user = tracker.GetUser();
+	}
+
+	private string InstrumentString(Instrument[] signupArray)
+	{
+		if (signupArray is null || signupArray.Length < 1) {
+			return "";
+		}
+		string message = String.Join(", ", signupArray.Select(i => i.GetDisplayName()).ToArray());
+		return message == "0" ? "" : message;
+	}
+
+	private async Task RemoveSong(string slug)
+	{
+		if (user.Name is not null) {
+		warnId = slug;
+		StateHasChanged();
+		await Task.Delay(100);
+		var song = db.FindSong(slug);
+		if (song is null) return;
+		removeId = slug;
+		StateHasChanged();
+		await Task.Delay(500);
+		db.SignUpForSong(song!, user, Array.Empty<Instrument>());
+		removeId = "";
+		warnId = "";
+		}
+	}
+
+	private string? GenerateSongClass(string slug)
+	{
+		string? hide = slug == removeId ? "hide shrink-height" : null;
+		string? warn = slug == warnId ? "warn" : null;
+		if (hide is null && warn is null) return null;
+		return $"{hide} {warn}".Trim();
+	}
+
+}

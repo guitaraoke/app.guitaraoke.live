@@ -7,6 +7,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GuitaraokeWebApp", "Guitara
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GuitaraokeWebApp.Tests", "GuitaraokeWebApp.Tests\GuitaraokeWebApp.Tests.csproj", "{16832E45-8D8D-40C0-9846-50DB1C5E147C}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GuitaraokeBlazorApp", "GuitaraokeBlazorApp\GuitaraokeBlazorApp.csproj", "{E881699D-89A8-4F1D-830B-20BB70B2D9CB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GuitaraokeBlazorApp.Tests", "GuitaraokeBlazorApp.Tests\GuitaraokeBlazorApp.Tests.csproj", "{6757D09C-0DF6-4128-9535-5915F2763425}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8D12566A-0BEC-4D00-AD50-26FAF975D2EB}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GuitaraokeBlazorApp.Common", "GuitaraokeBlazorApp.Common\GuitaraokeBlazorApp.Common.csproj", "{E82DEDA7-F1B2-4A0E-91A2-DA143D1A4C8E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +32,18 @@ Global
 		{16832E45-8D8D-40C0-9846-50DB1C5E147C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{16832E45-8D8D-40C0-9846-50DB1C5E147C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{16832E45-8D8D-40C0-9846-50DB1C5E147C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E881699D-89A8-4F1D-830B-20BB70B2D9CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E881699D-89A8-4F1D-830B-20BB70B2D9CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E881699D-89A8-4F1D-830B-20BB70B2D9CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E881699D-89A8-4F1D-830B-20BB70B2D9CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6757D09C-0DF6-4128-9535-5915F2763425}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6757D09C-0DF6-4128-9535-5915F2763425}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6757D09C-0DF6-4128-9535-5915F2763425}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6757D09C-0DF6-4128-9535-5915F2763425}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E82DEDA7-F1B2-4A0E-91A2-DA143D1A4C8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E82DEDA7-F1B2-4A0E-91A2-DA143D1A4C8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E82DEDA7-F1B2-4A0E-91A2-DA143D1A4C8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E82DEDA7-F1B2-4A0E-91A2-DA143D1A4C8E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

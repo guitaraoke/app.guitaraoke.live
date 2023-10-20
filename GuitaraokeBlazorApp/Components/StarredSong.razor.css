@@ -1,0 +1,18 @@
+li {
+	border-top: 1px solid currentColor;
+	padding: var(--gutter) 0;
+	line-height: 1.4em;
+	list-style: none;
+}
+
+span.artist {
+	display: block;
+	font-weight: bold;
+}
+
+span.starfield {
+	display: inline-block;
+	float: right;
+	font-size: 80%;
+	color: var(--gold);
+}

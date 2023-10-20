@@ -1,0 +1,95 @@
+#dashboard {
+	height: 100vh;
+	overflow: clip;
+	display: grid;
+	grid-template-columns: 60% 40%;
+	--drop-gap: 70px;
+}
+
+#song-queue {
+	overflow: scroll;
+
+}
+	#song-queue > ol {
+		margin: 0;
+		padding: 0;
+	}
+
+	#song-queue ol > li {
+		list-style-position: inside;
+		border: 1px solid currentColor;
+		border-radius: var(--gutter);
+		margin: var(--gutter);
+		background-color: rgba(var(--panel-rgb), 0.5);
+		padding: var(--gutter);
+		line-height: 1.4em;
+	}
+
+		#song-queue ol > li.moveto {
+			margin-top: var(--drop-gap);
+		}
+
+		#song-queue ol > li.drop-target {
+			margin-top: var(--drop-gap);
+		}
+
+			#song-queue ol > li.drop-target::before {
+				display: block;
+				position: absolute;
+				width: 100%;
+				content: '→';
+				color: transparent;
+				transform: translateY(calc(-60px - (var(--drop-gap)/2)));
+			}
+
+#starred-songs {
+	padding: 8px;
+	overflow: scroll;
+}
+
+#mark-song-as-played-link {
+	background-color: var(--button);
+	color: var(--button-text);
+	float: right;
+	text-decoration: none;
+	padding: 8px;
+	border-radius: 8px;
+	margin: 8px;
+	cursor: pointer;
+}
+
+
+.hide {
+	opacity: 0;
+	transition: opacity 500ms;
+}
+
+.shrink-height {
+	animation-name: shrink-height;
+	animation-duration: 500ms;
+}
+
+@keyframes shrink-height {
+	from {
+		transform: scale(1, 1);
+	}
+
+	to {
+		transform: scale(1, 0);
+	}
+}
+
+.moveme {
+	animation-duration: 700ms;
+	animation-name: updown;
+}
+
+@keyframes updown {
+	0% {
+		transform: translateY(0%);
+	}
+
+	100% {
+		transform: translateY(calc((var(--move-players, 1) * 40px) + var(--move-places, 1) * (40px)));
+	}
+}
