@@ -2,9 +2,8 @@
 A Star Is Born - Shallow
 A-Ha - Take On Me
 Abba - Waterloo
+AC/DC - Highway to Hell
 AC/DC - You Shook Me All Night Long
-ACDC - Highway to Hell
-ACDC - You Shook Me All Night Long
 Adele - Rolling in the Deep
 Aerosmith - Dream On
 Alannah Myles - Black Velvet
@@ -37,7 +36,6 @@ Faith No More - Everything’s Ruined
 Fleetwood Mac - Dreams
 Foo Fighters - Learn to Fly
 Fountains of Wayne - Stacy’s Mom
-generate-web-videos.cmd
 George Ezra - Shotgun
 Georgia Satellites - Battleship Chains
 Giorgio Moroder and Philip Oakey - Together in Electric Dreams
