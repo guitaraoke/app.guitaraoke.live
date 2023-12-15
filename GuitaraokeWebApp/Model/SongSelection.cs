@@ -16,6 +16,8 @@ public class SongSelection {
 	public IEnumerable<SelectListItem> InstrumentOptions =>
 		Enum
 			.GetValues<Instrument>()
+			// TAKE OUT BASS FOR NDC PORTO
+			.Where(item => item != Instrument.BassGuitar)
 			.Select(item => new SelectListItem {
 				Value = item.ToString(),
 				Text = item.GetDisplayName(),
