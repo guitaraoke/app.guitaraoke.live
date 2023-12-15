@@ -2,16 +2,17 @@
 A Star Is Born - Shallow
 A-Ha - Take On Me
 Abba - Waterloo
-AC/DC - Highway to Hell
-AC/DC - You Shook Me All Night Long
+ACDC - Highway to Hell
+ACDC - You Shook Me All Night Long
 Adele - Rolling in the Deep
 Aerosmith - Dream On
 Alannah Myles - Black Velvet
 Amy Winehouse - Valerie
-Backstreet Boys - Backstreet’s Back
+Backstreet Boys - Backstreets Back
 Backstreet Boys - Larger than Life
-Baddiel & Skinner - Three Lions
-Barenaked Ladies - If I Had $1000000
+Baddiel  Skinner - Three Lions
+Band Aid - Do They Know It’s Christmas
+Barenaked Ladies - If I Had A Million Dollars
 Belinda Carlisle - Heaven is a Place on Earth
 Billy Idol - Rebel Yell
 Billy Joel - We Didn’t Start The Fire
@@ -24,6 +25,8 @@ Bon Jovi - You Give Love a Bad Name
 Bryan Adams - Summer of 69
 Cher - If I Could Turn Back Time
 Chesney Hawkes - The One and Only
+Chris Rea - Driving Home for Christmas
+Chuck Berry - Run Rudolph Run
 Counting Crows - A Long December
 Cream - Crossroads
 Daft Punk - Get Lucky
@@ -35,6 +38,7 @@ Faith No More - Everything’s Ruined
 Fleetwood Mac - Dreams
 Foo Fighters - Learn to Fly
 Fountains of Wayne - Stacy’s Mom
+generate-web-videos.cmd
 George Ezra - Shotgun
 Georgia Satellites - Battleship Chains
 Giorgio Moroder and Philip Oakey - Together in Electric Dreams
@@ -54,6 +58,7 @@ Journey - Don’t Stop Believing
 Katrina And The Waves - Walking On Sunshine
 Lynyrd Skynyrd - Sweet Home Alabama
 Manic Street Preachers - A Design For Life
+Mariah Carey - All I Want For Christmas Is You
 Michael Jackson - Beat It
 Midnight Oil - Beds Are Burning
 Muse - Hysteria
@@ -78,19 +83,23 @@ Robert Palmer - Addicted to Love
 Roxette - It Must Have Been Love
 Santana - Black Magic Woman
 Santana - Smooth
+Shakin Stevens - Merry Christmas Everyone
 Shania Twain - Man I Feel Like A Woman
 Simple Minds - Don’t You Forget About Me
+Slade - Merry Xmas Everybody
 Smash Mouth - All Star
 Starship - Nothing’s Gonna Stop Us Now
 Steve Stevens - Top Gun Anthem
 Taylor Swift - Love Story
 Tears for Fears - Everybody Wants to Rule the World
+The Beatles - Hey Jude
 The Calling - Wherever You Will Go
 The Commitments - Mustang Sally
 The Cranberries - Zombie
 The Feeling - Love It When You Call
 The Killers - Mr Brightside
 The Killers - Somebody Told Me
+The Pogues - Fairytale of New York
 The Proclaimers - I’m Gonna Be (500 Miles)
 Tina Turner - Steamy Windows
 Toto - House of the Rising Sun
@@ -99,4 +108,5 @@ Van Halen - Jump
 Wet Leg - Chaise Longue
 Wheatus - Teenage Dirtbag
 White Stripes - Seven Nation Army
+Wizzard - I Wish It Could Be Christmas Every Day
 ZZ Top - Gimme All Your Lovin

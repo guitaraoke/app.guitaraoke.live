@@ -12,8 +12,9 @@ public enum Instrument {
 	RhythmGuitar,
 	[Display("Bass")]
 	BassGuitar,
-	//[Display("Piano")]
-	//Piano,
+
+	[Display("Keyboard")]
+	Keyboard,
 }
 
 public class User {

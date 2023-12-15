@@ -2,6 +2,7 @@ using GuitaraokeWebApp.Hubs;
 
 var songs = File.ReadAllLines("songlist.txt")
 	.Select(line => line.Split(" - "))
+	.Where(tokens => tokens.Length == 2)
 	.Select(tokens => new Song(tokens[0], tokens[1]));
 
 var builder = WebApplication.CreateBuilder(args);
